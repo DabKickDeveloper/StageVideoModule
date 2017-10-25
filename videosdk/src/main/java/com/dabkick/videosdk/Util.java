@@ -16,8 +16,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
-import static android.content.ContentValues.TAG;
-
 public class Util {
 
     static void register() {
@@ -69,11 +67,11 @@ public class Util {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        Timber.d(TAG, "signInWithCustomToken:success");
                         FirebaseUser user = mAuth.getCurrentUser();
+                        Timber.d("signInWithCustomToken:success");
                     } else {
                         // If sign in fails, display a message to the user.
-                        Timber.e(TAG, "signInWithCustomToken:failure", task.getException());
+                        Timber.e("signInWithCustomToken:failure. %s", task.getException());
                     }
                 });
 
