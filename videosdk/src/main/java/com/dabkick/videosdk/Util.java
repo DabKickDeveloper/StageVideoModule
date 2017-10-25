@@ -18,7 +18,7 @@ import timber.log.Timber;
 
 public class Util {
 
-    static void register() {
+    public static void register() {
 
         // String devId, String devToken
         RegisterRequestBody body = new RegisterRequestBody(

@@ -1,12 +1,14 @@
-package com.dabkick.videosdk;
+package com.dabkick.videosdk.developerbutton;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
-import timber.log.Timber;
+import com.dabkick.videosdk.R;
+import com.dabkick.videosdk.livesession.LiveSessionActivity;
 
 /**
  * The external view for usage in partner applications
@@ -33,10 +35,13 @@ public class DabKickVideoButton extends LinearLayout {
         LayoutInflater.from(getContext()).inflate(R.layout.layout_video_button, this, true);
         Log.d("Trevor", "clicked");
         setOnClickListener(view -> {
-            Timber.d("clicked");
-            Util.register();
-            // TODO flow for login - pass off this functionality to another class using MVC
+            startLiveSessionActivity();
         });
+    }
+
+    private void startLiveSessionActivity() {
+        Intent intent = new Intent(getContext(), LiveSessionActivity.class);
+        getContext().startActivity(intent);
     }
 
 
