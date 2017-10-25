@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1053522103424",
+    "firebase_url": "https://dabkick-9d3e8.firebaseio.com",
+    "project_id": "dabkick-9d3e8",
+    "storage_bucket": "dabkick-9d3e8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1053522103424:android:40fab63ffa2a94b1",
+        "android_client_info": {
+          "package_name": "com.dabkick.videosdk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1053522103424-7ne0oe8n0008hd5grlk78729085jje0i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCo_1Mti322NKP5e4DfhmKajJjf3H-jprQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
