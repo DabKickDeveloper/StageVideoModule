@@ -6,6 +6,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 
+import com.dabkick.videosdk.DabKick;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayAdapter<String> listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, urls);
         lv.setAdapter(listAdapter);
+
+        DabKick.initSdk("4b3403665fea6");
 
 
 

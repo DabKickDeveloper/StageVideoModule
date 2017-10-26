@@ -3,11 +3,15 @@ package com.dabkick.videosdk.livesession;
 
 class ChatMessage {
 
-    final String message, author;
+    String message, senderUserId;
 
-    ChatMessage(String message, String author) {
+    ChatMessage() {
+        // Firebase req'd constructor
+    }
+
+    ChatMessage(String message, String senderUserId) {
         this.message = message;
-        this.author = author;
+        this.senderUserId = senderUserId;
     }
 
 

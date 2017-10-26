@@ -6,24 +6,20 @@ package com.dabkick.videosdk.livesession;
 public class LiveSessionChatPresenter implements Presenter {
 
     private LiveSessionChatView view;
-  //  private MyChatModel model;
+    private ChatModel model;
 
     public LiveSessionChatPresenter(LiveSessionChatView view) {
         this.view = view;
+        model = new ChatModel(this);
+    }
+
+    public void messageAdded(ChatMessage chatMessage) {
+        view.addChatMessage(chatMessage);
     }
 
 
-    @Override
-    public void onCreate() {
- //       model = new MyChatModel();
+    public void sendMessage(String message) {
+        model.sendMessage(message);
     }
-
-    @Override
-    public void onPause() {}
-    @Override
-    public void onResume() {}
-    @Override
-    public void onDestroy() {}
-
 
 }

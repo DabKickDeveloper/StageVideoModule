@@ -55,11 +55,21 @@ public class LiveSessionActivity extends AppCompatActivity implements LiveSessio
 
 
         sendButton.setOnClickListener(view -> {
-
+            clickSendButton(chatEditText.getText().toString());
+            chatEditText.setText("");
         });
 
 
     }
 
+    @Override
+    public void clickSendButton(String message) {
+        chatPresenter.sendMessage(message);
+    }
+
+    @Override
+    public void addChatMessage(ChatMessage chatMessage) {
+        chatAdapter.add(chatMessage);
+    }
 
 }

@@ -38,7 +38,7 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
         TextView authorTv = convertView.findViewById(R.id.chat_message_author);
         TextView messageTv = convertView.findViewById(R.id.chat_message_message);
 
-        authorTv.setText(item.author);
+        authorTv.setText(item.senderUserId);
         messageTv.setText(item.message);
 
         return convertView;
