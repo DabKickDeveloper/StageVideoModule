@@ -2,4 +2,5 @@
     <string name="app_name">sdk</string>
     <string name="query_server_production" translatable="false">http://queryreplica2.dabkick.com/</string>
     <string name="query_server_staging" translatable="false">http://stagingquery.dabkick.com/</string>
+    <string name="send_button_label">Send</string>
 </resources>
