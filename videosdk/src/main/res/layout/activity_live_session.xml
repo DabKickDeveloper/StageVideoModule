@@ -30,8 +30,9 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview_livestream"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/layout_chat"/>
+        android:layout_height="@dimen/height_livestream_bar"
+        tools:listitem="@layout/livestream_add_friend_viewholder"
+        app:layout_constraintBottom_toTopOf="@+id/layout_chat"/>
 
     <include
         android:id="@+id/layout_chat"

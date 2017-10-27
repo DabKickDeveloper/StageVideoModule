@@ -2,6 +2,8 @@ package com.dabkick.videosdk.livesession;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -75,7 +77,15 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView {
         ImageView backBtn = findViewById(R.id.iv_leave_session_btn);
         backBtn.setOnClickListener(view -> finish());
 
-        livestreamAdapter = new LivestreamAdapter();
+        // setup livestream
+        RecyclerView livestreamRecyclerView = findViewById(R.id.recyclerview_livestream);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(
+                this, LinearLayoutManager.HORIZONTAL, false);
+        livestreamRecyclerView.setLayoutManager(layoutManager);
+        livestreamAdapter = new LivestreamAdapter(this);
+        livestreamRecyclerView.setAdapter(livestreamAdapter);
+
+        livestreamAdapter = new LivestreamAdapter(this);
         livestreamPresenter = new LiveStreamPresenterImpl();
 
     }

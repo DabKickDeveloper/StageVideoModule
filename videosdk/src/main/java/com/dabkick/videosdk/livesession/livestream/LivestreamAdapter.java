@@ -1,6 +1,7 @@
 package com.dabkick.videosdk.livesession.livestream;
 
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,15 +11,21 @@ import com.dabkick.videosdk.R;
 
 public class LivestreamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private Context context;
+
+    public LivestreamAdapter(Context context) {
+        this.context = context;
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder vh;
         if (viewType == MyViewHolder.TYPE) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.livestream_myviewholder, parent, false);
+            View view = LayoutInflater.from(context)
+                    .inflate(R.layout.livestream_my_viewholder, parent, false);
             vh = new MyViewHolder(view);
         } else {
-            View view = LayoutInflater.from(parent.getContext())
+            View view = LayoutInflater.from(context)
                     .inflate(R.layout.livestream_add_friend_viewholder, parent, false);
             vh = new AddFriendViewHolder(view);
         }
@@ -58,7 +65,7 @@ public class LivestreamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         static final int TYPE = 0;
 
-        public MyViewHolder(View itemView) {
+        MyViewHolder(View itemView) {
             super(itemView);
         }
     }
@@ -68,7 +75,7 @@ public class LivestreamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         static final int TYPE = 1;
 
-        public AddFriendViewHolder(View itemView) {
+        AddFriendViewHolder(View itemView) {
             super(itemView);
         }
     }
