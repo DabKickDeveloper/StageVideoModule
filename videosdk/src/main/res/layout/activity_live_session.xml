@@ -4,8 +4,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@android:color/holo_orange_light"
     android:layout_height="match_parent"
     tools:context="com.dabkick.videosdk.livesession.LiveSessionActivity">
+
+    <ImageView
+        android:id="@+id/iv_leave_session_btn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="4dp"
+        android:src="@drawable/ic_directions_boat_white_36dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
         android:id="@+id/listview_livesession_chat"

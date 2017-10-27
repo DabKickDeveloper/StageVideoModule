@@ -7,6 +7,7 @@ import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.dabkick.videosdk.R;
@@ -59,6 +60,9 @@ public class LiveSessionActivity extends AppCompatActivity implements LiveSessio
             chatEditText.setText("");
         });
 
+        // back button
+        ImageView backBtn = findViewById(R.id.iv_leave_session_btn);
+        backBtn.setOnClickListener(view -> finish());
 
     }
 
