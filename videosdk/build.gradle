@@ -54,7 +54,7 @@ dependencies {
     })
 
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.1'
-
+    compile "com.android.support:recyclerview-v7:${googleSupportLib}"
     compile "com.google.firebase:firebase-auth:${firebase}"
     compile "com.android.support:appcompat-v7:${googleSupportLib}"
     compile 'com.jakewharton.timber:timber:4.5.1'

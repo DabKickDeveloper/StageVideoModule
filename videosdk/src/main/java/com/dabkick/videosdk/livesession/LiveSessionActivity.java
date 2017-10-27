@@ -13,15 +13,22 @@ import android.widget.ListView;
 import com.dabkick.videosdk.R;
 import com.dabkick.videosdk.livesession.chat.ChatAdapter;
 import com.dabkick.videosdk.livesession.chat.ChatMessage;
-import com.dabkick.videosdk.livesession.chat.LiveSessionChatPresenter;
-import com.dabkick.videosdk.livesession.chat.LiveSessionChatView;
+import com.dabkick.videosdk.livesession.chat.ChatPresenter;
+import com.dabkick.videosdk.livesession.chat.ChatView;
+import com.dabkick.videosdk.livesession.livestream.LiveStreamPresenterImpl;
+import com.dabkick.videosdk.livesession.livestream.LivestreamAdapter;
+import com.dabkick.videosdk.livesession.livestream.LivestreamPresenter;
 
 import java.util.ArrayList;
 
-public class LiveSessionActivity extends AppCompatActivity implements LiveSessionChatView {
+public class LiveSessionActivity extends AppCompatActivity implements ChatView {
 
     private ChatAdapter chatAdapter;
-    private LiveSessionChatPresenter chatPresenter;
+    private ChatPresenter chatPresenter;
+
+    private LivestreamAdapter livestreamAdapter;
+    private LivestreamPresenter livestreamPresenter;
+
     private final int DEFAULT_CHAT_MSG_LENGTH_LIMIT = 256;
 
     @Override
@@ -33,7 +40,7 @@ public class LiveSessionActivity extends AppCompatActivity implements LiveSessio
         chatAdapter = new ChatAdapter(this, new ArrayList<>());
         chatListView.setAdapter(chatAdapter);
 
-        chatPresenter = new LiveSessionChatPresenter(this);
+        chatPresenter = new ChatPresenter(this);
 
         Button sendButton = findViewById(R.id.send_button);
 
@@ -67,6 +74,9 @@ public class LiveSessionActivity extends AppCompatActivity implements LiveSessio
         // back button
         ImageView backBtn = findViewById(R.id.iv_leave_session_btn);
         backBtn.setOnClickListener(view -> finish());
+
+        livestreamAdapter = new LivestreamAdapter();
+        livestreamPresenter = new LiveStreamPresenterImpl();
 
     }
 

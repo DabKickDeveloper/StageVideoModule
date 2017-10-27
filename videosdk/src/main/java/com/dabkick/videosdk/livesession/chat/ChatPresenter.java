@@ -5,12 +5,12 @@ import com.dabkick.videosdk.livesession.Presenter;
 /**
  * Essentially a LiveSession Controller
  */
-public class LiveSessionChatPresenter implements Presenter {
+public class ChatPresenter implements Presenter {
 
-    private LiveSessionChatView view;
+    private ChatView view;
     private ChatModel model;
 
-    public LiveSessionChatPresenter(LiveSessionChatView view) {
+    public ChatPresenter(ChatView view) {
         this.view = view;
         model = new ChatModel(this);
     }

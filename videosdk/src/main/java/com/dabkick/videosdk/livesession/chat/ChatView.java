@@ -1,7 +1,7 @@
 package com.dabkick.videosdk.livesession.chat;
 
 
-public interface LiveSessionChatView {
+public interface ChatView {
 
     void clickSendButton(String message);
 

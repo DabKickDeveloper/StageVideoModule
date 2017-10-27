@@ -18,7 +18,7 @@ class ChatModel {
     private FirebaseAuth firebaseAuth;
     private final String roomKey;
 
-    ChatModel(LiveSessionChatPresenter presenter) {
+    ChatModel(ChatPresenter presenter) {
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         String developerId = Prefs.getDeveloperId();
