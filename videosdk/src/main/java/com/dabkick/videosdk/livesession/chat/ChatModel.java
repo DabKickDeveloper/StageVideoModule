@@ -1,4 +1,4 @@
-package com.dabkick.videosdk.livesession;
+package com.dabkick.videosdk.livesession.chat;
 
 
 import com.dabkick.videosdk.Prefs;
@@ -11,14 +11,14 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import timber.log.Timber;
 
-public class ChatModel {
+class ChatModel {
 
     private DatabaseReference databaseReference;
     private FirebaseDatabase firebaseDatabase;
     private FirebaseAuth firebaseAuth;
     private final String roomKey;
 
-    public ChatModel(LiveSessionChatPresenter presenter) {
+    ChatModel(LiveSessionChatPresenter presenter) {
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         String developerId = Prefs.getDeveloperId();
@@ -44,7 +44,7 @@ public class ChatModel {
 
     }
 
-    public void sendMessage(String message) {
+    void sendMessage(String message) {
         String senderUserId = "";
         if (firebaseAuth.getCurrentUser() != null) {
             senderUserId = firebaseAuth.getCurrentUser().getUid();

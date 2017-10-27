@@ -11,6 +11,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.dabkick.videosdk.R;
+import com.dabkick.videosdk.livesession.chat.ChatAdapter;
+import com.dabkick.videosdk.livesession.chat.ChatMessage;
+import com.dabkick.videosdk.livesession.chat.LiveSessionChatPresenter;
+import com.dabkick.videosdk.livesession.chat.LiveSessionChatView;
 
 import java.util.ArrayList;
 

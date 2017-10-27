@@ -1,4 +1,6 @@
-package com.dabkick.videosdk.livesession;
+package com.dabkick.videosdk.livesession.chat;
+
+import com.dabkick.videosdk.livesession.Presenter;
 
 /**
  * Essentially a LiveSession Controller

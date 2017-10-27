@@ -1,4 +1,4 @@
-package com.dabkick.videosdk.livesession;
+package com.dabkick.videosdk.livesession.chat;
 
 
 import android.content.Context;

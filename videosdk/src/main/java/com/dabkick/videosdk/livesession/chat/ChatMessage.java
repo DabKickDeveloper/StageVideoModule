@@ -1,11 +1,11 @@
-package com.dabkick.videosdk.livesession;
+package com.dabkick.videosdk.livesession.chat;
 
 
-class ChatMessage {
+public class ChatMessage {
 
     String message, senderUserId;
 
-    ChatMessage() {
+    public ChatMessage() {
         // Firebase req'd constructor
     }
 
