@@ -1,6 +1,9 @@
 package com.dabkick.videosdk.livesession;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,30 +16,43 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.dabkick.videosdk.R;
+import com.dabkick.videosdk.Util;
 import com.dabkick.videosdk.livesession.chat.ChatAdapter;
 import com.dabkick.videosdk.livesession.chat.ChatMessage;
 import com.dabkick.videosdk.livesession.chat.ChatPresenter;
 import com.dabkick.videosdk.livesession.chat.ChatView;
-import com.dabkick.videosdk.livesession.livestream.LiveStreamPresenterImpl;
-import com.dabkick.videosdk.livesession.livestream.LivestreamAdapter;
 import com.dabkick.videosdk.livesession.livestream.LivestreamPresenter;
+import com.dabkick.videosdk.livesession.livestream.LivestreamPresenterImpl;
+import com.dabkick.videosdk.livesession.livestream.LivestreamView;
+import com.dabkick.videosdk.livesession.livestream.SessionParticipantsAdapter;
+import com.twilio.video.VideoView;
 
 import java.util.ArrayList;
 
-public class LiveSessionActivity extends AppCompatActivity implements ChatView {
+public class LiveSessionActivity extends AppCompatActivity implements ChatView, LivestreamView {
 
     private ChatAdapter chatAdapter;
     private ChatPresenter chatPresenter;
 
-    private LivestreamAdapter livestreamAdapter;
+    private SessionParticipantsAdapter sessionParticipantsAdapter;
     private LivestreamPresenter livestreamPresenter;
+    private VideoView myVideoView;
+    private String[] permissions = new String[] {
+            Manifest.permission.CAMERA,
+            Manifest.permission.RECORD_AUDIO
+    };
 
+    private final int PERMISSION_REQUEST_CODE = 3928;
     private final int DEFAULT_CHAT_MSG_LENGTH_LIMIT = 256;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_session);
+
+        if (savedInstanceState == null) {
+            Util.register();
+        }
 
         ListView chatListView = findViewById(R.id.listview_livesession_chat);
         chatAdapter = new ChatAdapter(this, new ArrayList<>());
@@ -82,11 +98,11 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(
                 this, LinearLayoutManager.HORIZONTAL, false);
         livestreamRecyclerView.setLayoutManager(layoutManager);
-        livestreamAdapter = new LivestreamAdapter(this);
-        livestreamRecyclerView.setAdapter(livestreamAdapter);
+        sessionParticipantsAdapter = new SessionParticipantsAdapter(this, this);
+        livestreamRecyclerView.setAdapter(sessionParticipantsAdapter);
 
-        livestreamAdapter = new LivestreamAdapter(this);
-        livestreamPresenter = new LiveStreamPresenterImpl();
+        sessionParticipantsAdapter = new SessionParticipantsAdapter(this, this);
+        livestreamPresenter = new LivestreamPresenterImpl(this);
 
     }
 
@@ -98,6 +114,42 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView {
     @Override
     public void addChatMessage(ChatMessage chatMessage) {
         chatAdapter.add(chatMessage);
+    }
+
+    @Override
+    public void myStreamClicked(VideoView videoView) {
+        ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String PERMISSIONS[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE: {
+
+                if(!Util.hasPermissions(this, PERMISSIONS)){
+                    ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_REQUEST_CODE);
+                    return;
+                }
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission granted
+                    livestreamPresenter.toggleStream(myVideoView);
+                } else {
+                    // permission denied. disable functionality
+
+                }
+                return;
+            }
+
+        }
+    }
+
+    @Override
+    public void otherUserStreamClicked(int index) {
+
     }
 
 }

@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:src="@drawable/ic_videocam_white_36dp"
-    style="@style/livestream_item" />
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/livestream_item">
+
+    <ImageView
+        android:src="@drawable/ic_videocam_white_36dp"
+        style="@style/livestream_item" />
+
+    <com.twilio.video.VideoView
+        android:id="@+id/livestream_my_viewholder_videoview"
+        android:visibility="invisible"
+        style="@style/livestream_item"/>
+
+</FrameLayout>

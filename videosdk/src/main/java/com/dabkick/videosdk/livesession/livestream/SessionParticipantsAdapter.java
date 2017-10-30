@@ -8,13 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dabkick.videosdk.R;
+import com.twilio.video.VideoView;
 
-public class LivestreamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
+    private LivestreamView livestreamView;
 
-    public LivestreamAdapter(Context context) {
+    public SessionParticipantsAdapter(Context context, LivestreamView livestreamView) {
         this.context = context;
+        this.livestreamView = livestreamView;
     }
 
     @Override
@@ -37,10 +40,19 @@ public class LivestreamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         switch (holder.getItemViewType()) {
             case MyViewHolder.TYPE:
-
+                MyViewHolder myViewHolder = (MyViewHolder) holder;
+                holder.itemView.setOnClickListener(v -> {
+                    livestreamView.myStreamClicked(myViewHolder.videoView);
+                    int isVisible = myViewHolder.videoView.getVisibility();
+                    if (isVisible == View.VISIBLE) {
+                        myViewHolder.videoView.setVisibility(View.INVISIBLE);
+                    } else {
+                        myViewHolder.videoView.setVisibility(View.VISIBLE);
+                    }
+                });
                 break;
             case AddFriendViewHolder.TYPE:
-
+                holder.itemView.setOnClickListener(v-> livestreamView.otherUserStreamClicked(position));
                 break;
         }
 
@@ -64,9 +76,11 @@ public class LivestreamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         static final int TYPE = 0;
+        VideoView videoView;
 
         MyViewHolder(View itemView) {
             super(itemView);
+            videoView = itemView.findViewById(R.id.livestream_my_viewholder_videoview);
         }
     }
 

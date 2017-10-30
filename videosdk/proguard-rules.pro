@@ -23,3 +23,11 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Twilio
+-keep class org.webrtc.** { *; }
+-keep class com.twilio.video.** { *; }
+-keepattributes InnerClasses
+
+# Apache HttpClient
+-dontwarn org.apache.http.**
