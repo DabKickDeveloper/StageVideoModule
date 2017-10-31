@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -65,8 +66,13 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
 
         ImageView chatToggleButton = findViewById(R.id.chat_toggle);
         chatToggleButton.setOnClickListener(v -> {
-            showingChat = !showingChat;
-
+            // toggle between invisible and visible
+            int visibility = chatListView.getVisibility();
+            if (visibility == View.INVISIBLE) {
+                chatListView.setVisibility(View.VISIBLE);
+            } else {
+                chatListView.setVisibility(View.INVISIBLE);
+            }
         });
 
         Button sendButton = findViewById(R.id.send_button);
