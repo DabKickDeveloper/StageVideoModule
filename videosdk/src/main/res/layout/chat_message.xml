@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:background="@color/chatbar_btn_outline"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,18 +11,21 @@
         android:id="@+id/chat_message_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        tools:text="Message description"
+        android:layout_marginTop="0dp"
+        android:textSize="17sp"
+        tools:text="Chat Message"
+        android:textColor="@android:color/white"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/chat_message_author" />
 
     <TextView
         android:id="@+id/chat_message_author"
         android:layout_width="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="12sp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Author name"
+        android:textColor="@android:color/white"
+        tools:text="Author name"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chat_message_message" />
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
