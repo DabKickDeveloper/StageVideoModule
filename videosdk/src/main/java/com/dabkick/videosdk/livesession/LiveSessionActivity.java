@@ -40,14 +40,11 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
     private SessionParticipantsAdapter sessionParticipantsAdapter;
     private LivestreamPresenter livestreamPresenter;
     private VideoView myVideoView;
-    private final String[] TWILIO_PERMISSIONS = new String[] {
-            Manifest.permission.CAMERA,
-            Manifest.permission.RECORD_AUDIO
-    };
 
     private final int PERMISSION_REQUEST_CODE = 3928;
     private final int DEFAULT_CHAT_MSG_LENGTH_LIMIT = 256;
     private VideoView  mainVideoView;
+    private boolean showingChat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +62,12 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
         chatListView.setAdapter(chatAdapter);
 
         chatPresenter = new ChatPresenter(this);
+
+        ImageView chatToggleButton = findViewById(R.id.chat_toggle);
+        chatToggleButton.setOnClickListener(v -> {
+            showingChat = !showingChat;
+
+        });
 
         Button sendButton = findViewById(R.id.send_button);
 

@@ -68,10 +68,10 @@ public class Util {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         FirebaseUser user = mAuth.getCurrentUser();
-                        Timber.d("signInWithCustomToken:success");
+                        Timber.d("registered user with Firebase");
                     } else {
                         // If sign in fails, display a message to the user.
-                        Timber.e("signInWithCustomToken:failure. %s", task.getException());
+                        Timber.e("cannot register user with Firebase. %s", task.getException());
                     }
                 });
 
