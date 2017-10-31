@@ -1,12 +1,14 @@
 package com.dabkick.videosdk.retrofit;
 
 
+import com.dabkick.videosdk.BuildConfig;
 import com.dabkick.videosdk.Prefs;
 import com.dabkick.videosdk.Util;
 import com.google.gson.GsonBuilder;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -89,13 +91,13 @@ public class RetrofitCreator {
         }
 
 
-        /* if () {
+        if (BuildConfig.DEBUG) {
             Timber.d("Turn on HTTP logging");
             // anyone can see auth/refresh tokens here
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
             httpClientBuilder.addInterceptor(logging);
-        } */
+        }
 
         OkHttpClient okHttpClient = httpClientBuilder.build();
 

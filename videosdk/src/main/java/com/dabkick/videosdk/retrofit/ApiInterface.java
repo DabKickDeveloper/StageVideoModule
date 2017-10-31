@@ -25,7 +25,7 @@ public interface ApiInterface {
             @Field("client_id") String clientId);
 
     // retrieves a Twilio access token
-    @GET("/iOS/getLiveStreamAccessTokenById.php")
+    @GET("/iOS/livestream/getLiveStreamAccessTokenById.php")
     Single<TwilioAccessToken> getLivestreamAccessToken();
 
 }

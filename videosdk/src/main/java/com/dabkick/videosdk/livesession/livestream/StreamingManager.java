@@ -7,6 +7,7 @@ import com.dabkick.videosdk.retrofit.TwilioAccessToken;
 import com.twilio.video.CameraCapturer;
 import com.twilio.video.ConnectOptions;
 import com.twilio.video.LocalAudioTrack;
+import com.twilio.video.LocalParticipant;
 import com.twilio.video.LocalVideoTrack;
 import com.twilio.video.Participant;
 import com.twilio.video.Room;
@@ -32,7 +33,11 @@ class StreamingManager implements StreamingManagerInterface {
 
     private LivestreamPresenterImpl liveStreamPresenter;
     private StreamingManagerInterface callback; // TODO send events to presenter
+
+    // a room is communication between the local participant and one or more participants
     private Room room;
+    private LocalParticipant localParticipant;
+
     private LocalAudioTrack localAudioTrack;
     private LocalVideoTrack localVideoTrack;
     private String accessToken = null;
@@ -61,8 +66,9 @@ class StreamingManager implements StreamingManagerInterface {
     }
 
     // do not directly disconnect from room - save $ from creating too many Twilio rooms
-    public void stopStreaming() {
+    public void stopStreaming(VideoView myVideoView) {
         // free native memory resources
+        localVideoTrack.removeRenderer(myVideoView);
         localAudioTrack.release();
         localAudioTrack = null;
         localVideoTrack.release();
@@ -70,7 +76,7 @@ class StreamingManager implements StreamingManagerInterface {
     }
 
     private void initAccessToken() {
-        RetrofitCreator.getUnauthenticatedApiInterface()
+        RetrofitCreator.getAuthenticatedApiInterface()
                 .getLivestreamAccessToken()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -111,6 +117,14 @@ class StreamingManager implements StreamingManagerInterface {
             @Override
             public void onConnected(Room room) {
                 Timber.d("Connected to %s", room.getName());
+                localParticipant = room.getLocalParticipant();
+                localParticipant.addAudioTrack(localAudioTrack);
+                localParticipant.addVideoTrack(localVideoTrack);
+
+                for (Participant participant : room.getParticipants()) {
+                    addParticipant(participant);
+                    break;
+                }
             }
 
             @Override
@@ -123,14 +137,19 @@ class StreamingManager implements StreamingManagerInterface {
             @Override
             public void onDisconnected(Room room, TwilioException e) {
                 Timber.d("Disconnected from %s", room.getName());
+                localParticipant = null;
+                room = null;
             }
 
             @Override
             public void onParticipantConnected(Room room, Participant participant) {
-                Timber.d("participant %s has connected to %s", participant.getIdentity(), room.getName());
+                Timber.d("participant %s has connected to %s",
+                        participant.getIdentity(), room.getName());
+                addParticipant(participant);
             }
             @Override public void onParticipantDisconnected(Room room, Participant participant) {
-                Timber.d("participant %s has disconnected from %s", participant.getIdentity(), room.getName());
+                Timber.d("participant %s has disconnected from %s",
+                        participant.getIdentity(), room.getName());
             }
             @Override public void onRecordingStarted(Room room) {}
             @Override public void onRecordingStopped(Room room) {}
@@ -138,6 +157,25 @@ class StreamingManager implements StreamingManagerInterface {
 
 
     }
+
+    /*
+     * Called when participant joins the room
+     */
+    private void addParticipant(Participant participant) {
+
+        /*
+         * Add participant renderer
+         */
+        if (participant.getVideoTracks().size() > 0) {
+            //addParticipantVideo(participant.getVideoTracks().get(0));
+        }
+
+        /*
+         * Start listening for participant events
+         */
+        //participant.setListener(participantListener());
+    }
+
 
     public boolean isStreaming() {
         return localAudioTrack != null && localVideoTrack != null;

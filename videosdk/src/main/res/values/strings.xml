@@ -5,4 +5,5 @@
     <string name="send_button_label">Send</string>
     <string name="chat">Chat</string>
     <string name="chat_message_field_hint">Message…</string>
+    <string name="permissions_needed">Permissions needed to start live streaming</string>
 </resources>

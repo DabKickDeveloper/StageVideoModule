@@ -15,7 +15,7 @@ public class LivestreamPresenterImpl implements LivestreamPresenter {
 
     public void toggleStream(VideoView myVideoView) {
         if (manager.isStreaming()) {
-
+            manager.stopStreaming(myVideoView);
         } else {
             manager.startStreaming(myVideoView);
         }

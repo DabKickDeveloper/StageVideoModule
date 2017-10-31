@@ -42,6 +42,7 @@ ext {
     firebase = '11.4.2'
     retrofit2 = '2.3.0'
     googleSupportLib = '26.0.0'
+    okhttp3 = '3.8.0'
 }
 
 // all dependencies with potential conflicting libraries must go in ext{...} above
@@ -63,7 +64,8 @@ dependencies {
     compile "com.squareup.retrofit2:adapter-rxjava2:${retrofit2}"
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
+    compile "com.squareup.okhttp3:okhttp:${okhttp3}"
+    compile "com.squareup.okhttp3:logging-interceptor:${okhttp3}"
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     compile 'io.reactivex.rxjava2:rxjava:2.1.5'
     testCompile 'junit:junit:4.12'

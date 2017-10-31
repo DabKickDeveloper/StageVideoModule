@@ -3,7 +3,9 @@ package com.dabkick.videosdk.livesession;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.dabkick.videosdk.R;
 import com.dabkick.videosdk.Util;
@@ -37,13 +40,14 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
     private SessionParticipantsAdapter sessionParticipantsAdapter;
     private LivestreamPresenter livestreamPresenter;
     private VideoView myVideoView;
-    private String[] permissions = new String[] {
+    private final String[] TWILIO_PERMISSIONS = new String[] {
             Manifest.permission.CAMERA,
             Manifest.permission.RECORD_AUDIO
     };
 
     private final int PERMISSION_REQUEST_CODE = 3928;
     private final int DEFAULT_CHAT_MSG_LENGTH_LIMIT = 256;
+    private VideoView  mainVideoView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,8 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
         if (savedInstanceState == null) {
             Util.register();
         }
+
+        mainVideoView = findViewById(R.id.videoview_main);
 
         ListView chatListView = findViewById(R.id.listview_livesession_chat);
         chatAdapter = new ChatAdapter(this, new ArrayList<>());
@@ -118,28 +124,53 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
 
     @Override
     public void myStreamClicked(VideoView videoView) {
-        ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_CODE);
+        if (checkPermissionForCameraAndMicrophone()) {
+            livestreamPresenter.toggleStream(mainVideoView); // FIXME pass reference from adapter
+        } else {
+            requestPermissionForCameraAndMicrophone();
+        }
+    }
+
+    private boolean checkPermissionForCameraAndMicrophone(){
+        int resultCamera = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+        int resultMic = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
+        return resultCamera == PackageManager.PERMISSION_GRANTED &&
+                resultMic == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPermissionForCameraAndMicrophone(){
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA) ||
+                ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        Manifest.permission.RECORD_AUDIO)) {
+            Toast.makeText(this,
+                    getString(R.string.permissions_needed),
+                    Toast.LENGTH_LONG).show();
+        } else {
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO},
+                    PERMISSION_REQUEST_CODE);
+        }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String PERMISSIONS[], int[] grantResults) {
+                                           @NonNull String PERMISSIONS[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_REQUEST_CODE: {
 
-                if(!Util.hasPermissions(this, PERMISSIONS)){
-                    ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_REQUEST_CODE);
-                    return;
+                boolean cameraAndMicPermissionGranted = true;
+
+                for (int grantResult : grantResults) {
+                    cameraAndMicPermissionGranted &= grantResult == PackageManager.PERMISSION_GRANTED;
                 }
 
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission granted
-                    livestreamPresenter.toggleStream(myVideoView);
+                if (cameraAndMicPermissionGranted) {
+                    livestreamPresenter.toggleStream(mainVideoView); // FIXME use adapter video view
                 } else {
-                    // permission denied. disable functionality
-
+                    Toast.makeText(this,
+                            R.string.permissions_needed,
+                            Toast.LENGTH_LONG).show();
                 }
                 return;
             }
