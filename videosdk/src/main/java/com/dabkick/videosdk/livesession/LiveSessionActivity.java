@@ -15,7 +15,6 @@ import android.text.InputFilter;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -26,6 +25,7 @@ import com.dabkick.videosdk.livesession.chat.ChatAdapter;
 import com.dabkick.videosdk.livesession.chat.ChatMessage;
 import com.dabkick.videosdk.livesession.chat.ChatPresenter;
 import com.dabkick.videosdk.livesession.chat.ChatView;
+import com.dabkick.videosdk.livesession.chat.ClearFocusBackPressedEditText;
 import com.dabkick.videosdk.livesession.livestream.LivestreamPresenter;
 import com.dabkick.videosdk.livesession.livestream.LivestreamPresenterImpl;
 import com.dabkick.videosdk.livesession.livestream.LivestreamView;
@@ -54,7 +54,7 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
     // Views
     private ImageView chatToggleButton;
     private ListView chatListView;
-    private EditText chatEditText;
+    private ClearFocusBackPressedEditText chatEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +99,8 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
                 if (imm != null) {
                     imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                 }
+                toggleChatUi();
+            } else {
                 toggleChatUi();
             }
         });
