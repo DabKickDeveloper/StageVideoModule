@@ -1,6 +1,7 @@
 package com.dabkick.videosdk.livesession;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -10,11 +11,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.text.InputFilter;
-import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -54,6 +54,7 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
     // Views
     private ImageView chatToggleButton;
     private ListView chatListView;
+    private EditText chatEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,35 +74,36 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
         chatPresenter = new ChatPresenter(this);
 
         chatToggleButton = findViewById(R.id.chat_toggle);
-        chatToggleButton.setOnClickListener(v -> toggleChatVisibility());
+        chatToggleButton.setOnClickListener(v -> toggleChatUi());
 
-        Button sendButton = findViewById(R.id.send_button);
-
-        EditText chatEditText = findViewById(R.id.message_edit_text);
-        chatEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().trim().length() > 0) {
-                    sendButton.setEnabled(true);
-                } else {
-                    sendButton.setEnabled(false);
+        chatEditText = findViewById(R.id.message_edit_text);
+        chatEditText.setOnEditorActionListener((v, actionId, event) -> {
+            boolean handled = false;
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                // do not handle empty strings
+                if (chatEditText.getText().toString().length() == 0) {
+                    return true;
                 }
+                handled = true;
+                clickSendButton(chatEditText.getText().toString());
+                chatEditText.setText("");
             }
 
-            @Override
-            public void afterTextChanged(Editable s) {}
+            return handled;
+        });
+
+        chatEditText.setOnFocusChangeListener((v, hasFocus) -> {
+            // show keyboard if widget has focus
+            if (hasFocus) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                }
+            }
         });
 
         chatEditText.setFilters(new InputFilter[]{
                 new InputFilter.LengthFilter(DEFAULT_CHAT_MSG_LENGTH_LIMIT)});
-
-        sendButton.setOnClickListener(view -> {
-            clickSendButton(chatEditText.getText().toString());
-            chatEditText.setText("");
-        });
 
         // back button
         ImageView backBtn = findViewById(R.id.iv_leave_session_btn);
@@ -120,7 +122,8 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
 
     }
 
-    private void toggleChatVisibility() {
+    // toggle visibility of chat UI and swap button drawable
+    private void toggleChatUi() {
         // toggle chat list and icon
         int visibility = chatListView.getVisibility();
         if (visibility == View.INVISIBLE) {

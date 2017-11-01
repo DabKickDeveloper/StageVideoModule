@@ -45,15 +45,9 @@
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1" />
-
-        <Button
-            android:id="@+id/send_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:enabled="false"
-            android:text="@string/send_button_label" />
+            android:layout_weight="1"
+            android:inputType="text"
+            android:imeOptions="actionSend"/>
 
     </LinearLayout>
 
