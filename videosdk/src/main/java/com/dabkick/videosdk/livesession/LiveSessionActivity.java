@@ -99,6 +99,7 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
                 if (imm != null) {
                     imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                 }
+                toggleChatUi();
             }
         });
 
