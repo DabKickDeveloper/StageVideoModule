@@ -2,6 +2,7 @@ package com.dabkick.videosdk.livesession;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -35,17 +36,24 @@ import java.util.ArrayList;
 
 public class LiveSessionActivity extends AppCompatActivity implements ChatView, LivestreamView {
 
+    // Chat MVP
     private ChatAdapter chatAdapter;
     private ChatPresenter chatPresenter;
 
+    // Session Participant MVP
     private SessionParticipantsAdapter sessionParticipantsAdapter;
     private LivestreamPresenter livestreamPresenter;
+    private VideoView  mainVideoView;
+
     private VideoView myVideoView;
 
+    // constants
     private final int PERMISSION_REQUEST_CODE = 3928;
     private final int DEFAULT_CHAT_MSG_LENGTH_LIMIT = 256;
-    private VideoView  mainVideoView;
-    private boolean showingChat;
+
+    // Views
+    private ImageView chatToggleButton;
+    private ListView chatListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,22 +66,14 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
 
         mainVideoView = findViewById(R.id.videoview_main);
 
-        ListView chatListView = findViewById(R.id.listview_livesession_chat);
+        chatListView = findViewById(R.id.listview_livesession_chat);
         chatAdapter = new ChatAdapter(this, new ArrayList<>());
         chatListView.setAdapter(chatAdapter);
 
         chatPresenter = new ChatPresenter(this);
 
-        ImageView chatToggleButton = findViewById(R.id.chat_toggle);
-        chatToggleButton.setOnClickListener(v -> {
-            // toggle between invisible and visible
-            int visibility = chatListView.getVisibility();
-            if (visibility == View.INVISIBLE) {
-                chatListView.setVisibility(View.VISIBLE);
-            } else {
-                chatListView.setVisibility(View.INVISIBLE);
-            }
-        });
+        chatToggleButton = findViewById(R.id.chat_toggle);
+        chatToggleButton.setOnClickListener(v -> toggleChatVisibility());
 
         Button sendButton = findViewById(R.id.send_button);
 
@@ -98,7 +98,6 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
         chatEditText.setFilters(new InputFilter[]{
                 new InputFilter.LengthFilter(DEFAULT_CHAT_MSG_LENGTH_LIMIT)});
 
-
         sendButton.setOnClickListener(view -> {
             clickSendButton(chatEditText.getText().toString());
             chatEditText.setText("");
@@ -119,6 +118,22 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
         sessionParticipantsAdapter = new SessionParticipantsAdapter(this, this);
         livestreamPresenter = new LivestreamPresenterImpl(this);
 
+    }
+
+    private void toggleChatVisibility() {
+        // toggle chat list and icon
+        int visibility = chatListView.getVisibility();
+        if (visibility == View.INVISIBLE) {
+            chatListView.setVisibility(View.VISIBLE);
+            Drawable drawable = ContextCompat.getDrawable(
+                    this, R.drawable.ic_accessible_white_36dp);
+            chatToggleButton.setImageDrawable(drawable);
+        } else {
+            chatListView.setVisibility(View.INVISIBLE);
+            Drawable drawable = ContextCompat.getDrawable(
+                    this, R.drawable.ic_directions_boat_white_36dp);
+            chatToggleButton.setImageDrawable(drawable);
+        }
     }
 
     @Override
