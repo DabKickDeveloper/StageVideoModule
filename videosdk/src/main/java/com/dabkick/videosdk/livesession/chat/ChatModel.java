@@ -15,14 +15,12 @@ class ChatModel {
     private DatabaseReference databaseReference;
     private FirebaseDatabase firebaseDatabase;
     private FirebaseAuth firebaseAuth;
-    private final String roomKey;
 
     ChatModel(ChatPresenter presenter) {
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
-        String roomPath =  ChatDatabaseReferences.getRoomReference();
-        roomKey = firebaseDatabase.getReference(roomPath).push().getKey();
-        String chatPath = ChatDatabaseReferences.getChatReference(roomKey);
+
+        String chatPath = ChatDatabaseReferences.getChatReference(ChatDatabaseReferences.getSessionId());
         databaseReference = firebaseDatabase.getReference(chatPath);
 
         ChildEventListener childEventListener = new ChildEventListener() {

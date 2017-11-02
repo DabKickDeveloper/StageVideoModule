@@ -16,7 +16,7 @@ import timber.log.Timber;
 /*
  * Simple wrapper class that uses Camera2Capturer with supported devices.
  */
-public class CameraCapturerCompat {
+class CameraCapturerCompat {
     private static final String TAG = "CameraCapturerCompat";
 
     private CameraCapturer camera1Capturer;

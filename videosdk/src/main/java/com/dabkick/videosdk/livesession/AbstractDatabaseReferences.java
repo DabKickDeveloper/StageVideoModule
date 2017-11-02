@@ -15,7 +15,7 @@ public abstract class AbstractDatabaseReferences {
                 Prefs.getDeveloperId() + SEPARATOR;
     }
 
-    protected static String getSessionId() {
+    public static String getSessionId() {
         return "DabKick Lobby";
     }
 
