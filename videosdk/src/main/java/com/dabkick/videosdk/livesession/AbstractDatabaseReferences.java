@@ -1,6 +1,8 @@
 package com.dabkick.videosdk.livesession;
 
 
+import com.dabkick.videosdk.Prefs;
+
 public abstract class AbstractDatabaseReferences {
 
     private static final String BASE = "DabKickVideoLiveSessionSDK";
@@ -8,9 +10,13 @@ public abstract class AbstractDatabaseReferences {
     protected static final String SEPARATOR = "/";
 
     protected static String getBase() {
-        return BASE + SEPARATOR + LIVE_SESSIONS + SEPARATOR;
+        return BASE + SEPARATOR +
+                LIVE_SESSIONS + SEPARATOR +
+                Prefs.getDeveloperId() + SEPARATOR;
     }
 
-
+    protected static String getSessionId() {
+        return "DabKick Lobby";
+    }
 
 }

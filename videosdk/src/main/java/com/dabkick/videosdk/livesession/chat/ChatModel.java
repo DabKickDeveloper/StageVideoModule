@@ -1,7 +1,6 @@
 package com.dabkick.videosdk.livesession.chat;
 
 
-import com.dabkick.videosdk.Prefs;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -21,10 +20,9 @@ class ChatModel {
     ChatModel(ChatPresenter presenter) {
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
-        String developerId = Prefs.getDeveloperId();
-        String roomPath =  ChatDatabaseReferences.getRoomReference(developerId);
+        String roomPath =  ChatDatabaseReferences.getRoomReference();
         roomKey = firebaseDatabase.getReference(roomPath).push().getKey();
-        String chatPath = ChatDatabaseReferences.getChatReference(developerId, roomKey);
+        String chatPath = ChatDatabaseReferences.getChatReference(roomKey);
         databaseReference = firebaseDatabase.getReference(chatPath);
 
         ChildEventListener childEventListener = new ChildEventListener() {
