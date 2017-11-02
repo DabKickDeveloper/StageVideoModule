@@ -6,7 +6,6 @@
     </style>
 
     <style name="livestream_item">
-        <item name="android:background">@android:color/holo_blue_dark</item>
         <item name="android:layout_width">@dimen/width_livestream_bar_item</item>
         <item name="android:layout_height">@dimen/height_livestream_bar</item>
     </style>

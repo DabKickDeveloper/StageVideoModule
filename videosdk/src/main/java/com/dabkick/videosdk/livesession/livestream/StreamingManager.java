@@ -65,10 +65,6 @@ class StreamingManager implements StreamingManagerInterface {
     private void createAudioVideoTracks() {
         localAudioTrack = LocalAudioTrack.create(SdkApp.getAppContext(), true, LOCAL_AUDIO_TRACK_NAME);
         cameraCapturerCompat = new CameraCapturerCompat(SdkApp.getAppContext(), getAvailableCameraSource());
-        localVideoTrack = LocalVideoTrack.create(SdkApp.getAppContext(), true,
-                cameraCapturerCompat.getVideoCapturer(),
-                LOCAL_VIDEO_TRACK_NAME);
-
         localVideoTrack = LocalVideoTrack.create(SdkApp.getAppContext(),
                 true,
                 cameraCapturerCompat.getVideoCapturer(),

@@ -207,9 +207,7 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
 
     @Override
     public void myVideoViewCreated(VideoView videoView) {
-        //livestreamPresenter.bindMyVideoView(videoView);
-        VideoView main_videoview = findViewById(R.id.main_videoview);
-        livestreamPresenter.bindMyVideoView(main_videoview);
+        livestreamPresenter.bindMyVideoView(videoView);
     }
 
     @Override
