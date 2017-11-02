@@ -55,7 +55,7 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
                 });
                 break;
             case AddFriendViewHolder.TYPE:
-                holder.itemView.setOnClickListener(v-> livestreamView.otherUserStreamClicked(position));
+                holder.itemView.setOnClickListener(v-> livestreamView.addFriendClicked());
                 break;
         }
 

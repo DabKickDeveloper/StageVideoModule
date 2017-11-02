@@ -2,6 +2,7 @@ package com.dabkick.videosdk.livesession;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -33,6 +34,8 @@ import com.dabkick.videosdk.livesession.livestream.SessionParticipantsAdapter;
 import com.twilio.video.VideoView;
 
 import java.util.ArrayList;
+
+import timber.log.Timber;
 
 public class LiveSessionActivity extends AppCompatActivity implements ChatView, LivestreamView {
 
@@ -218,6 +221,19 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
     @Override
     public void otherUserVideoViewCreated(VideoView videoView, int index) {
 
+    }
+
+    @Override
+    public void addFriendClicked() {
+        Timber.d("addFriendClicked");
+        // waiting on Ronnie to finish server auth work before this can work fully
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        String appName = Util.getAppName(this);
+        String text = "Let's watch videos together on " + appName + " by clicking link <link-from-server>";
+        shareIntent.putExtra(Intent.EXTRA_TEXT, text);
+        Intent chooserIntent = Intent.createChooser(shareIntent, "Share Room With");
+        startActivity(chooserIntent);
     }
 
 }
