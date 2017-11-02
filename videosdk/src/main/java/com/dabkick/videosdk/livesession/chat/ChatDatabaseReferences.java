@@ -3,13 +3,12 @@ package com.dabkick.videosdk.livesession.chat;
 
 import android.support.annotation.NonNull;
 
-// TODO builder pattern. consider stage, etc.
-class ChatDatabaseReferences {
+import com.dabkick.videosdk.livesession.AbstractDatabaseReferences;
 
-    private static final String BASE = "DabKickVideoLiveSessionSDK";
-    private static final String LIVE_SESSIONS = "liveSessions";
-    private static final String LIVE_SESSION_CHATS = "liveSessionChats";
-    private static final String SEPARATOR = "/";
+class ChatDatabaseReferences extends AbstractDatabaseReferences {
+
+    private static String LIVE_SESSION_CHATS = "liveSessionChats";
+
 
     static String getChatReference(@NonNull final String developerId, @NonNull final String roomId) {
         String roomRef = getRoomReference(developerId);
@@ -18,8 +17,7 @@ class ChatDatabaseReferences {
     }
 
     static String getRoomReference(@NonNull final String developerId) {
-        return BASE + SEPARATOR +
-                LIVE_SESSIONS + SEPARATOR +
+        return getBase() +
                 developerId + SEPARATOR +
                 LIVE_SESSION_CHATS;
     }
