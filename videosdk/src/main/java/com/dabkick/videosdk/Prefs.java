@@ -13,8 +13,14 @@ public class Prefs {
     private static final String REFRESH_TOKEN = "refresh_token";
     private static final String FIREBASE_TOKEN = "firebase_token";
     private static final String DEVELOPER_ID = "developer_id";
+    private static final String USER_ID = "user_id";
+    private static final String DABNAME = "dabname";
+    private static final String PROFILE_PIC_URL = "profile_pic_url";
+    private static final String VIDEO_ENABLED = "video_enabled";
+    private static final String AUDIO_ENABLED = "audio_enabled";
 
-    private final static String filename = "promo_pref";
+
+    private final static String filename = "prefs";
 
     private static SharedPreferences getPrefs() {
         return SdkApp.getAppContext().getSharedPreferences(filename, Context.MODE_PRIVATE);
@@ -54,6 +60,46 @@ public class Prefs {
 
     public static void setDeveloperId(String developerId) {
         getEditor().putString(DEVELOPER_ID, developerId).apply();
+    }
+
+    public static String getUserId() {
+        return getPrefs().getString(USER_ID, "");
+    }
+
+    public static void setUserId(String userId) {
+        getEditor().putString(USER_ID, userId).apply();
+    }
+
+    public static String getDabname() {
+        return getPrefs().getString(DABNAME, "");
+    }
+
+    public static void setDabname(String dabname) {
+        getEditor().putString(DABNAME, dabname).apply();
+    }
+
+    public static String getProfilePicUrl() {
+        return getPrefs().getString(PROFILE_PIC_URL, "");
+    }
+
+    public static void setProfilePicUrl(String param) {
+        getEditor().putString(PROFILE_PIC_URL, param).apply();
+    }
+
+    public static boolean isVideoEnabled() {
+        return getPrefs().getBoolean(VIDEO_ENABLED, false);
+    }
+
+    public static void setVideoEnabled(boolean param) {
+        getEditor().putBoolean(VIDEO_ENABLED, param).apply();
+    }
+
+    public static boolean isAudioEnabled() {
+        return getPrefs().getBoolean(AUDIO_ENABLED, false);
+    }
+
+    public static void setAudioEnabled(boolean param) {
+        getEditor().putBoolean(AUDIO_ENABLED, param).apply();
     }
 
 }
