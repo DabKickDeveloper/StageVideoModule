@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<RelativeLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/livestream_item">
 
     <ImageView
         android:src="@drawable/ic_videocam_white_36dp"
-        style="@style/livestream_item" />
+        style="@style/livestream_item"
+        android:visibility="gone"/>
 
     <com.twilio.video.VideoView
         android:id="@+id/livestream_my_viewholder_videoview"
-        android:visibility="invisible"
+        app:overlaySurface="true"
+        android:visibility="visible"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
         style="@style/livestream_item"/>
 
-</FrameLayout>
+</RelativeLayout>

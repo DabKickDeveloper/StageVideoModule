@@ -41,14 +41,17 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
         switch (holder.getItemViewType()) {
             case MyViewHolder.TYPE:
                 MyViewHolder myViewHolder = (MyViewHolder) holder;
+                livestreamView.myVideoViewCreated(myViewHolder.videoView);
+
                 holder.itemView.setOnClickListener(v -> {
-                    livestreamView.myStreamClicked(myViewHolder.videoView);
+                    livestreamView.myStreamClicked();
+                    /*
                     int isVisible = myViewHolder.videoView.getVisibility();
                     if (isVisible == View.VISIBLE) {
                         myViewHolder.videoView.setVisibility(View.INVISIBLE);
                     } else {
                         myViewHolder.videoView.setVisibility(View.VISIBLE);
-                    }
+                    } */
                 });
                 break;
             case AddFriendViewHolder.TYPE:

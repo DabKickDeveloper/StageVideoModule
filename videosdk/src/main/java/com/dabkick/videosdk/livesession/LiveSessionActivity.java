@@ -43,7 +43,6 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
     // Session Participant MVP
     private SessionParticipantsAdapter sessionParticipantsAdapter;
     private LivestreamPresenter livestreamPresenter;
-    private VideoView  mainVideoView;
 
     private VideoView myVideoView;
 
@@ -64,8 +63,6 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
         if (savedInstanceState == null) {
             Util.register();
         }
-
-        mainVideoView = findViewById(R.id.videoview_main);
 
         chatListView = findViewById(R.id.listview_livesession_chat);
         chatAdapter = new ChatAdapter(this, new ArrayList<>());
@@ -153,9 +150,9 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
     }
 
     @Override
-    public void myStreamClicked(VideoView videoView) {
+    public void myStreamClicked() {
         if (checkPermissionForCameraAndMicrophone()) {
-            livestreamPresenter.toggleStream(mainVideoView); // FIXME pass reference from adapter
+            livestreamPresenter.toggleMyStream();
         } else {
             requestPermissionForCameraAndMicrophone();
         }
@@ -196,7 +193,7 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
                 }
 
                 if (cameraAndMicPermissionGranted) {
-                    livestreamPresenter.toggleStream(mainVideoView); // FIXME use adapter video view
+                    // TODO enable my stream livestreamPresenter.toggleMyStream();
                 } else {
                     Toast.makeText(this,
                             R.string.permissions_needed,
@@ -209,7 +206,19 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
     }
 
     @Override
+    public void myVideoViewCreated(VideoView videoView) {
+        //livestreamPresenter.bindMyVideoView(videoView);
+        VideoView main_videoview = findViewById(R.id.main_videoview);
+        livestreamPresenter.bindMyVideoView(main_videoview);
+    }
+
+    @Override
     public void otherUserStreamClicked(int index) {
+
+    }
+
+    @Override
+    public void otherUserVideoViewCreated(VideoView videoView, int index) {
 
     }
 

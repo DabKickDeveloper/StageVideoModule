@@ -5,7 +5,9 @@ import com.twilio.video.VideoView;
 
 public interface LivestreamView {
 
-    void myStreamClicked(VideoView videoView);
+    void myStreamClicked();
     void otherUserStreamClicked(int index);
+    void myVideoViewCreated(VideoView videoView);
+    void otherUserVideoViewCreated(VideoView videoView, int index);
 
 }

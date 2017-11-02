@@ -6,7 +6,8 @@ import com.twilio.video.VideoView;
 public interface LivestreamPresenter {
 
 
-    void toggleStream(VideoView myVideoView);
+    void toggleMyStream();
+    void bindMyVideoView(VideoView videoView);
 
 
 }

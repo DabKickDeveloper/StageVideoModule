@@ -10,9 +10,11 @@ import com.twilio.video.LocalAudioTrack;
 import com.twilio.video.LocalParticipant;
 import com.twilio.video.LocalVideoTrack;
 import com.twilio.video.Participant;
+import com.twilio.video.RemoteParticipant;
 import com.twilio.video.Room;
 import com.twilio.video.TwilioException;
 import com.twilio.video.Video;
+import com.twilio.video.VideoRenderer;
 import com.twilio.video.VideoView;
 
 import java.util.Collections;
@@ -40,6 +42,19 @@ class StreamingManager implements StreamingManagerInterface {
 
     private LocalAudioTrack localAudioTrack;
     private LocalVideoTrack localVideoTrack;
+    private VideoRenderer localVideoView;
+    private CameraCapturerCompat cameraCapturerCompat;
+
+    /*
+     * Audio and video tracks can be created with names. This feature is useful for categorizing
+     * tracks of participants. For example, if one participant publishes a video track with
+     * ScreenCapturer and CameraCapturer with the names "screen" and "camera" respectively then
+     * other participants can use RemoteVideoTrack#getName to determine which video track is
+     * produced from the other participant's screen or camera.
+    */
+    private static final String LOCAL_AUDIO_TRACK_NAME = "mic";
+    private static final String LOCAL_VIDEO_TRACK_NAME = "camera";
+
     private String accessToken = null;
     private final String ROOM_NAME_TODO_DYNAMICALLY_OBTAIN = "DabKick Lobby"; // FIXME
 
@@ -47,17 +62,25 @@ class StreamingManager implements StreamingManagerInterface {
         this.liveStreamPresenter = liveStreamPresenter;
     }
 
-    private void setupAudioVideoTracks() {
-        localAudioTrack = LocalAudioTrack.create(SdkApp.getAppContext(), true);
-        CameraCapturer cameraCapturer = new CameraCapturer(SdkApp.getAppContext(),
-                CameraCapturer.CameraSource.FRONT_CAMERA);
+    private void createAudioVideoTracks() {
+        localAudioTrack = LocalAudioTrack.create(SdkApp.getAppContext(), true, LOCAL_AUDIO_TRACK_NAME);
+        cameraCapturerCompat = new CameraCapturerCompat(SdkApp.getAppContext(), getAvailableCameraSource());
+        localVideoTrack = LocalVideoTrack.create(SdkApp.getAppContext(), true,
+                cameraCapturerCompat.getVideoCapturer(),
+                LOCAL_VIDEO_TRACK_NAME);
+
         localVideoTrack = LocalVideoTrack.create(SdkApp.getAppContext(),
-                true, cameraCapturer);
+                true,
+                cameraCapturerCompat.getVideoCapturer(),
+                LOCAL_VIDEO_TRACK_NAME);
+
     }
 
+    @Override
     public void startStreaming(VideoView videoView) {
-        setupAudioVideoTracks();
-        localVideoTrack.addRenderer(videoView);
+        createAudioVideoTracks();
+        localVideoView = videoView;
+        localVideoTrack.addRenderer(localVideoView);
         if (accessToken == null) {
             initAccessToken();
         } else {
@@ -66,6 +89,7 @@ class StreamingManager implements StreamingManagerInterface {
     }
 
     // do not directly disconnect from room - save $ from creating too many Twilio rooms
+    @Override
     public void stopStreaming(VideoView myVideoView) {
         // free native memory resources
         localVideoTrack.removeRenderer(myVideoView);
@@ -99,11 +123,6 @@ class StreamingManager implements StreamingManagerInterface {
     }
 
     private void connectToRoom(String roomName) {
-        // re-init if streaming was previously stopped
-        if (localAudioTrack == null || localVideoTrack == null) {
-            setupAudioVideoTracks();
-        }
-
         ConnectOptions connectOptions = new ConnectOptions.Builder(accessToken)
                 .roomName(roomName)
                 .audioTracks(Collections.singletonList(localAudioTrack))
@@ -118,10 +137,10 @@ class StreamingManager implements StreamingManagerInterface {
             public void onConnected(Room room) {
                 Timber.d("Connected to %s", room.getName());
                 localParticipant = room.getLocalParticipant();
-                localParticipant.addAudioTrack(localAudioTrack);
-                localParticipant.addVideoTrack(localVideoTrack);
+                localParticipant.publishTrack(localAudioTrack);
+                localParticipant.publishTrack(localVideoTrack);
 
-                for (Participant participant : room.getParticipants()) {
+                for (Participant participant : room.getRemoteParticipants()) {
                     addParticipant(participant);
                     break;
                 }
@@ -142,15 +161,18 @@ class StreamingManager implements StreamingManagerInterface {
             }
 
             @Override
-            public void onParticipantConnected(Room room, Participant participant) {
+            public void onParticipantConnected(Room room, RemoteParticipant participant) {
                 Timber.d("participant %s has connected to %s",
                         participant.getIdentity(), room.getName());
                 addParticipant(participant);
             }
-            @Override public void onParticipantDisconnected(Room room, Participant participant) {
+
+            @Override
+            public void onParticipantDisconnected(Room room, RemoteParticipant participant) {
                 Timber.d("participant %s has disconnected from %s",
                         participant.getIdentity(), room.getName());
             }
+
             @Override public void onRecordingStarted(Room room) {}
             @Override public void onRecordingStopped(Room room) {}
         };
@@ -179,6 +201,12 @@ class StreamingManager implements StreamingManagerInterface {
 
     public boolean isStreaming() {
         return localAudioTrack != null && localVideoTrack != null;
+    }
+
+    private CameraCapturer.CameraSource getAvailableCameraSource() {
+        return (CameraCapturer.isSourceAvailable(CameraCapturer.CameraSource.FRONT_CAMERA)) ?
+                (CameraCapturer.CameraSource.FRONT_CAMERA) :
+                (CameraCapturer.CameraSource.BACK_CAMERA);
     }
 
 }

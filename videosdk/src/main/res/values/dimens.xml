@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="height_livestream_bar">100dp</dimen>
-    <dimen name="width_livestream_bar_item">70dp</dimen>
+    <dimen name="height_livestream_bar">180dp</dimen>
+    <dimen name="width_livestream_bar_item">130dp</dimen>
 </resources>

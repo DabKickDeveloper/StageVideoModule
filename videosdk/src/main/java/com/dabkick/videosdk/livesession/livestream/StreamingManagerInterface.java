@@ -6,8 +6,7 @@ import com.twilio.video.VideoView;
 interface StreamingManagerInterface {
 
     void startStreaming(VideoView videoView);
-    void stopStreaming(VideoView myVideoView);
+    void stopStreaming(VideoView videoView);
     boolean isStreaming();
-
 
 }
