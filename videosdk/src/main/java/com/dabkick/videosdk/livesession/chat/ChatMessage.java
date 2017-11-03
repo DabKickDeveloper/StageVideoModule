@@ -3,7 +3,7 @@ package com.dabkick.videosdk.livesession.chat;
 
 public class ChatMessage {
 
-    String message, senderUserId;
+    private String message, senderUserId;
 
     public ChatMessage() {
         // Firebase req'd constructor
@@ -12,6 +12,14 @@ public class ChatMessage {
     ChatMessage(String message, String senderUserId) {
         this.message = message;
         this.senderUserId = senderUserId;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getSenderUserId() {
+        return senderUserId;
     }
 
 

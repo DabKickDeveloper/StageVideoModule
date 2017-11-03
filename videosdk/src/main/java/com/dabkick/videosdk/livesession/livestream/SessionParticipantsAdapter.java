@@ -6,11 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.dabkick.videosdk.R;
 import com.twilio.video.VideoView;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -20,12 +22,12 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
     private Context context;
     private LivestreamView livestreamView;
     private ParticipantModel participantModel;
-    private HashSet<Participant> participants;
+    private List<Participant> participants;
 
     public SessionParticipantsAdapter(Context context, LivestreamView livestreamView) {
         this.context = context;
         this.livestreamView = livestreamView;
-        participants = new HashSet<>();
+        participants = new ArrayList<>();
         participantModel = new ParticipantModel(this);
     }
 
@@ -41,8 +43,8 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
             }
             case ParticipantViewHolder.TYPE: {
                 View view = LayoutInflater.from(context)
-                        .inflate(R.layout.livestream_my_viewholder, parent, false);
-                vh = new MyViewHolder(view);
+                        .inflate(R.layout.livestream_participant_viewholder, parent, false);
+                vh = new ParticipantViewHolder(view);
                 break;
             }
             case AddFriendViewHolder.TYPE: {
@@ -67,7 +69,7 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         switch (holder.getItemViewType()) {
-            case MyViewHolder.TYPE:
+            case MyViewHolder.TYPE: {
                 MyViewHolder myViewHolder = (MyViewHolder) holder;
                 livestreamView.myVideoViewCreated(myViewHolder.videoView);
 
@@ -82,9 +84,15 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
                     } */
                 });
                 break;
-            case AddFriendViewHolder.TYPE:
-                holder.itemView.setOnClickListener(v-> livestreamView.addFriendClicked());
+            }
+            case ParticipantViewHolder.TYPE: {
+                ParticipantViewHolder participantViewHolder = (ParticipantViewHolder) holder;
+                participantViewHolder.name.setText(participants.get(position - 1).dabname);
+            }
+            case AddFriendViewHolder.TYPE: {
+                holder.itemView.setOnClickListener(v -> livestreamView.addFriendClicked());
                 break;
+            }
         }
 
     }
@@ -137,8 +145,11 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
 
         static final int TYPE = 1;
 
+        TextView name;
+
         ParticipantViewHolder(View itemView) {
             super(itemView);
+            name = itemView.findViewById(R.id.livestream_participant_name);
         }
     }
 
