@@ -117,9 +117,10 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(
                 this, LinearLayoutManager.HORIZONTAL, false);
         livestreamRecyclerView.setLayoutManager(layoutManager);
-        sessionParticipantsAdapter = new SessionParticipantsAdapter(this, this);
-        livestreamRecyclerView.setAdapter(sessionParticipantsAdapter);
         livestreamPresenter = new LivestreamPresenterImpl(this);
+        sessionParticipantsAdapter = new SessionParticipantsAdapter(this, this,
+                livestreamPresenter.getLivestreamParticipants());
+        livestreamRecyclerView.setAdapter(sessionParticipantsAdapter);
 
     }
 

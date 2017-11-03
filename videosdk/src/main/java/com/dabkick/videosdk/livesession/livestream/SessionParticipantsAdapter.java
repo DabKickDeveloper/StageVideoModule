@@ -11,24 +11,21 @@ import android.widget.TextView;
 import com.dabkick.videosdk.R;
 import com.twilio.video.VideoView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
 
 public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
-        implements ParticipantModelCallback {
+        implements ParticipantModel.ParticipantModelCallback {
 
     private Context context;
     private LivestreamView livestreamView;
-    private ParticipantModel participantModel;
-    private List<Participant> participants;
+    private List<Participant> participantList;
 
-    public SessionParticipantsAdapter(Context context, LivestreamView livestreamView) {
+    public SessionParticipantsAdapter(Context context, LivestreamView livestreamView, List<Participant> participantList) {
         this.context = context;
         this.livestreamView = livestreamView;
-        participants = new ArrayList<>();
-        participantModel = new ParticipantModel(this);
+        this.participantList = participantList;
     }
 
     @Override
@@ -87,7 +84,7 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
             }
             case ParticipantViewHolder.TYPE: {
                 ParticipantViewHolder participantViewHolder = (ParticipantViewHolder) holder;
-                participantViewHolder.name.setText(participants.get(position - 1).dabname);
+                participantViewHolder.name.setText(participantList.get(position - 1).dabname);
             }
             case AddFriendViewHolder.TYPE: {
                 holder.itemView.setOnClickListener(v -> livestreamView.addFriendClicked());
@@ -111,20 +108,20 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
     @Override
     public int getItemCount() {
         int count = 2 + // my view + add friend view
-                participants.size();
+                participantList.size();
         Timber.d("item count: %s", count);
         return count;
     }
 
     @Override
-    public void onAdded(Participant participant) {
-        participants.add(participant);
+    public void onParticipantAdded(Participant participant) {
+        participantList.add(participant);
         notifyDataSetChanged();
     }
 
     @Override
-    public void onRemoved(Participant participant) {
-        participants.remove(participant);
+    public void onParticipantRemoved(Participant participant) {
+        participantList.remove(participant);
         notifyDataSetChanged();
     }
 

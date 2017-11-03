@@ -4,7 +4,6 @@ package com.dabkick.videosdk.livesession.livestream;
 import android.support.annotation.NonNull;
 
 import com.dabkick.videosdk.Prefs;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -13,17 +12,18 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import timber.log.Timber;
 
-public class ParticipantModel {
+class ParticipantModel {
+
+    interface ParticipantModelCallback {
+        void onParticipantAdded(Participant participant);
+        void onParticipantRemoved(Participant participant);
+    }
 
     private DatabaseReference databaseReference;
     private FirebaseDatabase firebaseDatabase;
-    private FirebaseAuth firebaseAuth;
-    private ParticipantModelCallback callback;
 
     ParticipantModel(@NonNull ParticipantModelCallback callback) {
-        this.callback = callback;
         firebaseDatabase = FirebaseDatabase.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
 
         String participantPath = ParticipantDatabaseReferences.getParticipantReference(ParticipantDatabaseReferences.getSessionId());
         databaseReference = firebaseDatabase.getReference(participantPath);
@@ -46,7 +46,7 @@ public class ParticipantModel {
                 if (participant.dabname.equals(Prefs.getDabname())) {
                     return;
                 }
-                callback.onAdded(participant);
+                callback.onParticipantAdded(participant);
             }
 
             @Override
@@ -58,7 +58,7 @@ public class ParticipantModel {
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Participant participant = dataSnapshot.getValue(Participant.class);
                 Timber.d("onChildRemoved: %s", participant.dabname);
-                callback.onRemoved(participant);
+                callback.onParticipantRemoved(participant);
 
             }
 
