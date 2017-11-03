@@ -42,6 +42,10 @@ public class ParticipantModel {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Participant participant = dataSnapshot.getValue(Participant.class);
                 Timber.d("onChildAdded: %s", participant.dabname);
+                // do not add participant with same dabname
+                if (participant.dabname.equals(Prefs.getDabname())) {
+                    return;
+                }
                 callback.onAdded(participant);
             }
 
