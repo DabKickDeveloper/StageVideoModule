@@ -36,13 +36,20 @@ public class LivestreamPresenterImpl implements LivestreamPresenter, Participant
     }
 
     @Override
+    public void onFinishing() {
+        participantModel.removeSelfFromDatabase();
+    }
+
+    @Override
     public void onParticipantAdded(Participant participant) {
         participantList.add(participant);
+        view.notifyDataSetChanged();
     }
 
     @Override
     public void onParticipantRemoved(Participant participant) {
         participantList.remove(participant);
+        view.notifyDataSetChanged();
     }
 
     @Override

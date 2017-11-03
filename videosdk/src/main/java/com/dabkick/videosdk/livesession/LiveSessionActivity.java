@@ -47,8 +47,6 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
     private SessionParticipantsAdapter sessionParticipantsAdapter;
     private LivestreamPresenter livestreamPresenter;
 
-    private VideoView myVideoView;
-
     // constants
     private final int PERMISSION_REQUEST_CODE = 3928;
     private final int DEFAULT_CHAT_MSG_LENGTH_LIMIT = 256;
@@ -208,6 +206,14 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (isFinishing()) {
+            livestreamPresenter.onFinishing();
+        }
+    }
+
+    @Override
     public void myVideoViewCreated(VideoView videoView) {
         livestreamPresenter.bindMyVideoView(videoView);
     }
@@ -233,6 +239,11 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
         shareIntent.putExtra(Intent.EXTRA_TEXT, text);
         Intent chooserIntent = Intent.createChooser(shareIntent, "Share Room With");
         startActivity(chooserIntent);
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        sessionParticipantsAdapter.notifyDataSetChanged();
     }
 
 }

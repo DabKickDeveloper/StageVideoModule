@@ -11,4 +11,5 @@ public interface LivestreamView {
     void otherUserVideoViewCreated(VideoView videoView, int index);
     void addFriendClicked();
 
+    void notifyDataSetChanged();
 }

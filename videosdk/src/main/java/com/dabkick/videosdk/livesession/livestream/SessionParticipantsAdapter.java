@@ -15,8 +15,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
-        implements ParticipantModel.ParticipantModelCallback {
+public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
     private LivestreamView livestreamView;
@@ -111,18 +110,6 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
                 participantList.size();
         Timber.d("item count: %s", count);
         return count;
-    }
-
-    @Override
-    public void onParticipantAdded(Participant participant) {
-        participantList.add(participant);
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public void onParticipantRemoved(Participant participant) {
-        participantList.remove(participant);
-        notifyDataSetChanged();
     }
 
     // this device's Viewholder

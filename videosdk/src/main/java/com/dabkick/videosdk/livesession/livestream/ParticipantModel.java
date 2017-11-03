@@ -21,6 +21,7 @@ class ParticipantModel {
 
     private DatabaseReference databaseReference;
     private FirebaseDatabase firebaseDatabase;
+    private String myParticipantKey;
 
     ParticipantModel(@NonNull ParticipantModelCallback callback) {
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -34,8 +35,9 @@ class ParticipantModel {
                 false,
                 false
         );
-        databaseReference.push().setValue(myParticipant);
-        databaseReference.onDisconnect().removeValue();
+        myParticipantKey = databaseReference.push().getKey();
+        databaseReference.child(myParticipantKey).setValue(myParticipant);
+        databaseReference.child(myParticipantKey).onDisconnect().removeValue();
 
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
@@ -75,6 +77,10 @@ class ParticipantModel {
         databaseReference.addChildEventListener(childEventListener);
 
 
+    }
+
+    void removeSelfFromDatabase() {
+        databaseReference.child(myParticipantKey).removeValue();
     }
 
 
