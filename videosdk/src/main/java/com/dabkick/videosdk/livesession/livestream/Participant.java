@@ -3,7 +3,7 @@ package com.dabkick.videosdk.livesession.livestream;
 
 public class Participant {
 
-    String userId;
+    private String userId;
 
     public String getUserId() {
         return userId;
@@ -41,4 +41,22 @@ public class Participant {
         this.isAudioEnabled = isAudioEnabled;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj == null) return false;
+
+        if (!Participant.class.isAssignableFrom(obj.getClass())) return false;
+
+        final Participant other = (Participant) obj;
+
+        return this.userId.equals(other.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + Integer.parseInt(this.userId);
+        return result;
+    }
 }
