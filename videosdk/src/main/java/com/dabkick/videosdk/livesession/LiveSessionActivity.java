@@ -11,7 +11,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.text.InputFilter;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -31,6 +33,10 @@ import com.dabkick.videosdk.livesession.livestream.LivestreamPresenter;
 import com.dabkick.videosdk.livesession.livestream.LivestreamPresenterImpl;
 import com.dabkick.videosdk.livesession.livestream.LivestreamView;
 import com.dabkick.videosdk.livesession.livestream.SessionParticipantsAdapter;
+import com.dabkick.videosdk.livesession.stage.StagePresenter;
+import com.dabkick.videosdk.livesession.stage.StagePresenterImpl;
+import com.dabkick.videosdk.livesession.stage.StageRecyclerViewAdapter;
+import com.dabkick.videosdk.livesession.stage.StageView;
 import com.twilio.video.VideoView;
 
 import java.util.ArrayList;
@@ -46,6 +52,7 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
     // Session Participant MVP
     private SessionParticipantsAdapter sessionParticipantsAdapter;
     private LivestreamPresenter livestreamPresenter;
+    private StagePresenter stagePresenter;
 
     // constants
     private final int PERMISSION_REQUEST_CODE = 3928;
@@ -55,6 +62,9 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
     private ImageView chatToggleButton;
     private ListView chatListView;
     private ClearFocusBackPressedEditText chatEditText;
+
+    // Stage
+    private StageRecyclerViewAdapter stageRecyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,13 +122,35 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
 
         // setup livestream
         RecyclerView livestreamRecyclerView = findViewById(R.id.recyclerview_livestream);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(
+        RecyclerView.LayoutManager livestreamLayoutManager = new LinearLayoutManager(
                 this, LinearLayoutManager.HORIZONTAL, false);
-        livestreamRecyclerView.setLayoutManager(layoutManager);
+        livestreamRecyclerView.setLayoutManager(livestreamLayoutManager);
         livestreamPresenter = new LivestreamPresenterImpl(this);
         sessionParticipantsAdapter = new SessionParticipantsAdapter(this, this,
                 livestreamPresenter.getLivestreamParticipants());
         livestreamRecyclerView.setAdapter(sessionParticipantsAdapter);
+
+
+        // setup stage
+        RecyclerView stageRecyclerView = findViewById(R.id.recyclerview_stage);
+        RecyclerView.LayoutManager stageLayoutManager = new LinearLayoutManager(
+                this, LinearLayoutManager.HORIZONTAL, false);
+        stageRecyclerView.setLayoutManager(stageLayoutManager);
+        stageRecyclerViewAdapter = new StageRecyclerViewAdapter();
+        String[] urls = new String[] {
+                "http://www.ebookfrenzy.com/android_book/movie.mp4",
+                "http://www.ebookfrenzy.com/android_book/movie.mp4",
+                "http://www.ebookfrenzy.com/android_book/movie.mp4"
+        };
+        stageRecyclerViewAdapter.setUrls(urls);
+        stageRecyclerView.setAdapter(stageRecyclerViewAdapter);
+
+        SnapHelper stageSnapHelper = new PagerSnapHelper();
+        stageSnapHelper.attachToRecyclerView(stageRecyclerView);
+
+        StageView stageView = new StageView();
+        stagePresenter = new StagePresenterImpl(stageView);
+
 
     }
 
