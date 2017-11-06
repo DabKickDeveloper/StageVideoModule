@@ -136,20 +136,20 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
         RecyclerView.LayoutManager stageLayoutManager = new LinearLayoutManager(
                 this, LinearLayoutManager.HORIZONTAL, false);
         stageRecyclerView.setLayoutManager(stageLayoutManager);
-        stageRecyclerViewAdapter = new StageRecyclerViewAdapter();
-        String[] urls = new String[] {
-                "http://www.ebookfrenzy.com/android_book/movie.mp4",
-                "http://www.ebookfrenzy.com/android_book/movie.mp4",
-                "http://www.ebookfrenzy.com/android_book/movie.mp4"
-        };
-        stageRecyclerViewAdapter.setUrls(urls);
-        stageRecyclerView.setAdapter(stageRecyclerViewAdapter);
 
         SnapHelper stageSnapHelper = new PagerSnapHelper();
         stageSnapHelper.attachToRecyclerView(stageRecyclerView);
 
-        StageView stageView = new StageView();
+        StageView stageView = new StageView() {
+            @Override
+            public void dataUpdated() {
+                stageRecyclerViewAdapter.notifyDataSetChanged();
+            }
+        };
         stagePresenter = new StagePresenterImpl(stageView);
+
+        stageRecyclerViewAdapter = new StageRecyclerViewAdapter(stagePresenter.getStageItems());
+        stageRecyclerView.setAdapter(stageRecyclerViewAdapter);
 
 
     }

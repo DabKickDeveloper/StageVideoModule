@@ -8,13 +8,15 @@ import android.widget.VideoView;
 
 import com.dabkick.videosdk.R;
 
+import java.util.List;
+
 
 public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private String[] urls;
+    private List<StageVideo> items;
 
-    public StageRecyclerViewAdapter() {
-        urls = new String[]{};
+    public StageRecyclerViewAdapter(List<StageVideo> items) {
+        this.items = items;
     }
 
     @Override
@@ -26,18 +28,14 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         StageViewHolder vh = (StageViewHolder) holder;
-        vh.videoView.setVideoPath(urls[position]);
-    }
-
-    public void setUrls(String[] urls) {
-        this.urls = urls;
-        notifyDataSetChanged();
+        vh.videoView.setVideoPath(items.get(position).getUrl());
     }
 
     @Override
     public int getItemCount() {
-        return urls.length;
+        return items.size();
     }
+
 
     private class StageViewHolder extends RecyclerView.ViewHolder {
 
