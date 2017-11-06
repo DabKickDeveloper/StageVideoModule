@@ -1,7 +1,9 @@
 package com.dabkick.videosdk.livesession.livestream;
 
 
+import com.dabkick.videosdk.Prefs;
 import com.dabkick.videosdk.SdkApp;
+import com.dabkick.videosdk.livesession.AbstractDatabaseReferences;
 import com.dabkick.videosdk.retrofit.RetrofitCreator;
 import com.dabkick.videosdk.retrofit.TwilioAccessToken;
 import com.twilio.video.CameraCapturer;
@@ -9,8 +11,13 @@ import com.twilio.video.ConnectOptions;
 import com.twilio.video.LocalAudioTrack;
 import com.twilio.video.LocalParticipant;
 import com.twilio.video.LocalVideoTrack;
-import com.twilio.video.Participant;
+import com.twilio.video.RemoteAudioTrack;
+import com.twilio.video.RemoteAudioTrackPublication;
+import com.twilio.video.RemoteDataTrack;
+import com.twilio.video.RemoteDataTrackPublication;
 import com.twilio.video.RemoteParticipant;
+import com.twilio.video.RemoteVideoTrack;
+import com.twilio.video.RemoteVideoTrackPublication;
 import com.twilio.video.Room;
 import com.twilio.video.TwilioException;
 import com.twilio.video.Video;
@@ -56,7 +63,7 @@ class StreamingManager implements StreamingManagerInterface {
     private static final String LOCAL_VIDEO_TRACK_NAME = "camera";
 
     private String accessToken = null;
-    private final String ROOM_NAME_TODO_DYNAMICALLY_OBTAIN = "DabKick Lobby"; // FIXME
+    private final String ROOM_NAME_TODO_DYNAMICALLY_OBTAIN = AbstractDatabaseReferences.getSessionId();
 
     StreamingManager(LivestreamPresenterImpl liveStreamPresenter) {
         this.liveStreamPresenter = liveStreamPresenter;
@@ -119,7 +126,7 @@ class StreamingManager implements StreamingManagerInterface {
     }
 
     private void connectToRoom(String roomName) {
-        ConnectOptions connectOptions = new ConnectOptions.Builder(accessToken)
+        ConnectOptions connectOptions = new ConnectOptions.Builder(Prefs.getUserId())
                 .roomName(roomName)
                 .audioTracks(Collections.singletonList(localAudioTrack))
                 .videoTracks(Collections.singletonList(localVideoTrack))
@@ -136,8 +143,8 @@ class StreamingManager implements StreamingManagerInterface {
                 localParticipant.publishTrack(localAudioTrack);
                 localParticipant.publishTrack(localVideoTrack);
 
-                for (Participant participant : room.getRemoteParticipants()) {
-                    addParticipant(participant);
+                for (RemoteParticipant participant : room.getRemoteParticipants()) {
+                    addRemoteParticipant(participant);
                     break;
                 }
             }
@@ -160,7 +167,7 @@ class StreamingManager implements StreamingManagerInterface {
             public void onParticipantConnected(Room room, RemoteParticipant participant) {
                 Timber.d("participant %s has connected to %s",
                         participant.getIdentity(), room.getName());
-                addParticipant(participant);
+                addRemoteParticipant(participant);
             }
 
             @Override
@@ -179,19 +186,114 @@ class StreamingManager implements StreamingManagerInterface {
     /*
      * Called when participant joins the room
      */
-    private void addParticipant(Participant participant) {
+    private void addRemoteParticipant(RemoteParticipant remoteParticipant) {
 
         /*
-         * Add participant renderer
+         * Add remote participant renderer
          */
-        if (participant.getVideoTracks().size() > 0) {
-            //addParticipantVideo(participant.getVideoTracks().get(0));
+        if (remoteParticipant.getRemoteVideoTracks().size() > 0) {
+            RemoteVideoTrackPublication remoteVideoTrackPublication =
+                    remoteParticipant.getRemoteVideoTracks().get(0);
+
+            /*
+             * Only render video tracks that are subscribed to
+             */
+            if (remoteVideoTrackPublication.isTrackSubscribed()) {
+                // TODO invoke VideoTrack.addRenderer(...) on correct VideoView
+                addRemoteParticipantVideo(remoteVideoTrackPublication.getRemoteVideoTrack());
+            }
         }
 
         /*
          * Start listening for participant events
          */
-        //participant.setListener(participantListener());
+        remoteParticipant.setListener(remoteParticipantListener());
+    }
+
+    private void addRemoteParticipantVideo(RemoteVideoTrack remoteVideoTrack) {
+
+    }
+
+    private void removeParticipantVideo(RemoteVideoTrack remoteVideoTrack) {
+
+    }
+
+    private RemoteParticipant.Listener remoteParticipantListener() {
+        return new RemoteParticipant.Listener() {
+            @Override
+            public void onAudioTrackPublished(RemoteParticipant remoteParticipant,
+                                              RemoteAudioTrackPublication remoteAudioTrackPublication) {}
+
+            @Override
+            public void onAudioTrackUnpublished(RemoteParticipant remoteParticipant,
+                                                RemoteAudioTrackPublication remoteAudioTrackPublication) {}
+
+            @Override
+            public void onDataTrackPublished(RemoteParticipant remoteParticipant,
+                                             RemoteDataTrackPublication remoteDataTrackPublication) {}
+
+            @Override
+            public void onDataTrackUnpublished(RemoteParticipant remoteParticipant,
+                                               RemoteDataTrackPublication remoteDataTrackPublication) {}
+
+            @Override
+            public void onVideoTrackPublished(RemoteParticipant remoteParticipant,
+                                              RemoteVideoTrackPublication remoteVideoTrackPublication) {}
+
+            @Override
+            public void onVideoTrackUnpublished(RemoteParticipant remoteParticipant,
+                                                RemoteVideoTrackPublication remoteVideoTrackPublication) {}
+
+            @Override
+            public void onAudioTrackSubscribed(RemoteParticipant remoteParticipant,
+                                               RemoteAudioTrackPublication remoteAudioTrackPublication,
+                                               RemoteAudioTrack remoteAudioTrack) {}
+
+            @Override
+            public void onAudioTrackUnsubscribed(RemoteParticipant remoteParticipant,
+                                                 RemoteAudioTrackPublication remoteAudioTrackPublication,
+                                                 RemoteAudioTrack remoteAudioTrack) {}
+
+            @Override
+            public void onDataTrackSubscribed(RemoteParticipant remoteParticipant,
+                                              RemoteDataTrackPublication remoteDataTrackPublication,
+                                              RemoteDataTrack remoteDataTrack) {}
+
+            @Override
+            public void onDataTrackUnsubscribed(RemoteParticipant remoteParticipant,
+                                                RemoteDataTrackPublication remoteDataTrackPublication,
+                                                RemoteDataTrack remoteDataTrack) {}
+
+            @Override
+            public void onVideoTrackSubscribed(RemoteParticipant remoteParticipant,
+                                               RemoteVideoTrackPublication remoteVideoTrackPublication,
+                                               RemoteVideoTrack remoteVideoTrack) {
+                addRemoteParticipantVideo(remoteVideoTrack);
+            }
+
+            @Override
+            public void onVideoTrackUnsubscribed(RemoteParticipant remoteParticipant,
+                                                 RemoteVideoTrackPublication remoteVideoTrackPublication,
+                                                 RemoteVideoTrack remoteVideoTrack) {
+                removeParticipantVideo(remoteVideoTrack);
+            }
+
+            @Override
+            public void onAudioTrackEnabled(RemoteParticipant remoteParticipant,
+                                            RemoteAudioTrackPublication remoteAudioTrackPublication) {}
+
+            @Override
+            public void onAudioTrackDisabled(RemoteParticipant remoteParticipant,
+                                             RemoteAudioTrackPublication remoteAudioTrackPublication) {}
+
+            @Override
+            public void onVideoTrackEnabled(RemoteParticipant remoteParticipant,
+                                            RemoteVideoTrackPublication remoteVideoTrackPublication) {}
+
+            @Override
+            public void onVideoTrackDisabled(RemoteParticipant remoteParticipant,
+                                             RemoteVideoTrackPublication remoteVideoTrackPublication) {}
+        };
     }
 
 
