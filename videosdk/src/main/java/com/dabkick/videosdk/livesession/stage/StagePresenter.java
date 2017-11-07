@@ -7,4 +7,5 @@ public interface StagePresenter {
 
     List<StageVideo> getStageItems();
 
+    ObservableVideoView.VideoControlListener getVideoControlsListener();
 }

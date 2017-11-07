@@ -5,6 +5,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.VideoView;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * VideoView with callbacks when pause, resume, and seek bar are changed
  */
@@ -14,7 +16,7 @@ public class ObservableVideoView extends VideoView {
     private boolean mIsOnPauseMode = false;
 
     public interface VideoControlListener {
-        void onPause();
+        void onPause(int currentTime);
         void onResume();
         void onSeekBarChanged(int currentTime);
     }
@@ -28,7 +30,8 @@ public class ObservableVideoView extends VideoView {
         super.pause();
 
         if (videoControlListener != null) {
-            videoControlListener.onPause();
+            int secs = (int) TimeUnit.SECONDS.convert(getCurrentPosition(), TimeUnit.MILLISECONDS);
+            videoControlListener.onPause(secs);
         }
 
         mIsOnPauseMode = true;
@@ -52,7 +55,7 @@ public class ObservableVideoView extends VideoView {
         super.seekTo(msec);
 
         if (videoControlListener != null) {
-            videoControlListener.onSeekBarChanged(msec);
+            videoControlListener.onSeekBarChanged((int) TimeUnit.SECONDS.convert(msec, TimeUnit.MILLISECONDS));
         }
     }
 

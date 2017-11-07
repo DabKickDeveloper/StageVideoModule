@@ -19,9 +19,11 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     private Context context;
     private ObservableVideoView.VideoControlListener videoControlListener;
 
-    public StageRecyclerViewAdapter(Activity activity, List<StageVideo> items) {
+    public StageRecyclerViewAdapter(Activity activity, List<StageVideo> items,
+                                    ObservableVideoView.VideoControlListener videoControlListener) {
         this.items = items;
         this.context = activity;
+        this.videoControlListener = videoControlListener;
     }
 
     @Override

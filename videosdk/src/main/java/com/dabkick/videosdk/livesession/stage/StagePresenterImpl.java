@@ -14,12 +14,12 @@ public class StagePresenterImpl implements StagePresenter, StageModel.StageModel
 
     @Override
     public void onStageVideoAdded() {
-        view.dataUpdated();
+        view.onStageDataUpdated();
     }
 
     @Override
     public void onStageVideoRemoved() {
-        view.dataUpdated();
+        view.onStageDataUpdated();
     }
 
     @Override
@@ -27,6 +27,23 @@ public class StagePresenterImpl implements StagePresenter, StageModel.StageModel
         return model.getStageVideoList();
     }
 
+    @Override
+    public ObservableVideoView.VideoControlListener getVideoControlsListener() {
+        return new ObservableVideoView.VideoControlListener() {
+            @Override
+            public void onPause(int secs) {
+                model.pauseVideo(secs);
+            }
 
+            @Override
+            public void onResume() {
+                model.resumeVideo();
+            }
 
+            @Override
+            public void onSeekBarChanged(int currentTime) {
+                model.seekTo(currentTime);
+            }
+        };
+    }
 }

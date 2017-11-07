@@ -43,7 +43,7 @@ import java.util.ArrayList;
 
 import timber.log.Timber;
 
-public class LiveSessionActivity extends AppCompatActivity implements ChatView, LivestreamView {
+public class LiveSessionActivity extends AppCompatActivity implements ChatView, LivestreamView, StageView {
 
     // Chat MVP
     private ChatAdapter chatAdapter;
@@ -140,15 +140,10 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
         SnapHelper stageSnapHelper = new PagerSnapHelper();
         stageSnapHelper.attachToRecyclerView(stageRecyclerView);
 
-        StageView stageView = new StageView() {
-            @Override
-            public void dataUpdated() {
-                stageRecyclerViewAdapter.notifyDataSetChanged();
-            }
-        };
-        stagePresenter = new StagePresenterImpl(stageView);
+        stagePresenter = new StagePresenterImpl(this);
 
-        stageRecyclerViewAdapter = new StageRecyclerViewAdapter(this, stagePresenter.getStageItems());
+        stageRecyclerViewAdapter = new StageRecyclerViewAdapter(this, stagePresenter.getStageItems(),
+                stagePresenter.getVideoControlsListener());
         stageRecyclerView.setAdapter(stageRecyclerViewAdapter);
 
 
@@ -276,6 +271,11 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
     @Override
     public void notifyDataSetChanged() {
         sessionParticipantsAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onStageDataUpdated() {
+        stageRecyclerViewAdapter.notifyDataSetChanged();
     }
 
 }

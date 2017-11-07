@@ -38,6 +38,7 @@ class StageModel {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 StageVideo sv = dataSnapshot.getValue(StageVideo.class);
+                sv.setKey(dataSnapshot.getKey());
                 stageVideoList.add(sv);
                 callback.onStageVideoAdded();
             }
@@ -60,10 +61,25 @@ class StageModel {
         };
         databaseReference.addChildEventListener(childEventListener);
 
-
     }
 
-    public List<StageVideo> getStageVideoList() {
+    void pauseVideo(int secs) {
+        stageVideoList.get(0).setPlayedSeconds(secs);
+        stageVideoList.get(0).setState(StageVideo.PAUSED);
+        databaseReference.child(stageVideoList.get(0).getKey()).setValue(stageVideoList.get(0));
+    }
+
+    void resumeVideo() {
+        stageVideoList.get(0).setState(StageVideo.PLAYING);
+        databaseReference.child(stageVideoList.get(0).getKey()).setValue(stageVideoList.get(0));
+    }
+
+    void seekTo(int secs) {
+        stageVideoList.get(0).setPlayedSeconds(secs);
+        databaseReference.child(stageVideoList.get(0).getKey()).setValue(stageVideoList.get(0));
+    }
+
+    List<StageVideo> getStageVideoList() {
         return stageVideoList;
     }
 

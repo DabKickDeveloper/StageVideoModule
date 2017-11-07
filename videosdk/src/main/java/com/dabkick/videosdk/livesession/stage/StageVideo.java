@@ -4,25 +4,12 @@ package com.dabkick.videosdk.livesession.stage;
 public class StageVideo {
 
     private String url;
-
     private String state;
+    private String key;
 
-    public enum State {
+    private int playedSeconds;
 
-        PLAYING("playing"), PAUSED("paused");
-
-        private final String stateStr;
-
-        State(String stateStr) {
-            this.stateStr = stateStr;
-        }
-
-
-        @Override
-        public String toString() {
-            return stateStr;
-        }
-    }
+    static final String PLAYING = "playing", PAUSED = "paused";
 
     public StageVideo() {
         // firebase req'd empty constructor
@@ -30,7 +17,28 @@ public class StageVideo {
 
     public StageVideo(String url) {
         this.url = url;
-        this.state = State.PAUSED.toString();
+        this.state = PAUSED;
+        this.playedSeconds = 0;
+    }
+
+    public int getPlayedSeconds() {
+        return playedSeconds;
+    }
+
+    public void setPlayedSeconds(int playedSeconds) {
+        this.playedSeconds = playedSeconds;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getState() {
