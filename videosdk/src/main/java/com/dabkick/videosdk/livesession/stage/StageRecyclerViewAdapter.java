@@ -1,10 +1,12 @@
 package com.dabkick.videosdk.livesession.stage;
 
+import android.app.Activity;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.VideoView;
+import android.widget.MediaController;
 
 import com.dabkick.videosdk.R;
 
@@ -14,9 +16,12 @@ import java.util.List;
 public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<StageVideo> items;
+    private Context context;
+    private ObservableVideoView.VideoControlListener videoControlListener;
 
-    public StageRecyclerViewAdapter(List<StageVideo> items) {
+    public StageRecyclerViewAdapter(Activity activity, List<StageVideo> items) {
         this.items = items;
+        this.context = activity;
     }
 
     @Override
@@ -27,8 +32,13 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
         StageViewHolder vh = (StageViewHolder) holder;
         vh.videoView.setVideoPath(items.get(position).getUrl());
+        vh.videoView.setMediaController(vh.mediaController);
+        vh.mediaController.setAnchorView(vh.videoView);
+        vh.videoView.setVideoControlsListener(videoControlListener);
+
     }
 
     @Override
@@ -39,11 +49,13 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
     private class StageViewHolder extends RecyclerView.ViewHolder {
 
-        VideoView videoView;
+        ObservableVideoView videoView;
+        MediaController mediaController;
 
         StageViewHolder(View itemView) {
             super(itemView);
             videoView = itemView.findViewById(R.id.item_stage_videoview);
+            mediaController = new MediaController(context);
         }
     }
 

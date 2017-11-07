@@ -148,7 +148,7 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
         };
         stagePresenter = new StagePresenterImpl(stageView);
 
-        stageRecyclerViewAdapter = new StageRecyclerViewAdapter(stagePresenter.getStageItems());
+        stageRecyclerViewAdapter = new StageRecyclerViewAdapter(this, stagePresenter.getStageItems());
         stageRecyclerView.setAdapter(stageRecyclerViewAdapter);
 
 
