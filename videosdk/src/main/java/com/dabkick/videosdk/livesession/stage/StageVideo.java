@@ -49,4 +49,19 @@ public class StageVideo {
         return url;
     }
 
+    @Override
+    public int hashCode() {
+        int num = 17;
+        num *= 31 + Integer.parseInt(key);
+        return num;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (!(obj instanceof StageVideo)) return false;
+        final StageVideo other = (StageVideo) obj;
+
+        return key.equals(other.getKey());
+    }
 }

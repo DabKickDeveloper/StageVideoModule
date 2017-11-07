@@ -13,6 +13,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 class StageModel {
 
     interface StageModelCallback {
@@ -44,7 +46,15 @@ class StageModel {
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Timber.d("onChildChanged");
+                StageVideo stageVideo = dataSnapshot.getValue(StageVideo.class);
+                for (int i = 0; i < stageVideoList.size(); i++) {
+                    if (stageVideo.equals(stageVideoList.get(i))) {
+                        stageVideoList.set(i, stageVideo);
+                    }
+                }
+            }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
