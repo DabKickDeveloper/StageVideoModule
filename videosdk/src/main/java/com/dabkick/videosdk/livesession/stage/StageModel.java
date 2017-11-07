@@ -18,8 +18,7 @@ import timber.log.Timber;
 class StageModel {
 
     interface StageModelCallback {
-        void onStageVideoAdded();
-        void onStageVideoRemoved();
+        void onStageVideoChanged();
     }
 
     private DatabaseReference databaseReference;
@@ -42,7 +41,7 @@ class StageModel {
                 StageVideo sv = dataSnapshot.getValue(StageVideo.class);
                 sv.setKey(dataSnapshot.getKey());
                 stageVideoList.add(sv);
-                callback.onStageVideoAdded();
+                callback.onStageVideoChanged();
             }
 
             @Override
@@ -52,15 +51,17 @@ class StageModel {
                 for (int i = 0; i < stageVideoList.size(); i++) {
                     if (stageVideo.equals(stageVideoList.get(i))) {
                         stageVideoList.set(i, stageVideo);
+                        break;
                     }
                 }
+                callback.onStageVideoChanged();
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 StageVideo sv = dataSnapshot.getValue(StageVideo.class);
                 stageVideoList.remove(sv);
-                callback.onStageVideoRemoved();
+                callback.onStageVideoChanged();
             }
 
             @Override
@@ -74,17 +75,20 @@ class StageModel {
     }
 
     void pauseVideo(int secs) {
+        Timber.d("pauseVideo: %s", secs);
         stageVideoList.get(0).setPlayedSeconds(secs);
         stageVideoList.get(0).setState(StageVideo.PAUSED);
         databaseReference.child(stageVideoList.get(0).getKey()).setValue(stageVideoList.get(0));
     }
 
     void resumeVideo() {
+        Timber.d("resumeVideo");
         stageVideoList.get(0).setState(StageVideo.PLAYING);
         databaseReference.child(stageVideoList.get(0).getKey()).setValue(stageVideoList.get(0));
     }
 
     void seekTo(int secs) {
+        Timber.d("seekTo: %s", secs);
         stageVideoList.get(0).setPlayedSeconds(secs);
         databaseReference.child(stageVideoList.get(0).getKey()).setValue(stageVideoList.get(0));
     }

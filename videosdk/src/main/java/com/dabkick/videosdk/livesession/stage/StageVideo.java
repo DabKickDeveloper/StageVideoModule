@@ -1,6 +1,8 @@
 package com.dabkick.videosdk.livesession.stage;
 
 
+import timber.log.Timber;
+
 public class StageVideo {
 
     private String url;
@@ -19,6 +21,14 @@ public class StageVideo {
         this.url = url;
         this.state = PAUSED;
         this.playedSeconds = 0;
+    }
+
+    public boolean isPlaying() {
+        if (state == null) {
+            Timber.w("cannot check state before initialization");
+            return false;
+        }
+        return state.equals(PLAYING);
     }
 
     public int getPlayedSeconds() {

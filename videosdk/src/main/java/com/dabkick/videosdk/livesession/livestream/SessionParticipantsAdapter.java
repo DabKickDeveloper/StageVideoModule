@@ -108,7 +108,6 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
     public int getItemCount() {
         int count = 2 + // my view + add friend view
                 participantList.size();
-        Timber.d("item count: %s", count);
         return count;
     }
 
