@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         DabKickSession.DabKickVideoProvider dabKickVideoProvider = new DabKickSession.DabKickVideoProvider() {
             @Override
-            public ArrayList<DabKickVideoInfo> provideVideos(int offset) {
+            public ArrayList<DabKickVideoInfo> provideVideos(String category, int offset) {
                 return null; // Shwetha TODO
             }
 
