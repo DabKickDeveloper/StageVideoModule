@@ -28,6 +28,7 @@ dependencies {
     //FIXME failes to sync gradle compile 'com.github.HaarigerHarald:android-youtubeExtractor:master-SNAPSHOT'
     compile 'com.android.support:recyclerview-v7:26.0.0'
     compile 'com.jakewharton:butterknife:8.8.1'
+    compile 'com.squareup.picasso:picasso:2.5.2'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     compile project(":videosdk")

@@ -10,13 +10,14 @@
         android:choiceMode="singleChoice"
         android:listSelector="#666666"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_above="@+id/dabkick_video_button"/>
 
     <com.dabkick.videosdk.developerbutton.DabKickVideoButton
         android:id="@+id/dabkick_video_button"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
 </RelativeLayout>
