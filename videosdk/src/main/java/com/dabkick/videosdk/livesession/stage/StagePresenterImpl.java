@@ -13,8 +13,13 @@ public class StagePresenterImpl implements StagePresenter, StageModel.StageModel
     }
 
     @Override
-    public void onStageVideoChanged() {
+    public void onStageVideoAdded() {
         view.onStageDataUpdated();
+    }
+
+    @Override
+    public void onStageVideoTimeChanged(int position, int playedMillis) {
+        view.onStageVideoTimeChanged(position, playedMillis);
     }
 
     @Override

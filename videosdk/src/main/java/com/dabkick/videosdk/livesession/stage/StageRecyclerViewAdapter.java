@@ -12,6 +12,8 @@ import com.dabkick.videosdk.R;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 
 public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -42,11 +44,24 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         vh.videoView.setVideoControlsListener(videoControlListener);
 
         StageVideo stageVideo = items.get(position);
-        vh.videoView.actualSeekTo(stageVideo.getPlayedSeconds());
+        vh.videoView.actualSeekTo(stageVideo.getPlayedMillis());
         if (stageVideo.isPlaying()) {
             vh.videoView.start();
         }
 
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List<Object> payloads) {
+        if (!payloads.isEmpty()) {
+            if (payloads.get(0) instanceof Integer) {
+                StageViewHolder vh = (StageViewHolder) holder;
+                int seekTime = (int) payloads.get(0);
+                Timber.d("update video to time: %s", seekTime);
+                vh.videoView.actualSeekTo(seekTime);
+            }
+        }
+        super.onBindViewHolder(holder, position, payloads);
     }
 
     @Override

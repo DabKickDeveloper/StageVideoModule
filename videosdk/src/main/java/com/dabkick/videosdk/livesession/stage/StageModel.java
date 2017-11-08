@@ -18,7 +18,9 @@ import timber.log.Timber;
 class StageModel {
 
     interface StageModelCallback {
-        void onStageVideoChanged();
+        void onStageVideoAdded();
+
+        void onStageVideoTimeChanged(int position, int playedMillis);
     }
 
     private DatabaseReference databaseReference;
@@ -42,29 +44,27 @@ class StageModel {
                 sv.setKey(dataSnapshot.getKey());
                 Timber.d("onChildAdded: %s", dataSnapshot.getKey());
                 stageVideoList.add(sv);
-                callback.onStageVideoChanged();
+                callback.onStageVideoAdded();
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                StageVideo stageVideo = dataSnapshot.getValue(StageVideo.class);
+                StageVideo changedStageVideo = dataSnapshot.getValue(StageVideo.class);
                 Timber.d("onChildChanged: %s", dataSnapshot.getKey());
                 for (int i = 0; i < stageVideoList.size(); i++) {
-                    if (stageVideo.equals(stageVideoList.get(i))) {
-                        Timber.d("replaced video: %s", stageVideo.getKey());
-                        stageVideoList.set(i, stageVideo);
+                    if (changedStageVideo.equals(stageVideoList.get(i))) {
+                        if (changedStageVideo.getPlayedMillis() != stageVideoList.get(0).getPlayedMillis()) {
+                            callback.onStageVideoTimeChanged(i, changedStageVideo.getPlayedMillis());
+                        }
+                        Timber.d("replaced video: %s", changedStageVideo.getKey());
+                        stageVideoList.set(i, changedStageVideo);
                         break;
                     }
                 }
-                callback.onStageVideoChanged();
             }
 
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                StageVideo sv = dataSnapshot.getValue(StageVideo.class);
-                stageVideoList.remove(sv);
-                callback.onStageVideoChanged();
-            }
+            public void onChildRemoved(DataSnapshot dataSnapshot) {}
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
@@ -78,7 +78,7 @@ class StageModel {
 
     void pauseVideo(int secs) {
         Timber.d("pauseVideo: %s", secs);
-        stageVideoList.get(0).setPlayedSeconds(secs);
+        stageVideoList.get(0).setPlayedMillis(secs);
         stageVideoList.get(0).setState(StageVideo.PAUSED);
         databaseReference.child(stageVideoList.get(0).getKey()).setValue(stageVideoList.get(0));
     }
@@ -91,8 +91,8 @@ class StageModel {
 
     void seekTo(int secs) {
         Timber.d("seekTo: %s", secs);
-        //stageVideoList.get(0).setPlayedSeconds(secs);
-        databaseReference.child(stageVideoList.get(0).getKey()).child("playedSeconds").setValue(secs);
+        //stageVideoList.get(0).setPlayedMillis(secs);
+        databaseReference.child(stageVideoList.get(0).getKey()).child("playedMillis").setValue(secs);
     }
 
     List<StageVideo> getStageVideoList() {

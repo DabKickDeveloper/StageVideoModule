@@ -9,7 +9,7 @@ public class StageVideo {
     private String state;
     private String key;
 
-    private int playedSeconds;
+    private int playedMillis;
 
     static final String PLAYING = "playing", PAUSED = "paused";
 
@@ -20,7 +20,7 @@ public class StageVideo {
     public StageVideo(String url) {
         this.url = url;
         this.state = PAUSED;
-        this.playedSeconds = 0;
+        this.playedMillis = 0;
     }
 
     public boolean isPlaying() {
@@ -31,12 +31,12 @@ public class StageVideo {
         return state.equals(PLAYING);
     }
 
-    public int getPlayedSeconds() {
-        return playedSeconds;
+    public int getPlayedMillis() {
+        return playedMillis;
     }
 
-    public void setPlayedSeconds(int playedSeconds) {
-        this.playedSeconds = playedSeconds;
+    public void setPlayedMillis(int playedMillis) {
+        this.playedMillis = playedMillis;
     }
 
     public String getKey() {
