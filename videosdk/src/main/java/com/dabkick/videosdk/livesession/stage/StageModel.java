@@ -40,16 +40,18 @@ class StageModel {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 StageVideo sv = dataSnapshot.getValue(StageVideo.class);
                 sv.setKey(dataSnapshot.getKey());
+                Timber.d("onChildAdded: %s", dataSnapshot.getKey());
                 stageVideoList.add(sv);
                 callback.onStageVideoChanged();
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Timber.d("onChildChanged");
                 StageVideo stageVideo = dataSnapshot.getValue(StageVideo.class);
+                Timber.d("onChildChanged: %s", dataSnapshot.getKey());
                 for (int i = 0; i < stageVideoList.size(); i++) {
                     if (stageVideo.equals(stageVideoList.get(i))) {
+                        Timber.d("replaced video: %s", stageVideo.getKey());
                         stageVideoList.set(i, stageVideo);
                         break;
                     }
@@ -89,8 +91,8 @@ class StageModel {
 
     void seekTo(int secs) {
         Timber.d("seekTo: %s", secs);
-        stageVideoList.get(0).setPlayedSeconds(secs);
-        databaseReference.child(stageVideoList.get(0).getKey()).setValue(stageVideoList.get(0));
+        //stageVideoList.get(0).setPlayedSeconds(secs);
+        databaseReference.child(stageVideoList.get(0).getKey()).child("playedSeconds").setValue(secs);
     }
 
     List<StageVideo> getStageVideoList() {

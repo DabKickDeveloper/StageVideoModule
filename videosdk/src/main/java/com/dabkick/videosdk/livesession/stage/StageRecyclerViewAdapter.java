@@ -42,7 +42,7 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         vh.videoView.setVideoControlsListener(videoControlListener);
 
         StageVideo stageVideo = items.get(position);
-        vh.videoView.seekTo(stageVideo.getPlayedSeconds());
+        vh.videoView.actualSeekTo(stageVideo.getPlayedSeconds());
         if (stageVideo.isPlaying()) {
             vh.videoView.start();
         }
