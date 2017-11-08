@@ -5,8 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.dabkick.videosdk.DabKickSession;
+import com.dabkick.videosdk.DabKickVideoInfo;
+import com.dabkick.videosdk.developerbutton.DabKickVideoButton;
 
-import com.dabkick.videosdk.DabKick;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,7 +33,32 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, urls);
         lv.setAdapter(listAdapter);
 
-        DabKick.initSdk("4b3403665fea6");
+
+        DabKickSession.DabKickVideoProvider dabKickVideoProvider = new DabKickSession.DabKickVideoProvider() {
+            @Override
+            public ArrayList<DabKickVideoInfo> provideVideos(int offset) {
+                return null; // Shwetha TODO
+            }
+
+            @Override
+            public ArrayList<String> provideCategories(int offset) {
+                return null; // Shwetha TODO
+            }
+
+            @Override
+            public ArrayList<DabKickVideoInfo> startDabKickWithVideos() {
+                return null; // Shwetha TODO
+            }
+        };
+
+        DabKickSession.DabKickBuilder dabKickBuilder = new DabKickSession.DabKickBuilder(
+                "4b3403665fea6",
+                dabKickVideoProvider
+        );
+
+        DabKickSession dabKickSession = dabKickBuilder.build();
+        DabKickVideoButton dabKickVideoButton = findViewById(R.id.dabkick_video_button);
+        dabKickVideoButton.setDabKickSession(dabKickSession);
 
 
 

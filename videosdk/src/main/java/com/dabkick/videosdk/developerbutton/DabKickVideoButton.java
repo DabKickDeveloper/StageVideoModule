@@ -3,10 +3,10 @@ package com.dabkick.videosdk.developerbutton;
 import android.content.Context;
 import android.content.Intent;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
+import com.dabkick.videosdk.DabKickSession;
 import com.dabkick.videosdk.R;
 import com.dabkick.videosdk.livesession.LiveSessionActivity;
 
@@ -14,6 +14,8 @@ import com.dabkick.videosdk.livesession.LiveSessionActivity;
  * The external view for usage in partner applications
  */
 public class DabKickVideoButton extends LinearLayout {
+
+    private DabKickSession dabKickSession;
 
     public DabKickVideoButton(Context context) {
         super(context);
@@ -33,10 +35,11 @@ public class DabKickVideoButton extends LinearLayout {
     private void init() {
         setOrientation(VERTICAL);
         LayoutInflater.from(getContext()).inflate(R.layout.layout_video_button, this, true);
-        Log.d("Trevor", "clicked");
-        setOnClickListener(view -> {
-            startLiveSessionActivity();
-        });
+        setOnClickListener(view -> startLiveSessionActivity());
+    }
+
+    public void setDabKickSession(final DabKickSession dabKickSession) {
+        this.dabKickSession = dabKickSession;
     }
 
     private void startLiveSessionActivity() {
