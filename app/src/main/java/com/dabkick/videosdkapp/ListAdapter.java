@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.dabkick.videosdk.DabKickVideoInfo;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -24,10 +25,10 @@ import java.util.Map;
 
 public class ListAdapter extends BaseAdapter {
 
-    ArrayList<MainActivity.VideoDetails> data;
+    ArrayList<DabKickVideoInfo> data;
     Context mCtx;
 
-    public ListAdapter(ArrayList<MainActivity.VideoDetails> data, Context ctx) {
+    public ListAdapter(ArrayList<DabKickVideoInfo> data, Context ctx) {
         this.data = data;
         mCtx = ctx;
     }
@@ -42,7 +43,7 @@ public class ListAdapter extends BaseAdapter {
     }
 
     @Override
-    public MainActivity.VideoDetails getItem(int position) {
+    public DabKickVideoInfo getItem(int position) {
 
         return data.get(position);
     }
@@ -63,16 +64,16 @@ public class ListAdapter extends BaseAdapter {
         TextView author = (TextView) row.findViewById(R.id.author);
         TextView duration = (TextView) row.findViewById(R.id.duration);
 
-        url.setText(getItem(position).Url);
+        url.setText(getItem(position).getVideoUrl());
 
-        title.setText(getItem(position).title);
+        title.setText(getItem(position).getTitle());
 
-        author.setText(getItem(position).author);
+        author.setText(getItem(position).getAuthorName());
 
-        duration.setText(getItem(position).duration);
+        duration.setText(getItem(position).getDuration());
 
         Picasso.with(mCtx)
-                .load(getItem(position).thumbnailUrl)
+                .load(getItem(position).getThumbnailUrl())
                 .into(img);
 
         return row;
