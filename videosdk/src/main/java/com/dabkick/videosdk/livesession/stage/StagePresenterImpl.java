@@ -2,6 +2,8 @@ package com.dabkick.videosdk.livesession.stage;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 public class StagePresenterImpl implements StagePresenter, StageModel.StageModelCallback {
 
     private StageView view;
@@ -20,6 +22,21 @@ public class StagePresenterImpl implements StagePresenter, StageModel.StageModel
     @Override
     public void onStageVideoTimeChanged(int position, int playedMillis) {
         view.onStageVideoTimeChanged(position, playedMillis);
+    }
+
+    @Override
+    public void onStageVideoStateChanged(int i, String newState) {
+        // if video is playing and server state changes to paused
+        if (model.getStageVideoList().get(0).isPlaying() &&
+                newState.equals("paused")) {
+            Timber.d("newState: %s, pausing video...", newState);
+            view.onStageVideoStateChanged(i, true);
+        // if video is paused and server state changes to playing
+        } else if (!model.getStageVideoList().get(0).isPlaying() &&
+                newState.equals("playing")) {
+            Timber.d("newState: %s, playing video...", newState);
+            view.onStageVideoStateChanged(i, false);
+        }
     }
 
     @Override

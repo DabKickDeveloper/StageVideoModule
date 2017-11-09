@@ -54,11 +54,25 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List<Object> payloads) {
         if (!payloads.isEmpty()) {
+
+            StageViewHolder vh = (StageViewHolder) holder;
+
+            // updated seekTime
             if (payloads.get(0) instanceof Integer) {
-                StageViewHolder vh = (StageViewHolder) holder;
                 int seekTime = (int) payloads.get(0);
                 Timber.d("update video to time: %s", seekTime);
                 vh.videoView.actualSeekTo(seekTime);
+            }
+            // FIXME move pause/resume logic to controller
+            // updated play/pause state
+            if (payloads.get(0) instanceof Boolean) {
+                boolean shouldPause = (boolean) payloads.get(0);
+                Timber.d("update video to pause: %s", shouldPause);
+                if (shouldPause) {
+                    vh.videoView.pause();
+                } else {
+                    vh.videoView.start();
+                }
             }
         }
         super.onBindViewHolder(holder, position, payloads);

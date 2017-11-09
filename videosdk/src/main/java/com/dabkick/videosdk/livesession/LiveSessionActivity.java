@@ -283,4 +283,9 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
         stageRecyclerViewAdapter.notifyItemChanged(position, playedMillis);
     }
 
+    @Override
+    public void onStageVideoStateChanged(int position, boolean shouldPause) {
+        stageRecyclerViewAdapter.notifyItemChanged(position, shouldPause);
+    }
+
 }
