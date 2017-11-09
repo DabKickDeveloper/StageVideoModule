@@ -1,27 +1,17 @@
 package com.dabkick.videosdkapp;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dabkick.videosdk.DabKickVideoInfo;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-/**
- * Created by iFocus on 07-11-2017.
- */
 
 public class ListAdapter extends BaseAdapter {
 
@@ -58,11 +48,11 @@ public class ListAdapter extends BaseAdapter {
 
         }
 
-        ImageView img = (ImageView) row.findViewById(R.id.thumbnail);
-        TextView url = (TextView) row.findViewById(R.id.url);
-        TextView title = (TextView) row.findViewById(R.id.title);
-        TextView author = (TextView) row.findViewById(R.id.author);
-        TextView duration = (TextView) row.findViewById(R.id.duration);
+        ImageView img = row.findViewById(R.id.thumbnail);
+        TextView url = row.findViewById(R.id.url);
+        TextView title = row.findViewById(R.id.title);
+        TextView author = row.findViewById(R.id.author);
+        TextView duration = row.findViewById(R.id.duration);
 
         url.setText(getItem(position).getVideoUrl());
 
