@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="300dp"
+    android:background="#D5D8DC">
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/icons8camera"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:id="@+id/camera_img"
+        android:scaleType="centerCrop"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:textColorHint="#AAAAAA"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_below="@+id/camera_img"
+        android:layout_marginTop="25dp"
+        android:id="@+id/input_layout">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="left"
+        android:hint="Enter your name"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:textColorHint="#000000"
+        android:textColor="#000000"
+        android:textCursorDrawable="@null"
+        android:cursorVisible="true"
+        android:textSize="20dp"
+        android:id="@+id/name_txt"/>
+        <!--android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/camera_img"
+       />-->
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/cont_btn"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:text="Continue"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/input_layout"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
+        android:background="#424949"
+        android:textColor="#FFFFFF"/>
+
+</RelativeLayout>
