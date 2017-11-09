@@ -1,4 +1,4 @@
-package com.dabkick.videosdk.usersetup;
+package com.dabkick.videosdk.livesession.usersetup;
 
 import android.app.DialogFragment;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,14 +21,14 @@ import com.dabkick.videosdk.R;
 
 import static android.app.Activity.RESULT_OK;
 
-public class GetUserDetails extends DialogFragment{
+public class GetUserDetailsFragment extends DialogFragment{
 
-        ImageView cameraImage;
-        Button continueBtn;
-        EditText nameTxt;
-        DabkickGetUserDetails userDetailListener;
-        Bitmap userImage;
-    static final int REQUEST_IMAGE_CAPTURE = 1;
+    private ImageView cameraImage;
+    private Button continueBtn;
+    private EditText nameTxt;
+    private DabkickGetUserDetails userDetailListener;
+    private Bitmap userImage;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -79,6 +80,7 @@ public class GetUserDetails extends DialogFragment{
         });
 
         nameTxt = view.findViewById(R.id.name_txt);
+        nameTxt.setFilters(new InputFilter[]{new InputFilter.LengthFilter(256)});
     }
 
     @Override

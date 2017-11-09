@@ -37,6 +37,7 @@ import com.dabkick.videosdk.livesession.stage.StagePresenter;
 import com.dabkick.videosdk.livesession.stage.StagePresenterImpl;
 import com.dabkick.videosdk.livesession.stage.StageRecyclerViewAdapter;
 import com.dabkick.videosdk.livesession.stage.StageView;
+import com.dabkick.videosdk.livesession.usersetup.GetUserDetailsFragment;
 import com.twilio.video.VideoView;
 
 import java.util.ArrayList;
@@ -286,6 +287,22 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
     @Override
     public void onStageVideoStateChanged(int position, boolean shouldPause) {
         stageRecyclerViewAdapter.notifyItemChanged(position, shouldPause);
+    }
+
+    private void showGetUserDetailsFragment() {
+
+        android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+        // remove any currently shown dialog
+        android.app.Fragment prev = getFragmentManager().findFragmentByTag(GetUserDetailsFragment.class.getName());
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+        // show Fragment
+        GetUserDetailsFragment newGetUserDetailsFragment = new GetUserDetailsFragment();
+        newGetUserDetailsFragment.show(ft, GetUserDetailsFragment.class.getName());
+
     }
 
 }
