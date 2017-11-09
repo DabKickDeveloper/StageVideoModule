@@ -86,15 +86,16 @@ class StageModel {
 
     }
 
-    void pauseVideo(int secs) {
-        Timber.d("pauseVideo: %s", secs);
-        stageVideoList.get(0).setPlayedMillis(secs);
+    void pauseVideo(int milliseconds) {
+        Timber.d("pauseVideo: %s", milliseconds);
+        stageVideoList.get(0).setPlayedMillis(milliseconds);
         stageVideoList.get(0).setState(StageVideo.PAUSED);
         databaseReference.child(stageVideoList.get(0).getKey()).setValue(stageVideoList.get(0));
     }
 
-    void resumeVideo() {
-        Timber.d("resumeVideo");
+    void resumeVideo(int milliseconds) {
+        Timber.d("resumeVideo: %s", milliseconds);
+        stageVideoList.get(0).setPlayedMillis(milliseconds);
         stageVideoList.get(0).setState(StageVideo.PLAYING);
         databaseReference.child(stageVideoList.get(0).getKey()).setValue(stageVideoList.get(0));
     }

@@ -48,13 +48,13 @@ public class StagePresenterImpl implements StagePresenter, StageModel.StageModel
     public ObservableVideoView.VideoControlListener getVideoControlsListener() {
         return new ObservableVideoView.VideoControlListener() {
             @Override
-            public void onPause(int secs) {
-                model.pauseVideo(secs);
+            public void onPause(int milliseconds) {
+                model.pauseVideo(milliseconds);
             }
 
             @Override
-            public void onResume() {
-                model.resumeVideo();
+            public void onResume(int milliseconds) {
+                model.resumeVideo(milliseconds);
             }
 
             @Override

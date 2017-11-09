@@ -16,8 +16,8 @@ public class ObservableVideoView extends VideoView {
     private boolean mIsOnPauseMode = false;
 
     public interface VideoControlListener {
-        void onPause(int currentTime);
-        void onResume();
+        void onPause(int milliseconds);
+        void onResume(int milliseconds);
         void onSeekBarChanged(int currentTime);
     }
 
@@ -39,13 +39,18 @@ public class ObservableVideoView extends VideoView {
     @Override
     public void start() {
         super.start();
-
+        // started before the end of the video has been reached
         if (mIsOnPauseMode) {
             if (videoControlListener != null) {
-                videoControlListener.onResume();
+                videoControlListener.onResume(getCurrentPosition());
             }
 
             mIsOnPauseMode = false;
+        // user has reached end of video and clicked button
+        } else {
+            if (videoControlListener != null) {
+                videoControlListener.onResume(0);
+            }
         }
     }
 
