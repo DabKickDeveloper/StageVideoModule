@@ -48,22 +48,30 @@ public class ObservableVideoView extends VideoView {
             mIsOnPauseMode = false;
         // user has reached end of video and clicked button
         } else {
-            if (videoControlListener != null) {
-                videoControlListener.onResume(0);
-            }
+//            if (videoControlListener != null) {
+//                videoControlListener.onResume(0);
+//            }
         }
     }
 
-    // seeks the app, where overridden seek() only notifies the listener
-    public void actualSeekTo(int msec) {
-        Timber.d("actualSeekTo: %s", msec);
+    void seekLocal(int msec) {
+        Timber.d("seekLocal: %s", msec);
+        super.seekTo(msec);
+    }
+
+    public void prepareThenSeek(int msec, boolean startPlaying) {
+        Timber.d("prepareThenSeek: %s", msec);
+
         setOnPreparedListener(mp -> {
-            mp.seekTo(msec);
+            //mp.seekTo(msec);
+            //if (startPlaying) super.start();
         });
+
     }
 
     @Override
     public void seekTo(int msec) {
+        //super.seekTo(msec);
         Timber.d("seekTo: %s", msec);
         if (videoControlListener != null) {
             videoControlListener.onSeekBarChanged(msec);

@@ -22,7 +22,6 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     private ObservableVideoView.VideoControlListener videoControlListener;
 
     public StageRecyclerViewAdapter(Activity activity) {
-        this.items = items;
         this.context = activity;
     }
 
@@ -43,12 +42,8 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
         StageVideo stageVideo = items.get(position);
 
-        vh.videoView.actualSeekTo(stageVideo.getPlayedMillis());
-        vh.videoView.setOnPreparedListener(mp -> {
-            if (stageVideo.isPlaying()) {
-                vh.videoView.start();
-            }
-        });
+        boolean startPlaying = stageVideo.isPlaying();
+        vh.videoView.prepareThenSeek(stageVideo.getPlayedMillis(), startPlaying);
 
     }
 
@@ -62,9 +57,9 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             if (payloads.get(0) instanceof Integer) {
                 int seekTime = (int) payloads.get(0);
                 Timber.d("update video to time: %s", seekTime);
-                vh.videoView.actualSeekTo(seekTime);
+                vh.videoView.seekLocal(seekTime);
             }
-            // FIXME move pause/resume logic to controller
+
             // updated play/pause state
             if (payloads.get(0) instanceof Boolean) {
                 boolean shouldPause = (boolean) payloads.get(0);

@@ -49,7 +49,6 @@ class StageModel {
                 callback.onStageVideoAdded();
             }
 
-            // FIXME move if-statement logic into controller
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 StageVideo changedStageVideo = dataSnapshot.getValue(StageVideo.class);
@@ -58,15 +57,16 @@ class StageModel {
                     if (changedStageVideo.equals(stageVideoList.get(i))) {
                         // update stage time
                         if (changedStageVideo.getPlayedMillis() != stageVideoList.get(0).getPlayedMillis()) {
+                            Timber.d("changed time: %s", changedStageVideo.getPlayedMillis());
                             callback.onStageVideoTimeChanged(i, changedStageVideo.getPlayedMillis());
                         }
                         // do not update play/pause
                         if (!changedStageVideo.getState().equals(stageVideoList.get(0).getState())) {
+                            Timber.d("changed state: %s", changedStageVideo.getState());
                             callback.onStageVideoStateChanged(i, changedStageVideo.getState());
                         }
 
 
-                        Timber.d("replaced video: %s", changedStageVideo.getKey());
                         stageVideoList.set(i, changedStageVideo);
                         break;
                     }
