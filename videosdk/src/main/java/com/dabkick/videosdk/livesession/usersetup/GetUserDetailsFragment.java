@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.text.InputFilter;
@@ -30,11 +31,22 @@ public class GetUserDetailsFragment extends DialogFragment{
     private Bitmap userImage;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
+    public static GetUserDetailsFragment newInstance(DabkickGetUserDetails listener){
+
+        GetUserDetailsFragment frag = new GetUserDetailsFragment();
+        Bundle args = new Bundle();
+        args.putParcelable("listener", listener);
+        frag.setArguments(args);
+        return frag;
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.get_user_details_dialog, container);
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
+        userDetailListener = getArguments().getParcelable("listener");
         return  view;
     }
 
@@ -96,12 +108,6 @@ public class GetUserDetailsFragment extends DialogFragment{
         }
     }
 
-    public void setUserDetailListener(DabkickGetUserDetails listner){
-
-        this.userDetailListener = listner;
-
-    }
-
     @Override
     public void onPause() {
         super.onPause();
@@ -115,7 +121,7 @@ public class GetUserDetailsFragment extends DialogFragment{
     }
 
     //Listener to return the name and bitmap collected from the user
-    public interface DabkickGetUserDetails{
+    public interface DabkickGetUserDetails extends Parcelable{
 
         public void getUserDetails(String name, Bitmap userImage);
 
