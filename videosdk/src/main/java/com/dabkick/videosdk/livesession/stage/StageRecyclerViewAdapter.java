@@ -15,17 +15,15 @@ import java.util.List;
 import timber.log.Timber;
 
 
-public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements StageView {
 
     private List<StageVideo> items;
     private Context context;
     private ObservableVideoView.VideoControlListener videoControlListener;
 
-    public StageRecyclerViewAdapter(Activity activity, List<StageVideo> items,
-                                    ObservableVideoView.VideoControlListener videoControlListener) {
+    public StageRecyclerViewAdapter(Activity activity) {
         this.items = items;
         this.context = activity;
-        this.videoControlListener = videoControlListener;
     }
 
     @Override
@@ -84,6 +82,30 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public int getItemCount() {
         return items.size();
+    }
+
+    @Override
+    public void onStageDataUpdated() {
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void onStageVideoTimeChanged(int position, int playedMillis) {
+        notifyItemChanged(position, playedMillis);
+    }
+
+    @Override
+    public void onStageVideoStateChanged(int position, boolean shouldPause) {
+        notifyItemChanged(position, shouldPause);
+    }
+
+    public void setItems(List<StageVideo> items) {
+        this.items = items;
+        notifyDataSetChanged();
+    }
+
+    public void setVideoControlListener(ObservableVideoView.VideoControlListener videoControlListener) {
+        this.videoControlListener = videoControlListener;
     }
 
 

@@ -38,7 +38,6 @@ import com.dabkick.videosdk.livesession.livestream.SessionParticipantsAdapter;
 import com.dabkick.videosdk.livesession.stage.StagePresenter;
 import com.dabkick.videosdk.livesession.stage.StagePresenterImpl;
 import com.dabkick.videosdk.livesession.stage.StageRecyclerViewAdapter;
-import com.dabkick.videosdk.livesession.stage.StageView;
 import com.dabkick.videosdk.livesession.usersetup.GetUserDetailsFragment;
 import com.twilio.video.VideoView;
 
@@ -46,7 +45,7 @@ import java.util.ArrayList;
 
 import timber.log.Timber;
 
-public class LiveSessionActivity extends AppCompatActivity implements ChatView, LivestreamView, StageView {
+public class LiveSessionActivity extends AppCompatActivity implements ChatView, LivestreamView {
 
     // Chat MVP
     private ChatAdapter chatAdapter;
@@ -147,6 +146,7 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
         ImageView backBtn = findViewById(R.id.iv_leave_session_btn);
         backBtn.setOnClickListener(view -> finish());
 
+
         // setup livestream
         RecyclerView livestreamRecyclerView = findViewById(R.id.recyclerview_livestream);
         RecyclerView.LayoutManager livestreamLayoutManager = new LinearLayoutManager(
@@ -167,11 +167,13 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
         SnapHelper stageSnapHelper = new PagerSnapHelper();
         stageSnapHelper.attachToRecyclerView(stageRecyclerView);
 
-        stagePresenter = new StagePresenterImpl(this);
+        stageRecyclerViewAdapter = new StageRecyclerViewAdapter(this);
+        stagePresenter = new StagePresenterImpl(stageRecyclerViewAdapter);
+        stageRecyclerViewAdapter.setVideoControlListener(stagePresenter.getVideoControlsListener());
+        stageRecyclerViewAdapter.setItems(stagePresenter.getStageItems());
 
-        stageRecyclerViewAdapter = new StageRecyclerViewAdapter(this, stagePresenter.getStageItems(),
-                stagePresenter.getVideoControlsListener());
         stageRecyclerView.setAdapter(stageRecyclerViewAdapter);
+
 
         emojiLayout = findViewById(R.id.layout_emoji);
         findViewById(R.id.emoji_icon1).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.SMILE));
@@ -309,21 +311,6 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
     @Override
     public void notifyDataSetChanged() {
         sessionParticipantsAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onStageDataUpdated() {
-        stageRecyclerViewAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onStageVideoTimeChanged(int position, int playedMillis) {
-        stageRecyclerViewAdapter.notifyItemChanged(position, playedMillis);
-    }
-
-    @Override
-    public void onStageVideoStateChanged(int position, boolean shouldPause) {
-        stageRecyclerViewAdapter.notifyItemChanged(position, shouldPause);
     }
 
     private void showGetUserDetailsFragment() {
