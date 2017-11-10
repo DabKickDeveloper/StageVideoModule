@@ -1,6 +1,8 @@
 package com.dabkick.videosdk.livesession.stage;
 
 
+import com.google.firebase.database.Exclude;
+
 import timber.log.Timber;
 
 public class StageVideo {
@@ -23,6 +25,7 @@ public class StageVideo {
         this.playedMillis = 0;
     }
 
+    @Exclude
     public boolean isPlaying() {
         if (state == null) {
             Timber.w("cannot check state before initialization");
