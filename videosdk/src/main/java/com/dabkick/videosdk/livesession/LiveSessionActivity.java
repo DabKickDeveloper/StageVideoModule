@@ -15,10 +15,12 @@ import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.text.InputFilter;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -67,6 +69,10 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
     // Stage
     private StageRecyclerViewAdapter stageRecyclerViewAdapter;
 
+    //Emoji Layout
+    private View emojiLayout;
+    EmojiClickCallback emojiClickCallbackListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,8 +114,28 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
                 if (imm != null) {
                     imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                 }
+
+                chatEditText.setWidth(0);
+                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        1.0f
+                );
+                param.setMargins(12,4,4,4);
+                chatEditText.setLayoutParams(param);
+                emojiLayout.setVisibility(View.GONE);
+
                 toggleChatUi();
             } else {
+
+                int px = Math.round(TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP, 180,getResources().getDisplayMetrics()));
+                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                        px,LinearLayout.LayoutParams.MATCH_PARENT);
+                param.setMargins(12,4,4,4);
+                chatEditText.setLayoutParams(param);
+                emojiLayout.setVisibility(View.VISIBLE);
+
                 toggleChatUi();
             }
         });
@@ -147,6 +173,17 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
                 stagePresenter.getVideoControlsListener());
         stageRecyclerView.setAdapter(stageRecyclerViewAdapter);
 
+        emojiLayout = findViewById(R.id.layout_emoji);
+        findViewById(R.id.emoji_icon1).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.SMILE));
+        findViewById(R.id.emoji_icon2).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.COOL));
+        findViewById(R.id.emoji_icon3).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.WINK));
+        findViewById(R.id.emoji_icon4).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.LOVE));
+        findViewById(R.id.emoji_icon5).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.TONGUE));
+        findViewById(R.id.emoji_icon6).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.ROFL));
+        findViewById(R.id.emoji_icon7).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.CRY));
+        findViewById(R.id.emoji_icon8).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.ANGRY));
+        findViewById(R.id.emoji_icon9).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.XEYES));
+        findViewById(R.id.emoji_icon10).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.SHOCKED));
 
     }
 
@@ -302,6 +339,31 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
         // show Fragment
         GetUserDetailsFragment newGetUserDetailsFragment = new GetUserDetailsFragment();
         newGetUserDetailsFragment.show(ft, GetUserDetailsFragment.class.getName());
+
+    }
+
+    public void setEmojiClickCallbackListener(LiveSessionActivity.EmojiClickCallback listener){
+
+        emojiClickCallbackListener = listener;
+    }
+
+    public enum Emoji{
+
+        SMILE,
+        COOL,
+        WINK,
+        LOVE,
+        TONGUE,
+        ROFL,
+        CRY,
+        ANGRY,
+        XEYES,
+        SHOCKED
+    }
+
+    public interface EmojiClickCallback{
+
+        void emojiClicked(Emoji emoji);
 
     }
 

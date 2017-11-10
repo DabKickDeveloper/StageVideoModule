@@ -36,7 +36,7 @@
 
         <com.dabkick.videosdk.livesession.chat.ClearFocusBackPressedEditText
             android:id="@+id/message_edit_text"
-            android:layout_width="0dp"
+            android:layout_width="180dp"
             android:background="@drawable/background_enter_chat_message"
             android:hint="@string/chat_message_field_hint"
             android:textColorHint="@android:color/darker_gray"
@@ -47,9 +47,14 @@
             android:paddingLeft="12dp"
             android:paddingRight="4dp"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1"
             android:inputType="text"
             android:imeOptions="actionSend"/>
+
+        <include
+            android:id="@+id/layout_emoji"
+            layout="@layout/emoji_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
