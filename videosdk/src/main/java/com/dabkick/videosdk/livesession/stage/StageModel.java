@@ -20,7 +20,7 @@ class StageModel {
     interface StageModelCallback {
         void onStageVideoAdded();
 
-        void onStageVideoTimeChanged(int position, int playedMillis);
+        void onStageVideoTimeChanged(int position, long playedMillis);
 
         void onStageVideoStateChanged(int i, String newState);
     }
@@ -86,21 +86,21 @@ class StageModel {
 
     }
 
-    void pauseVideo(int milliseconds) {
+    void pauseVideo(long milliseconds) {
         Timber.d("pauseVideo: %s", milliseconds);
         stageVideoList.get(0).setPlayedMillis(milliseconds);
         stageVideoList.get(0).setState(StageVideo.PAUSED);
         databaseReference.child(stageVideoList.get(0).getKey()).setValue(stageVideoList.get(0));
     }
 
-    void resumeVideo(int milliseconds) {
+    void resumeVideo(long milliseconds) {
         Timber.d("resumeVideo: %s", milliseconds);
         stageVideoList.get(0).setPlayedMillis(milliseconds);
         stageVideoList.get(0).setState(StageVideo.PLAYING);
         databaseReference.child(stageVideoList.get(0).getKey()).setValue(stageVideoList.get(0));
     }
 
-    void seekTo(int secs) {
+    void seekTo(long secs) {
         Timber.d("seekTo: %s", secs);
         //stageVideoList.get(0).setPlayedMillis(secs);
         databaseReference.child(stageVideoList.get(0).getKey()).child("playedMillis").setValue(secs);

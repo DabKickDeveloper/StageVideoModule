@@ -20,7 +20,7 @@ public class StagePresenterImpl implements StagePresenter, StageModel.StageModel
     }
 
     @Override
-    public void onStageVideoTimeChanged(int position, int playedMillis) {
+    public void onStageVideoTimeChanged(int position, long playedMillis) {
         view.onStageVideoTimeChanged(position, playedMillis);
     }
 
@@ -45,20 +45,20 @@ public class StagePresenterImpl implements StagePresenter, StageModel.StageModel
     }
 
     @Override
-    public ObservableVideoView.VideoControlListener getVideoControlsListener() {
-        return new ObservableVideoView.VideoControlListener() {
+    public StageRecyclerViewAdapter.VideoControlListener getVideoControlsListener() {
+        return new StageRecyclerViewAdapter.VideoControlListener() {
             @Override
-            public void onPause(int milliseconds) {
+            public void onPause(long milliseconds) {
                 model.pauseVideo(milliseconds);
             }
 
             @Override
-            public void onResume(int milliseconds) {
+            public void onResume(long milliseconds) {
                 model.resumeVideo(milliseconds);
             }
 
             @Override
-            public void onSeekBarChanged(int currentTime) {
+            public void onSeekBarChanged(long currentTime) {
                 model.seekTo(currentTime);
             }
         };

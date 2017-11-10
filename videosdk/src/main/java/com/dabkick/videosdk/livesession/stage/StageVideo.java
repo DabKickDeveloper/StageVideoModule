@@ -11,7 +11,7 @@ public class StageVideo {
     private String state;
     private String key;
 
-    private int playedMillis;
+    private long playedMillis;
 
     static final String PLAYING = "playing", PAUSED = "paused";
 
@@ -34,11 +34,11 @@ public class StageVideo {
         return state.equals(PLAYING);
     }
 
-    public int getPlayedMillis() {
+    public long getPlayedMillis() {
         return playedMillis;
     }
 
-    public void setPlayedMillis(int playedMillis) {
+    public void setPlayedMillis(long playedMillis) {
         this.playedMillis = playedMillis;
     }
 

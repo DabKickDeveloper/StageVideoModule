@@ -6,9 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.MediaController;
 
 import com.dabkick.videosdk.R;
+import com.devbrackets.android.exomedia.listener.VideoControlsButtonListener;
+import com.devbrackets.android.exomedia.ui.widget.VideoView;
 
 import java.util.List;
 
@@ -19,7 +20,13 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
     private List<StageVideo> items;
     private Context context;
-    private ObservableVideoView.VideoControlListener videoControlListener;
+    private VideoControlListener videoControlListener;
+
+    public interface VideoControlListener {
+        void onPause(long milliseconds);
+        void onResume(long milliseconds);
+        void onSeekBarChanged(long currentTime);
+    }
 
     public StageRecyclerViewAdapter(Activity activity) {
         this.context = activity;
@@ -36,14 +43,50 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
         StageViewHolder vh = (StageViewHolder) holder;
         vh.videoView.setVideoPath(items.get(position).getUrl());
-        vh.videoView.setMediaController(vh.mediaController);
-        vh.mediaController.setAnchorView(vh.videoView);
-        vh.videoView.setVideoControlsListener(videoControlListener);
-
         StageVideo stageVideo = items.get(position);
 
-        boolean startPlaying = stageVideo.isPlaying();
-        vh.videoView.prepareThenSeek(stageVideo.getPlayedMillis(), startPlaying);
+        vh.videoView.setOnPreparedListener(() -> {
+            if (stageVideo.isPlaying()) vh.videoView.start();
+        });
+
+        vh.videoView.setOnSeekCompletionListener(() -> {
+            Timber.d("setOnSeekCompletionListener: %s", vh.videoView.getCurrentPosition());
+            videoControlListener.onSeekBarChanged(vh.videoView.getCurrentPosition());
+        });
+
+        vh.videoView.getVideoControls().setButtonListener(new VideoControlsButtonListener() {
+            @Override
+            public boolean onPlayPauseClicked() {
+                if (vh.videoView.isPlaying()) {
+                    videoControlListener.onPause(vh.videoView.getCurrentPosition());
+                } else {
+                    videoControlListener.onResume(vh.videoView.getCurrentPosition());
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onPreviousClicked() {
+                return false;
+            }
+
+            @Override
+            public boolean onNextClicked() {
+                return false;
+            }
+
+            @Override
+            public boolean onRewindClicked() {
+                return false;
+            }
+
+            @Override
+            public boolean onFastForwardClicked() {
+                return false;
+            }
+        });
+
+        vh.videoView.seekTo(stageVideo.getPlayedMillis());
 
     }
 
@@ -54,10 +97,10 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             StageViewHolder vh = (StageViewHolder) holder;
 
             // updated seekTime
-            if (payloads.get(0) instanceof Integer) {
-                int seekTime = (int) payloads.get(0);
+            if (payloads.get(0) instanceof Long) {
+                long seekTime = (long) payloads.get(0);
                 Timber.d("update video to time: %s", seekTime);
-                vh.videoView.seekLocal(seekTime);
+                vh.videoView.seekTo(seekTime);
             }
 
             // updated play/pause state
@@ -85,7 +128,7 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     @Override
-    public void onStageVideoTimeChanged(int position, int playedMillis) {
+    public void onStageVideoTimeChanged(int position, long playedMillis) {
         notifyItemChanged(position, playedMillis);
     }
 
@@ -99,20 +142,18 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         notifyDataSetChanged();
     }
 
-    public void setVideoControlListener(ObservableVideoView.VideoControlListener videoControlListener) {
+    public void setVideoControlListener(VideoControlListener videoControlListener) {
         this.videoControlListener = videoControlListener;
     }
 
 
     private class StageViewHolder extends RecyclerView.ViewHolder {
 
-        ObservableVideoView videoView;
-        MediaController mediaController;
+        VideoView videoView;
 
         StageViewHolder(View itemView) {
             super(itemView);
             videoView = itemView.findViewById(R.id.item_stage_videoview);
-            mediaController = new MediaController(context);
         }
     }
 
