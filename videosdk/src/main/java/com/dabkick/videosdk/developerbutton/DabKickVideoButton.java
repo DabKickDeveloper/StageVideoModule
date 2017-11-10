@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
 import com.dabkick.videosdk.DabKickSession;
+import com.dabkick.videosdk.Prefs;
 import com.dabkick.videosdk.R;
 import com.dabkick.videosdk.livesession.LiveSessionActivity;
 
@@ -40,6 +41,7 @@ public class DabKickVideoButton extends LinearLayout {
 
     public void setDabKickSession(final DabKickSession dabKickSession) {
         this.dabKickSession = dabKickSession;
+        Prefs.setDeveloperId(dabKickSession.getDeveloperKey());
     }
 
     private void startLiveSessionActivity() {

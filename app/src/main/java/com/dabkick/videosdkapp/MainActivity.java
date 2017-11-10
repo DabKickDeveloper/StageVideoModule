@@ -1,23 +1,16 @@
 package com.dabkick.videosdkapp;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.dabkick.videosdk.DabKickSession;
 import com.dabkick.videosdk.DabKickVideoInfo;
 import com.dabkick.videosdk.developerbutton.DabKickVideoButton;
 
 import java.util.ArrayList;
-
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
