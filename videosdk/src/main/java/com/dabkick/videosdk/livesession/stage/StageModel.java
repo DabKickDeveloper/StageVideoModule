@@ -44,7 +44,7 @@ class StageModel {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 StageVideo sv = dataSnapshot.getValue(StageVideo.class);
                 sv.setKey(dataSnapshot.getKey());
-                Timber.d("onChildAdded: %s", dataSnapshot.getKey());
+                Timber.i("onChildAdded: %s", dataSnapshot.getKey());
                 stageVideoList.add(sv);
                 callback.onStageVideoAdded();
             }
@@ -52,17 +52,17 @@ class StageModel {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 StageVideo changedStageVideo = dataSnapshot.getValue(StageVideo.class);
-                Timber.d("onChildChanged: %s", dataSnapshot.getKey());
+                Timber.i("onChildChanged: %s", dataSnapshot.getKey());
                 for (int i = 0; i < stageVideoList.size(); i++) {
                     if (changedStageVideo.equals(stageVideoList.get(i))) {
                         // update stage time
                         if (changedStageVideo.getPlayedMillis() != stageVideoList.get(0).getPlayedMillis()) {
-                            Timber.d("changed time: %s", changedStageVideo.getPlayedMillis());
+                            Timber.i("changed time: %s", changedStageVideo.getPlayedMillis());
                             callback.onStageVideoTimeChanged(i, changedStageVideo.getPlayedMillis());
                         }
                         // do not update play/pause
                         if (!changedStageVideo.getState().equals(stageVideoList.get(0).getState())) {
-                            Timber.d("changed state: %s", changedStageVideo.getState());
+                            Timber.i("changed state: %s", changedStageVideo.getState());
                             callback.onStageVideoStateChanged(i, changedStageVideo.getState());
                         }
 
@@ -87,21 +87,21 @@ class StageModel {
     }
 
     void pauseVideo(long milliseconds) {
-        Timber.d("pauseVideo: %s", milliseconds);
+        Timber.i("pauseVideo: %s", milliseconds);
         stageVideoList.get(0).setPlayedMillis(milliseconds);
         stageVideoList.get(0).setState(StageVideo.PAUSED);
         databaseReference.child(stageVideoList.get(0).getKey()).setValue(stageVideoList.get(0));
     }
 
     void resumeVideo(long milliseconds) {
-        Timber.d("resumeVideo: %s", milliseconds);
+        Timber.i("resumeVideo: %s", milliseconds);
         stageVideoList.get(0).setPlayedMillis(milliseconds);
         stageVideoList.get(0).setState(StageVideo.PLAYING);
         databaseReference.child(stageVideoList.get(0).getKey()).setValue(stageVideoList.get(0));
     }
 
     void seekTo(long secs) {
-        Timber.d("seekTo: %s", secs);
+        Timber.i("seekTo: %s", secs);
         //stageVideoList.get(0).setPlayedMillis(secs);
         databaseReference.child(stageVideoList.get(0).getKey()).child("playedMillis").setValue(secs);
     }

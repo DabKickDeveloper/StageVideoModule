@@ -50,7 +50,7 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         });
 
         vh.videoView.setOnSeekCompletionListener(() -> {
-            Timber.d("setOnSeekCompletionListener: %s", vh.videoView.getCurrentPosition());
+            Timber.i("setOnSeekCompletionListener: %s", vh.videoView.getCurrentPosition());
             videoControlListener.onSeekBarChanged(vh.videoView.getCurrentPosition());
         });
 
@@ -99,14 +99,14 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             // updated seekTime
             if (payloads.get(0) instanceof Long) {
                 long seekTime = (long) payloads.get(0);
-                Timber.d("update video to time: %s", seekTime);
+                Timber.i("update video to time: %s", seekTime);
                 vh.videoView.seekTo(seekTime);
             }
 
             // updated play/pause state
             if (payloads.get(0) instanceof Boolean) {
                 boolean shouldPause = (boolean) payloads.get(0);
-                Timber.d("update video to pause: %s", shouldPause);
+                Timber.i("update video to pause: %s", shouldPause);
                 if (shouldPause) {
                     vh.videoView.pause();
                 } else {

@@ -43,7 +43,7 @@ class ParticipantModel {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Participant participant = dataSnapshot.getValue(Participant.class);
-                Timber.d("onChildAdded: %s", participant.dabname);
+                Timber.i("onChildAdded: %s", participant.dabname);
                 // do not add participant with same dabname
                 if (participant.dabname.equals(Prefs.getDabname())) {
                     return;
@@ -59,7 +59,7 @@ class ParticipantModel {
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Participant participant = dataSnapshot.getValue(Participant.class);
-                Timber.d("onChildRemoved: %s", participant.dabname);
+                Timber.i("onChildRemoved: %s", participant.dabname);
                 callback.onParticipantRemoved(participant);
 
             }

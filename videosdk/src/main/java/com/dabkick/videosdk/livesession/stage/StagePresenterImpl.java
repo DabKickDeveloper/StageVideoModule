@@ -29,12 +29,12 @@ public class StagePresenterImpl implements StagePresenter, StageModel.StageModel
         // if video is playing and server state changes to paused
         if (model.getStageVideoList().get(0).isPlaying() &&
                 newState.equals("paused")) {
-            Timber.d("newState: %s, pausing video...", newState);
+            Timber.i("newState: %s, pausing video...", newState);
             view.onStageVideoStateChanged(i, true);
         // if video is paused and server state changes to playing
         } else if (!model.getStageVideoList().get(0).isPlaying() &&
                 newState.equals("playing")) {
-            Timber.d("newState: %s, playing video...", newState);
+            Timber.i("newState: %s, playing video...", newState);
             view.onStageVideoStateChanged(i, false);
         }
     }
