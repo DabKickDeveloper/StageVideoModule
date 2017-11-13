@@ -3,7 +3,9 @@ package com.dabkick.videosdk.livesession.stage;
 
 import android.support.annotation.NonNull;
 
+import com.dabkick.videosdk.SdkApp;
 import com.dabkick.videosdk.livesession.livestream.ParticipantDatabaseReferences;
+import com.dabkick.videosdk.livesession.overviews.OverviewDatabase;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -13,9 +15,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
-class StageModel {
+public class StageModel {
 
     interface StageModelCallback {
         void onStageVideoAdded();
@@ -30,7 +34,11 @@ class StageModel {
 
     private List<StageVideo> stageVideoList;
 
+    @Inject OverviewDatabase overviewDatabase;
+
     StageModel(@NonNull StageModelCallback callback) {
+
+        ((SdkApp) SdkApp.getAppContext()).getLivesessionComponent().inject(this);
 
         stageVideoList = new ArrayList<>();
 

@@ -9,6 +9,7 @@ import timber.log.Timber;
 public class SdkApp extends Application {
 
     private static Context appContext;
+    private LivesessionComponent livesessionComponent;
 
     @Override
     public void onCreate() {
@@ -19,7 +20,17 @@ public class SdkApp extends Application {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
+
+        livesessionComponent = DaggerLivesessionComponent.create();
     }
+
+    public LivesessionComponent getLivesessionComponent() {
+        return livesessionComponent;
+    }
+
+
+
+
 
     public static Context getAppContext() {
         return appContext;
