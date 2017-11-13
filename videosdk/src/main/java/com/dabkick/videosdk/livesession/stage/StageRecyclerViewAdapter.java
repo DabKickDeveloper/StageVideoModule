@@ -2,6 +2,7 @@ package com.dabkick.videosdk.livesession.stage;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,7 +51,6 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         });
 
         vh.videoView.setOnSeekCompletionListener(() -> {
-            Timber.i("setOnSeekCompletionListener: %s", vh.videoView.getCurrentPosition());
             videoControlListener.onSeekBarChanged(vh.videoView.getCurrentPosition());
         });
 
@@ -84,6 +84,15 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             public boolean onFastForwardClicked() {
                 return false;
             }
+        });
+
+        vh.videoView.setOnCompletionListener(() -> {
+            vh.videoView.restart();
+            vh.videoView.seekTo(items.get(0).getPlayedMillis());
+            Runnable r = () ->  {
+                if (vh.videoView.isPlaying()) vh.videoView.pause();
+            };
+            new Handler().postDelayed(r, 1000);
         });
 
         vh.videoView.seekTo(stageVideo.getPlayedMillis());
