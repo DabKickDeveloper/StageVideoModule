@@ -7,7 +7,7 @@ import com.dabkick.videosdk.livesession.AbstractDatabaseReferences;
 
 public class StageDatabaseReferences extends AbstractDatabaseReferences {
 
-    private static String LIVE_SESSION_VIDEOS = "liveSessionVideos";
+    private static String VIDEOS = "videos";
 
     static String getStageReference(@NonNull final String roomId) {
         String roomRef = getRoomReference();
@@ -17,7 +17,7 @@ public class StageDatabaseReferences extends AbstractDatabaseReferences {
 
     static String getRoomReference() {
         return getBase() +
-                LIVE_SESSION_VIDEOS;
+                VIDEOS;
     }
 
 }
