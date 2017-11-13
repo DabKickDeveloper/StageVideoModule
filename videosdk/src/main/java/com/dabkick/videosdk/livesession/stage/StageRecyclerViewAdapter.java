@@ -95,26 +95,37 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         if (!payloads.isEmpty()) {
 
             StageViewHolder vh = (StageViewHolder) holder;
+            Long seekTime = getSeekTimeFromPayloads(payloads);
+            Boolean shouldPause = getStateFromPayloads(payloads);
 
             // updated seekTime
-            if (payloads.get(0) instanceof Long) {
-                long seekTime = (long) payloads.get(0);
+            if (seekTime != null) {
                 Timber.i("update video to time: %s", seekTime);
                 vh.videoView.seekTo(seekTime);
             }
 
             // updated play/pause state
-            if (payloads.get(0) instanceof Boolean) {
-                boolean shouldPause = (boolean) payloads.get(0);
+            if (shouldPause != null) {
                 Timber.i("update video to pause: %s", shouldPause);
-                if (shouldPause) {
-                    vh.videoView.pause();
-                } else {
-                    vh.videoView.start();
-                }
+                if (shouldPause) vh.videoView.pause();
+                else vh.videoView.start();
             }
         }
         super.onBindViewHolder(holder, position, payloads);
+    }
+
+    private Long getSeekTimeFromPayloads(List<Object> payloads) {
+        for (Object o : payloads) {
+            if (o instanceof Long) return (Long) o;
+        }
+        return null;
+    }
+
+    private Boolean getStateFromPayloads(List<Object> payloads) {
+        for (Object o : payloads) {
+            if (o instanceof Boolean) return (Boolean) o;
+        }
+        return null;
     }
 
     @Override
