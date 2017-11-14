@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface StagePresenter {
 
-    List<StageVideo> getStageItems();
+    List<StageModel> getStageItems();
 
     StageRecyclerViewAdapter.VideoControlListener getVideoControlsListener();
 }

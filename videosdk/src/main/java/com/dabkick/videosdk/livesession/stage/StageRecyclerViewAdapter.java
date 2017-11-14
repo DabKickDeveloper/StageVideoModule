@@ -19,7 +19,7 @@ import timber.log.Timber;
 
 public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements StageView {
 
-    private List<StageVideo> items;
+    private List<StageModel> items;
     private Context context;
     private VideoControlListener videoControlListener;
 
@@ -44,10 +44,10 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
         StageViewHolder vh = (StageViewHolder) holder;
         vh.videoView.setVideoPath(items.get(position).getUrl());
-        StageVideo stageVideo = items.get(position);
+        StageModel stageModel = items.get(position);
 
         vh.videoView.setOnPreparedListener(() -> {
-            if (stageVideo.isPlaying()) vh.videoView.start();
+            if (stageModel.isPlaying()) vh.videoView.start();
         });
 
         vh.videoView.setOnSeekCompletionListener(() -> {
@@ -95,7 +95,7 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             new Handler().postDelayed(r, 1000);
         });
 
-        vh.videoView.seekTo(stageVideo.getPlayedMillis());
+        vh.videoView.seekTo(stageModel.getPlayedMillis());
 
     }
 
@@ -157,7 +157,7 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         notifyItemChanged(position, shouldPause);
     }
 
-    public void setItems(List<StageVideo> items) {
+    public void setItems(List<StageModel> items) {
         this.items = items;
         notifyDataSetChanged();
     }

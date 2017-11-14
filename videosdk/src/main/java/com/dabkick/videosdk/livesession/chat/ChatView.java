@@ -6,5 +6,5 @@ public interface ChatView {
     void clickSendButton(String message);
 
 
-    void addChatMessage(ChatMessage chatMessage);
+    void addChatMessage(ChatModel chatModel);
 }

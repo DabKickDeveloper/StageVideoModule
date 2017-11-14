@@ -4,14 +4,14 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public class StagePresenterImpl implements StagePresenter, StageModel.StageModelCallback {
+public class StagePresenterImpl implements StagePresenter, StageDatabase.StageDatabaseCallback {
 
     private StageView view;
-    private StageModel model;
+    private StageDatabase model;
 
     public StagePresenterImpl(StageView view) {
         this.view = view;
-        model = new StageModel(this);
+        model = new StageDatabase(this);
     }
 
     @Override
@@ -27,12 +27,12 @@ public class StagePresenterImpl implements StagePresenter, StageModel.StageModel
     @Override
     public void onStageVideoStateChanged(int i, String newState) {
         // if video is playing and server state changes to paused
-        if (model.getStageVideoList().get(0).isPlaying() &&
+        if (model.getStageModelList().get(0).isPlaying() &&
                 newState.equals("paused")) {
             Timber.i("newState: %s, pausing video...", newState);
             view.onStageVideoStateChanged(i, true);
         // if video is paused and server state changes to playing
-        } else if (!model.getStageVideoList().get(0).isPlaying() &&
+        } else if (!model.getStageModelList().get(0).isPlaying() &&
                 newState.equals("playing")) {
             Timber.i("newState: %s, playing video...", newState);
             view.onStageVideoStateChanged(i, false);
@@ -40,8 +40,8 @@ public class StagePresenterImpl implements StagePresenter, StageModel.StageModel
     }
 
     @Override
-    public List<StageVideo> getStageItems() {
-        return model.getStageVideoList();
+    public List<StageModel> getStageItems() {
+        return model.getStageModelList();
     }
 
     @Override

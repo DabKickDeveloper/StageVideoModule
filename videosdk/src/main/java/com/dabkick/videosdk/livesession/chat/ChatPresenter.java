@@ -8,15 +8,15 @@ import com.dabkick.videosdk.livesession.Presenter;
 public class ChatPresenter implements Presenter {
 
     private ChatView view;
-    private ChatModel model;
+    private ChatDatabase model;
 
     public ChatPresenter(ChatView view) {
         this.view = view;
-        model = new ChatModel(this);
+        model = new ChatDatabase(this);
     }
 
-    public void messageAdded(ChatMessage chatMessage) {
-        view.addChatMessage(chatMessage);
+    public void messageAdded(ChatModel chatModel) {
+        view.addChatMessage(chatModel);
     }
 
 

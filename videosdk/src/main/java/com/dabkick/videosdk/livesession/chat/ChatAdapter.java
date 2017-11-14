@@ -14,12 +14,12 @@ import com.dabkick.videosdk.R;
 
 import java.util.ArrayList;
 
-public class ChatAdapter extends ArrayAdapter<ChatMessage> {
+public class ChatAdapter extends ArrayAdapter<ChatModel> {
 
     private Context context;
-    private ArrayList<ChatMessage> messageList;
+    private ArrayList<ChatModel> messageList;
 
-    public ChatAdapter(Context context, ArrayList<ChatMessage> messageList) {
+    public ChatAdapter(Context context, ArrayList<ChatModel> messageList) {
         super(context, R.layout.chat_message, messageList);
         this.context = context;
         this.messageList = messageList;
@@ -33,7 +33,7 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
             convertView = LayoutInflater.from(context).inflate(R.layout.chat_message, parent, false);
         }
 
-        ChatMessage item = messageList.get(position);
+        ChatModel item = messageList.get(position);
 
         TextView authorTv = convertView.findViewById(R.id.chat_message_author);
         TextView messageTv = convertView.findViewById(R.id.chat_message_message);

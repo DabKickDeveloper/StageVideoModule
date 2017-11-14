@@ -27,7 +27,7 @@ import android.widget.Toast;
 import com.dabkick.videosdk.R;
 import com.dabkick.videosdk.Util;
 import com.dabkick.videosdk.livesession.chat.ChatAdapter;
-import com.dabkick.videosdk.livesession.chat.ChatMessage;
+import com.dabkick.videosdk.livesession.chat.ChatModel;
 import com.dabkick.videosdk.livesession.chat.ChatPresenter;
 import com.dabkick.videosdk.livesession.chat.ChatView;
 import com.dabkick.videosdk.livesession.chat.ClearFocusBackPressedEditText;
@@ -202,8 +202,8 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
     }
 
     @Override
-    public void addChatMessage(ChatMessage chatMessage) {
-        chatAdapter.add(chatMessage);
+    public void addChatMessage(ChatModel chatModel) {
+        chatAdapter.add(chatModel);
     }
 
     @Override
