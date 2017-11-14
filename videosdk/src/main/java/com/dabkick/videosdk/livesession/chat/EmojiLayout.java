@@ -1,4 +1,4 @@
-package com.dabkick.videosdk.livesession.emoji;
+package com.dabkick.videosdk.livesession.chat;
 
 import android.content.Context;
 import android.util.AttributeSet;
