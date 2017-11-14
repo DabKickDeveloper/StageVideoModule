@@ -71,7 +71,6 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
 
     //Emoji Layout
     private View emojiLayout;
-    EmojiClickCallback emojiClickCallbackListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,16 +173,7 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
         stageRecyclerView.setAdapter(stageRecyclerViewAdapter);
 
         emojiLayout = findViewById(R.id.layout_emoji);
-        findViewById(R.id.emoji_icon1).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.SMILE));
-        findViewById(R.id.emoji_icon2).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.COOL));
-        findViewById(R.id.emoji_icon3).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.WINK));
-        findViewById(R.id.emoji_icon4).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.LOVE));
-        findViewById(R.id.emoji_icon5).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.TONGUE));
-        findViewById(R.id.emoji_icon6).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.ROFL));
-        findViewById(R.id.emoji_icon7).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.CRY));
-        findViewById(R.id.emoji_icon8).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.ANGRY));
-        findViewById(R.id.emoji_icon9).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.XEYES));
-        findViewById(R.id.emoji_icon10).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.SHOCKED));
+
 
     }
 
@@ -339,31 +329,6 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
         // show Fragment
         GetUserDetailsFragment newGetUserDetailsFragment = new GetUserDetailsFragment();
         newGetUserDetailsFragment.show(ft, GetUserDetailsFragment.class.getName());
-
-    }
-
-    public void setEmojiClickCallbackListener(LiveSessionActivity.EmojiClickCallback listener){
-
-        emojiClickCallbackListener = listener;
-    }
-
-    public enum Emoji{
-
-        SMILE,
-        COOL,
-        WINK,
-        LOVE,
-        TONGUE,
-        ROFL,
-        CRY,
-        ANGRY,
-        XEYES,
-        SHOCKED
-    }
-
-    public interface EmojiClickCallback{
-
-        void emojiClicked(Emoji emoji);
 
     }
 

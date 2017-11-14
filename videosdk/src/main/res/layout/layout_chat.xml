@@ -50,11 +50,18 @@
             android:inputType="text"
             android:imeOptions="actionSend"/>
 
-        <include
+        <HorizontalScrollView
             android:id="@+id/layout_emoji"
-            layout="@layout/emoji_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:paddingLeft="4dp"
+            android:scrollbars="none">
+
+            <com.dabkick.videosdk.livesession.emoji.EmojiLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </HorizontalScrollView>
 
     </LinearLayout>
 

@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <HorizontalScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/horizontalScrollView"
-        android:layout_width="wrap_content"
-        android:layout_height="38dp"
-        android:layout_marginLeft="4dp"
-        android:layout_toRightOf="@+id/text_layout_new"
-        android:scrollbars="none">
 
-        <LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/linear_emoji"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -92,7 +85,4 @@
                 android:layout_marginLeft="4dp"
                 android:onClick="onClickShocked"
                 android:src="@drawable/shocked" />
-
-
-        </LinearLayout>
-    </HorizontalScrollView>
+</LinearLayout>
