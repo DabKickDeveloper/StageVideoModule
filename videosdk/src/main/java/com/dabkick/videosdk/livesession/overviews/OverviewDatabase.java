@@ -11,12 +11,15 @@ import com.google.firebase.database.FirebaseDatabase;
 public class OverviewDatabase {
 
     private OverviewModel overviewModel;
+    private OverviewListener overviewListener;
+    private DatabaseReference databaseReference;
 
-    public OverviewDatabase() {
+    public OverviewDatabase(OverviewListener overviewListener) {
+        this.overviewListener = overviewListener;
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
         String chatPath = OverviewDatabaseReferences.getOverviewRoomReference(AbstractDatabaseReferences.getSessionId());
-        DatabaseReference databaseReference = firebaseDatabase.getReference(chatPath);
+        databaseReference = firebaseDatabase.getReference(chatPath);
 
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
@@ -26,6 +29,7 @@ public class OverviewDatabase {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 OverviewDatabase.this.overviewModel = dataSnapshot.getValue(OverviewModel.class);
+                overviewListener.onOverviewChanged();
             }
             public void onChildRemoved(DataSnapshot dataSnapshot) {}
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
@@ -35,7 +39,12 @@ public class OverviewDatabase {
 
     }
 
-    interface OverviewListener {
+    private void createInitialObject() {
+        overviewModel = new OverviewModel(0);
+        databaseReference.push().setValue(overviewModel);
+    }
+
+    public interface OverviewListener {
         void onOverviewChanged();
     }
 

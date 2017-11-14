@@ -11,12 +11,16 @@ import dagger.Provides;
 @Module
 public class LivesessionModule {
 
-    public LivesessionModule() {}
+    private final OverviewDatabase.OverviewListener overviewListener;
+
+    public LivesessionModule(OverviewDatabase.OverviewListener overviewListener) {
+        this.overviewListener = overviewListener;
+    }
 
     @Provides
     @Singleton
     OverviewDatabase providesOverviewModel() {
-        return new OverviewDatabase();
+        return new OverviewDatabase(overviewListener);
     }
 
 }
