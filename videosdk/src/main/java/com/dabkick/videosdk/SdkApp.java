@@ -12,6 +12,7 @@ public class SdkApp extends Application {
 
     private static Context appContext;
     private LivesessionComponent livesessionComponent;
+    private DabKickSession dabKickSession;
 
     @Override
     public void onCreate() {
@@ -31,6 +32,14 @@ public class SdkApp extends Application {
                 .livesessionModule(new LivesessionModule(listener))
                 .build();
 
+    }
+
+    public DabKickSession getDabKickSession() {
+        return dabKickSession;
+    }
+
+    public void setDabKickSession(DabKickSession dabKickSession) {
+        this.dabKickSession = dabKickSession;
     }
 
     public LivesessionComponent getLivesessionComponent() {

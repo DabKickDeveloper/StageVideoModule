@@ -9,14 +9,13 @@ import android.widget.LinearLayout;
 import com.dabkick.videosdk.DabKickSession;
 import com.dabkick.videosdk.Prefs;
 import com.dabkick.videosdk.R;
+import com.dabkick.videosdk.SdkApp;
 import com.dabkick.videosdk.livesession.LiveSessionActivity;
 
 /**
  * The external view for usage in partner applications
  */
 public class DabKickVideoButton extends LinearLayout {
-
-    private DabKickSession dabKickSession;
 
     public DabKickVideoButton(Context context) {
         super(context);
@@ -40,7 +39,7 @@ public class DabKickVideoButton extends LinearLayout {
     }
 
     public void setDabKickSession(final DabKickSession dabKickSession) {
-        this.dabKickSession = dabKickSession;
+        ((SdkApp)SdkApp.getAppContext()).setDabKickSession(dabKickSession);
         Prefs.setDeveloperId(dabKickSession.getDeveloperKey());
     }
 
@@ -48,6 +47,5 @@ public class DabKickVideoButton extends LinearLayout {
         Intent intent = new Intent(getContext(), LiveSessionActivity.class);
         getContext().startActivity(intent);
     }
-
 
 }
