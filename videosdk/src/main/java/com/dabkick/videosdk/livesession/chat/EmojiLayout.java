@@ -8,7 +8,7 @@ import com.dabkick.videosdk.R;
 
 public class EmojiLayout extends LinearLayout {
 
-    static EmojiClickCallback emojiClickCallbackListener;
+    private EmojiClickCallback emojiClickCallbackListener;
 
     public EmojiLayout(Context context) {
         super(context);
@@ -40,13 +40,11 @@ public class EmojiLayout extends LinearLayout {
         findViewById(R.id.emoji_icon10).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.SHOCKED));
     }
 
-    public static void setEmojiClickCallbackListener(EmojiClickCallback listener){
-
+    public void setEmojiClickCallbackListener(EmojiClickCallback listener){
         emojiClickCallbackListener = listener;
     }
 
     public enum Emoji{
-
         SMILE,
         COOL,
         WINK,
