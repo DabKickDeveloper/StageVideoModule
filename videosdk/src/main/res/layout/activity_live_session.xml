@@ -25,13 +25,23 @@
         android:layout_marginBottom="?android:attr/actionBarSize"
         app:layout_constraintBottom_toTopOf="@+id/recyclerview_livestream"/>
 
+    <ImageView
+        android:id="@+id/iv_content_paddle"
+        android:onClick="showContentDialog"
+        android:layout_width="100dp"
+        android:layout_height="@dimen/height_livestream_bar"
+        android:background="@android:color/holo_green_dark"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerview_livestream" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview_livestream"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/height_livestream_bar"
-        tools:listitem="@layout/livestream_add_friend_viewholder"
         android:layout_marginBottom="?android:attr/actionBarSize"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_content_paddle"
+        tools:listitem="@layout/livestream_add_friend_viewholder" />
 
     <include
         android:id="@+id/layout_chat"
