@@ -20,7 +20,7 @@ public class StagePresenterImpl implements StagePresenter, StageModel.StageModel
     }
 
     @Override
-    public void onStageVideoTimeChanged(int position, int playedMillis) {
+    public void onStageVideoTimeChanged(int position, long playedMillis) {
         view.onStageVideoTimeChanged(position, playedMillis);
     }
 
@@ -29,12 +29,12 @@ public class StagePresenterImpl implements StagePresenter, StageModel.StageModel
         // if video is playing and server state changes to paused
         if (model.getStageVideoList().get(0).isPlaying() &&
                 newState.equals("paused")) {
-            Timber.d("newState: %s, pausing video...", newState);
+            Timber.i("newState: %s, pausing video...", newState);
             view.onStageVideoStateChanged(i, true);
         // if video is paused and server state changes to playing
         } else if (!model.getStageVideoList().get(0).isPlaying() &&
                 newState.equals("playing")) {
-            Timber.d("newState: %s, playing video...", newState);
+            Timber.i("newState: %s, playing video...", newState);
             view.onStageVideoStateChanged(i, false);
         }
     }
@@ -45,20 +45,20 @@ public class StagePresenterImpl implements StagePresenter, StageModel.StageModel
     }
 
     @Override
-    public ObservableVideoView.VideoControlListener getVideoControlsListener() {
-        return new ObservableVideoView.VideoControlListener() {
+    public StageRecyclerViewAdapter.VideoControlListener getVideoControlsListener() {
+        return new StageRecyclerViewAdapter.VideoControlListener() {
             @Override
-            public void onPause(int milliseconds) {
+            public void onPause(long milliseconds) {
                 model.pauseVideo(milliseconds);
             }
 
             @Override
-            public void onResume(int milliseconds) {
+            public void onResume(long milliseconds) {
                 model.resumeVideo(milliseconds);
             }
 
             @Override
-            public void onSeekBarChanged(int currentTime) {
+            public void onSeekBarChanged(long currentTime) {
                 model.seekTo(currentTime);
             }
         };

@@ -5,7 +5,7 @@ public interface StageView {
 
     void onStageDataUpdated();
 
-    void onStageVideoTimeChanged(int position, int playedMillis);
+    void onStageVideoTimeChanged(int position, long playedMillis);
 
     void onStageVideoStateChanged(int position, boolean shouldPause);
 

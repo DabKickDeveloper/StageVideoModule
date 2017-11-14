@@ -43,6 +43,7 @@ ext {
     retrofit2 = '2.3.0'
     googleSupportLib = '26.0.0'
     okhttp3 = '3.8.0'
+    dagger2 = '2.11'
 }
 
 // all dependencies with potential conflicting libraries must go in ext{...} above
@@ -66,11 +67,18 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile "com.squareup.okhttp3:okhttp:${okhttp3}"
     compile "com.squareup.okhttp3:logging-interceptor:${okhttp3}"
+    compile 'com.devbrackets.android:exomedia:4.0.3'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     compile 'io.reactivex.rxjava2:rxjava:2.1.5'
     compile "com.android.support:appcompat-v7:${googleSupportLib}"
     compile "com.android.support:design:${googleSupportLib}"
     testCompile 'junit:junit:4.12'
+
+    compile "com.google.dagger:dagger-android:${dagger2}"
+    compile "com.google.dagger:dagger-android-support:${dagger2}"
+    annotationProcessor "com.google.dagger:dagger-android-processor:${dagger2}"
+    annotationProcessor "com.google.dagger:dagger-compiler:${dagger2}"
+
 }
 
 apply plugin: 'me.tatarka.retrolambda'
