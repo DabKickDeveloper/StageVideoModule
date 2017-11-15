@@ -26,7 +26,7 @@
         app:layout_constraintBottom_toTopOf="@+id/recyclerview_livestream"/>
 
     <ImageView
-        android:id="@+id/iv_content_paddle"
+        android:id="@+id/iv_media_drawer"
         android:onClick="showContentDialog"
         android:layout_width="100dp"
         android:layout_height="@dimen/height_livestream_bar"
@@ -40,7 +40,7 @@
         android:layout_marginBottom="?android:attr/actionBarSize"
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iv_content_paddle"
+        app:layout_constraintStart_toEndOf="@+id/iv_media_drawer"
         tools:listitem="@layout/livestream_add_friend_viewholder" />
 
     <include

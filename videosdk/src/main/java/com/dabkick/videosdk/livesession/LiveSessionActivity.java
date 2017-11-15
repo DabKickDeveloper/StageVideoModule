@@ -24,7 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.dabkick.videosdk.livesession.contentdialog.ContentDialogFragment;
+import com.dabkick.videosdk.livesession.mediadrawer.MediaDrawerDialogFragment;
 import com.dabkick.videosdk.R;
 import com.dabkick.videosdk.Util;
 import com.dabkick.videosdk.livesession.chat.ChatAdapter;
@@ -181,8 +181,8 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
     }
 
     public void showContentDialog(View view) {
-        ContentDialogFragment contentDialogFragment = ContentDialogFragment.newInstance();
-        contentDialogFragment.show(getSupportFragmentManager(), "contentdialogfragment");
+        MediaDrawerDialogFragment mediaDrawerDialogFragment = MediaDrawerDialogFragment.newInstance();
+        mediaDrawerDialogFragment.show(getSupportFragmentManager(), "contentdialogfragment");
     }
 
     // toggle visibility of chat UI and swap button drawable

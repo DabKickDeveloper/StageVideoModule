@@ -1,4 +1,4 @@
-package com.dabkick.videosdk.livesession.contentdialog;
+package com.dabkick.videosdk.livesession.mediadrawer;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,15 +10,15 @@ import android.widget.TextView;
 import com.dabkick.videosdk.R;
 
 // In this case, the fragment displays simple text based on the page
-public class PageFragment extends Fragment {
+public class MediaPageFragment extends Fragment {
     public static final String ARG_PAGE = "ARG_PAGE";
 
     private int mPage;
 
-    public static PageFragment newInstance(int page) {
+    public static MediaPageFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
-        PageFragment fragment = new PageFragment();
+        MediaPageFragment fragment = new MediaPageFragment();
         fragment.setArguments(args);
         return fragment;
     }

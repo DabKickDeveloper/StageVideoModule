@@ -1,4 +1,4 @@
-package com.dabkick.videosdk.livesession.contentdialog;
+package com.dabkick.videosdk.livesession.mediadrawer;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,13 +15,13 @@ import com.dabkick.videosdk.SdkApp;
 import java.util.ArrayList;
 
 
-public class ContentDialogFragment extends DialogFragment {
+public class MediaDrawerDialogFragment extends DialogFragment {
 
-    public static ContentDialogFragment newInstance() {
-        ContentDialogFragment contentDialogFragment = new ContentDialogFragment();
+    public static MediaDrawerDialogFragment newInstance() {
+        MediaDrawerDialogFragment mediaDrawerDialogFragment = new MediaDrawerDialogFragment();
         Bundle args = new Bundle();
-        contentDialogFragment.setArguments(args);
-        return contentDialogFragment;
+        mediaDrawerDialogFragment.setArguments(args);
+        return mediaDrawerDialogFragment;
     }
 
     @Nullable
@@ -35,7 +35,7 @@ public class ContentDialogFragment extends DialogFragment {
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = parent.findViewById(R.id.viewpager);
-        ContentFragmentPagerAdapter adapter = new ContentFragmentPagerAdapter(
+        MediaDrawerPagerAdapter adapter = new MediaDrawerPagerAdapter(
                 getChildFragmentManager(), getContext(), categoryList);
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
