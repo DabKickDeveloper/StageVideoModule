@@ -325,4 +325,15 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        stagePresenter.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stagePresenter.onStop();
+    }
 }

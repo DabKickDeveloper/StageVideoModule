@@ -8,4 +8,8 @@ public interface StagePresenter {
     List<StageModel> getStageItems();
 
     StageRecyclerViewAdapter.VideoControlListener getVideoControlsListener();
+
+    // Activity Lifecycle callbacks
+    void onStart();
+    void onStop();
 }

@@ -12,6 +12,8 @@ import android.widget.ListView;
 import com.dabkick.videosdk.R;
 import com.dabkick.videosdk.SdkApp;
 
+import org.greenrobot.eventbus.EventBus;
+
 import javax.inject.Inject;
 
 // In this case, the fragment displays simple text based on the page
@@ -56,7 +58,6 @@ public class MediaFragment extends Fragment {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if (visibleItemCount == totalItemCount) {
-
                     listAdapter.addAll(mediaDatabase.loadMoreVideos(category));
                     listAdapter.notifyDataSetChanged();
                 }
@@ -64,7 +65,9 @@ public class MediaFragment extends Fragment {
         });
 
         listView.setOnItemClickListener((parent, view, position, id) -> {
-
+            String url = mediaDatabase.getVideoList(category).get(position);
+            MediaItemClickEvent event = new MediaItemClickEvent(url);
+            EventBus.getDefault().post(event);
         });
 
 

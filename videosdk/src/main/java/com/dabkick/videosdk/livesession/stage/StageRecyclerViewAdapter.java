@@ -54,37 +54,39 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             videoControlListener.onSeekBarChanged(vh.videoView.getCurrentPosition());
         });
 
-        vh.videoView.getVideoControls().setButtonListener(new VideoControlsButtonListener() {
-            @Override
-            public boolean onPlayPauseClicked() {
-                if (vh.videoView.isPlaying()) {
-                    videoControlListener.onPause(vh.videoView.getCurrentPosition());
-                } else {
-                    videoControlListener.onResume(vh.videoView.getCurrentPosition());
+        if (vh.videoView.getVideoControls() != null) {
+            vh.videoView.getVideoControls().setButtonListener(new VideoControlsButtonListener() {
+                @Override
+                public boolean onPlayPauseClicked() {
+                    if (vh.videoView.isPlaying()) {
+                        videoControlListener.onPause(vh.videoView.getCurrentPosition());
+                    } else {
+                        videoControlListener.onResume(vh.videoView.getCurrentPosition());
+                    }
+                    return false;
                 }
-                return false;
-            }
 
-            @Override
-            public boolean onPreviousClicked() {
-                return false;
-            }
+                @Override
+                public boolean onPreviousClicked() {
+                    return false;
+                }
 
-            @Override
-            public boolean onNextClicked() {
-                return false;
-            }
+                @Override
+                public boolean onNextClicked() {
+                    return false;
+                }
 
-            @Override
-            public boolean onRewindClicked() {
-                return false;
-            }
+                @Override
+                public boolean onRewindClicked() {
+                    return false;
+                }
 
-            @Override
-            public boolean onFastForwardClicked() {
-                return false;
-            }
-        });
+                @Override
+                public boolean onFastForwardClicked() {
+                    return false;
+                }
+            });
+        }
 
         vh.videoView.setOnCompletionListener(() -> {
             vh.videoView.restart();

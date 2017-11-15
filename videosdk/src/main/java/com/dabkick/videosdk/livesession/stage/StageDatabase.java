@@ -116,7 +116,8 @@ public class StageDatabase {
         return stageModelList;
     }
 
-    public void addVideo(String url) {
+    void addVideo(String url) {
+        Timber.i("added video: %s", url);
         StageModel stageModel = new StageModel(url);
         databaseReference.push().setValue(stageModel);
     }

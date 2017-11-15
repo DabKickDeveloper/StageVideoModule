@@ -1,5 +1,11 @@
 package com.dabkick.videosdk.livesession.stage;
 
+import com.dabkick.videosdk.livesession.mediadrawer.MediaItemClickEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 
 import timber.log.Timber;
@@ -63,4 +69,20 @@ public class StagePresenterImpl implements StagePresenter, StageDatabase.StageDa
             }
         };
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MediaItemClickEvent event) {
+        model.addVideo(event.url);
+    }
+
+    @Override
+    public void onStart() {
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+    }
+
 }

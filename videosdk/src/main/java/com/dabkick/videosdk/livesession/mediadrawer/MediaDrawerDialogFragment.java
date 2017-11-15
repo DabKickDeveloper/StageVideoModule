@@ -12,6 +12,10 @@ import android.view.ViewGroup;
 import com.dabkick.videosdk.R;
 import com.dabkick.videosdk.SdkApp;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -76,6 +80,25 @@ public class MediaDrawerDialogFragment extends DialogFragment {
         tabLayout.setupWithViewPager(viewPager);
 
         return rootLayout;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MediaItemClickEvent event) {
+        dismiss();
+    };
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+
     }
 
 }
