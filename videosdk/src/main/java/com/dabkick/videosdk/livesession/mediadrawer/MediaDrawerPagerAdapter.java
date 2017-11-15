@@ -6,13 +6,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import java.util.ArrayList;
+import java.util.List;
 
 class MediaDrawerPagerAdapter extends FragmentPagerAdapter {
-    private ArrayList<String> tabTitles;
+
+    private List<String> tabTitles;
     private Context context;
 
-    MediaDrawerPagerAdapter(FragmentManager fm, Context context, ArrayList<String> categoryList) {
+    MediaDrawerPagerAdapter(FragmentManager fm, Context context, List<String> categoryList) {
         super(fm);
         this.context = context;
         tabTitles = categoryList;

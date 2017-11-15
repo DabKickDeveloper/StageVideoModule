@@ -12,10 +12,17 @@ import android.view.ViewGroup;
 import com.dabkick.videosdk.R;
 import com.dabkick.videosdk.SdkApp;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 
 public class MediaDrawerDialogFragment extends DialogFragment {
+
+    @Inject MediaDatabase mediaDatabase;
 
     public static MediaDrawerDialogFragment newInstance() {
         MediaDrawerDialogFragment mediaDrawerDialogFragment = new MediaDrawerDialogFragment();
@@ -24,33 +31,37 @@ public class MediaDrawerDialogFragment extends DialogFragment {
         return mediaDrawerDialogFragment;
     }
 
+    public MediaDrawerDialogFragment() {
+        ((SdkApp) SdkApp.getAppContext()).getLivesessionComponent().inject(this);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View parent = inflater.inflate(R.layout.layout_content_dialog_fragment, container);
 
-        ArrayList<String> categoryList = new ArrayList<>();
-        categoryList.add("1");
-        categoryList.add("2");
-
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = parent.findViewById(R.id.viewpager);
         MediaDrawerPagerAdapter adapter = new MediaDrawerPagerAdapter(
-                getChildFragmentManager(), getContext(), categoryList);
+                getChildFragmentManager(), getContext(), mediaDatabase.getCategoryList());
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
             // onPageSelected will not be called with only 1 or 0 item in initial list
             @Override public void onPageSelected(int position) {
-                if (position == categoryList.size() - 1) {
-                    ArrayList<String> newCategories = ((SdkApp) SdkApp.getAppContext()).getDabKickSession().
-                            getDabKickVideoProvider().provideCategories(position);
-                    if (newCategories == null) {
-                        // partner app did not provide any new categories
-                        return;
-                    }
-                    categoryList.addAll(newCategories);
-                    adapter.notifyDataSetChanged();
+                if (position == mediaDatabase.getCategoryList().size() - 1) {
+                    // reached end of categories - query more
+                    mediaDatabase.loadMoreCategories(new Observer<List<String>>() {
+                        @Override public void onSubscribe(Disposable d) {}
+
+                        @Override
+                        public void onNext(List<String> strings) {
+                            adapter.notifyDataSetChanged();
+                        }
+
+                        @Override public void onError(Throwable e) {}
+                        @Override public void onComplete() {}
+                    });
                 }
             }
             @Override public void onPageScrollStateChanged(int state) {}

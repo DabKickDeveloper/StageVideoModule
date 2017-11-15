@@ -9,16 +9,21 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.dabkick.videosdk.R;
+import com.dabkick.videosdk.SdkApp;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 // In this case, the fragment displays simple text based on the page
 public class MediaFragment extends Fragment {
-    public static final String ARG_CATEGORY = "ARG_CATEGORY";
 
+    public static final String ARG_CATEGORY = "ARG_CATEGORY";
     private String category;
     private List<String> items;
+
+    @Inject MediaDatabase mediaDatabase;
 
     public static MediaFragment newInstance(final String category) {
         Bundle args = new Bundle();
@@ -26,6 +31,10 @@ public class MediaFragment extends Fragment {
         MediaFragment fragment = new MediaFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public MediaFragment() {
+        ((SdkApp) SdkApp.getAppContext()).getLivesessionComponent().inject(this);
     }
 
     @Override

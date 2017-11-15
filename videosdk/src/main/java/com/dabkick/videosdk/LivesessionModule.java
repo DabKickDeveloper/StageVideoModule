@@ -1,6 +1,7 @@
 package com.dabkick.videosdk;
 
 
+import com.dabkick.videosdk.livesession.mediadrawer.MediaDatabase;
 import com.dabkick.videosdk.livesession.overviews.OverviewDatabase;
 
 import javax.inject.Singleton;
@@ -22,5 +23,9 @@ public class LivesessionModule {
     OverviewDatabase providesOverviewModel() {
         return new OverviewDatabase(overviewListener);
     }
+
+    @Provides
+    @Singleton
+    MediaDatabase providesMediaDatabase() { return new MediaDatabase(); }
 
 }

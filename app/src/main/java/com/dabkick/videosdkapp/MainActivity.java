@@ -419,7 +419,7 @@ public class MainActivity extends AppCompatActivity {
             public ArrayList<String> provideCategories(int offset) {
                 if (offset == categories.size() - 1) {
                     // cannot provide any more categories
-                    return null;
+                    return new ArrayList<>();
                 }
                 ArrayList<String> categoryList = new ArrayList<>();
                 categoryList.add(categories.get(offset));
