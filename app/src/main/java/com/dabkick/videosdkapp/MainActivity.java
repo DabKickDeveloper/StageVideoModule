@@ -417,29 +417,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public ArrayList<String> provideCategories(int offset) {
-
-                //Create new list to return required value
-                ArrayList<String> categoryList = new ArrayList<>();
-
-                //If offset is equal to list size
-                //return the entire list
-                if(offset == categories.size() - 1)
-                    return categories;
-
-
-                //If the size of the list from the offset is > 5
-                //Return only 5 categories
-                if((categories.size() - 1 - offset) > 5){
-
-                    for(int i = offset; i < 5; i++)
-                        categoryList.add(categories.get(i));
-                }else{//If the size of the list from the offset <=5, then opy the entire list from the ofset
-
-                    for(int i = offset; i < categories.size() ; i++)
-                        categoryList.add(categories.get(i));
-
+                if (offset == categories.size() - 1) {
+                    // cannot provide any more categories
+                    return null;
                 }
-
+                ArrayList<String> categoryList = new ArrayList<>();
+                categoryList.add(categories.get(offset));
                 return categoryList;
             }
 

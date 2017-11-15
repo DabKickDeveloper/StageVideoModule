@@ -10,6 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dabkick.videosdk.R;
+import com.dabkick.videosdk.SdkApp;
+
+import java.util.ArrayList;
 
 
 public class ContentDialogFragment extends DialogFragment {
@@ -26,11 +29,35 @@ public class ContentDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View parent = inflater.inflate(R.layout.layout_content_dialog_fragment, container);
 
+        ArrayList<String> categoryList = new ArrayList<>();
+        categoryList.add("1");
+        categoryList.add("2");
+
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = parent.findViewById(R.id.viewpager);
-        viewPager.setAdapter(new SampleFragmentPagerAdapter(getChildFragmentManager(), getContext()));
+        ContentFragmentPagerAdapter adapter = new ContentFragmentPagerAdapter(
+                getChildFragmentManager(), getContext(), categoryList);
 
-        // Give the TabLayout the ViewPager
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+            // onPageSelected will not be called with only 1 or 0 item in initial list
+            @Override public void onPageSelected(int position) {
+                if (position == categoryList.size() - 1) {
+                    ArrayList<String> newCategories = ((SdkApp) SdkApp.getAppContext()).getDabKickSession().
+                            getDabKickVideoProvider().provideCategories(position);
+                    if (newCategories == null) {
+                        // partner app did not provide any new categories
+                        return;
+                    }
+                    categoryList.addAll(newCategories);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+            @Override public void onPageScrollStateChanged(int state) {}
+        });
+
+        viewPager.setAdapter(adapter);
+
         TabLayout tabLayout = parent.findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
 

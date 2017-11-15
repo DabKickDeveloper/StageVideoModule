@@ -6,19 +6,21 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
-    final int PAGE_COUNT = 3;
-    private String tabTitles[] = new String[] { "Tab1", "Tab2", "Tab3" };
+import java.util.ArrayList;
+
+public class ContentFragmentPagerAdapter extends FragmentPagerAdapter {
+    private ArrayList<String> tabTitles;
     private Context context;
 
-    public SampleFragmentPagerAdapter(FragmentManager fm, Context context) {
+    public ContentFragmentPagerAdapter(FragmentManager fm, Context context, ArrayList<String> categoryList) {
         super(fm);
         this.context = context;
+        tabTitles = categoryList;
     }
 
     @Override
     public int getCount() {
-        return PAGE_COUNT;
+        return tabTitles.size();
     }
 
     @Override
@@ -29,7 +31,7 @@ public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         // Generate title based on item position
-        return tabTitles[position];
+        return tabTitles.get(position);
     }
 }
 

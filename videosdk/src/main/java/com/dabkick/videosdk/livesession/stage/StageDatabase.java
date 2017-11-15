@@ -23,9 +23,7 @@ public class StageDatabase {
 
     interface StageDatabaseCallback {
         void onStageVideoAdded();
-
         void onStageVideoTimeChanged(int position, long playedMillis);
-
         void onStageVideoStateChanged(int i, String newState);
     }
 
