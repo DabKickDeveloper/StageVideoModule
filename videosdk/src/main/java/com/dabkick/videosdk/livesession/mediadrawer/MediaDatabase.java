@@ -6,7 +6,6 @@ import com.dabkick.videosdk.DabKickVideoInfo;
 import com.dabkick.videosdk.SdkApp;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +31,6 @@ public class MediaDatabase {
         provider = ((SdkApp) SdkApp.getAppContext()).getDabKickSession().getDabKickVideoProvider();
 
         categoryList = new ArrayList<>();
-        categoryList.addAll(Arrays.asList("1", "2"));
 
         videoMap = new HashMap<>();
         videoIndexMap = new HashMap<>();

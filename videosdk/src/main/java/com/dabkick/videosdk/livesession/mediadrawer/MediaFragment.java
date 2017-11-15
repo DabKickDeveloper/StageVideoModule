@@ -45,10 +45,6 @@ public class MediaFragment extends Fragment {
 
         ListView listView = (ListView) inflater.inflate(R.layout.fragment_media, container, false);
 
-        // ignore placeholder code
-        if (category.equals("1") || category.equals("2")) return listView;
-
-
         ArrayAdapter<String> listAdapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_list_item_1, mediaDatabase.getVideoList(category));
         listView.setAdapter(listAdapter);

@@ -18,6 +18,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import timber.log.Timber;
 
 
 public class MediaDrawerDialogFragment extends DialogFragment {
@@ -45,11 +46,14 @@ public class MediaDrawerDialogFragment extends DialogFragment {
         MediaDrawerPagerAdapter adapter = new MediaDrawerPagerAdapter(
                 getChildFragmentManager(), getContext(), mediaDatabase.getCategoryList());
 
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
-            // onPageSelected will not be called with only 1 or 0 item in initial list
-            @Override public void onPageSelected(int position) {
-                if (position == mediaDatabase.getCategoryList().size() - 1) {
+
+        ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
+            // hacky solution to make sure we keep loading
+            // ViewPager has a bug where it won't call onPageSelected until it has two or more items
+            @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                Timber.i("pos: %s", position);
+                if (position == 0 || (position == mediaDatabase.getCategoryList().size() - 1)) {
+                    Timber.i("inside");
                     // reached end of categories - query more
                     mediaDatabase.loadMoreCategories(new Observer<List<String>>() {
                         @Override public void onSubscribe(Disposable d) {}
@@ -64,8 +68,10 @@ public class MediaDrawerDialogFragment extends DialogFragment {
                     });
                 }
             }
-            @Override public void onPageScrollStateChanged(int state) {}
-        });
+        };
+
+        viewPager.addOnPageChangeListener(onPageChangeListener);
+        viewPager.post(() -> onPageChangeListener.onPageScrolled(viewPager.getCurrentItem(), 0, 0));
 
         viewPager.setAdapter(adapter);
 
