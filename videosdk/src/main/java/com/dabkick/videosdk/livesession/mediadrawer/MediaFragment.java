@@ -63,6 +63,10 @@ public class MediaFragment extends Fragment {
             }
         });
 
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+
+        });
+
 
         return listView;
     }

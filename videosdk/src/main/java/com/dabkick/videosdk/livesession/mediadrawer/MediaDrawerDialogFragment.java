@@ -18,7 +18,6 @@ import javax.inject.Inject;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-import timber.log.Timber;
 
 
 public class MediaDrawerDialogFragment extends DialogFragment {
@@ -39,12 +38,12 @@ public class MediaDrawerDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View parent = inflater.inflate(R.layout.layout_content_dialog_fragment, container);
+        View rootLayout = inflater.inflate(R.layout.layout_content_dialog_fragment, container);
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
-        ViewPager viewPager = parent.findViewById(R.id.viewpager);
+        ViewPager viewPager = rootLayout.findViewById(R.id.viewpager);
         MediaDrawerPagerAdapter adapter = new MediaDrawerPagerAdapter(
-                getChildFragmentManager(), getContext(), mediaDatabase.getCategoryList());
+                getChildFragmentManager(), mediaDatabase.getCategoryList());
 
 
         ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
@@ -73,10 +72,10 @@ public class MediaDrawerDialogFragment extends DialogFragment {
 
         viewPager.setAdapter(adapter);
 
-        TabLayout tabLayout = parent.findViewById(R.id.sliding_tabs);
+        TabLayout tabLayout = rootLayout.findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        return parent;
+        return rootLayout;
     }
 
 }

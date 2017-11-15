@@ -1,7 +1,6 @@
 package com.dabkick.videosdk.livesession.mediadrawer;
 
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -11,11 +10,9 @@ import java.util.List;
 class MediaDrawerPagerAdapter extends FragmentPagerAdapter {
 
     private List<String> tabTitles;
-    private Context context;
 
-    MediaDrawerPagerAdapter(FragmentManager fm, Context context, List<String> categoryList) {
+    MediaDrawerPagerAdapter(FragmentManager fm, List<String> categoryList) {
         super(fm);
-        this.context = context;
         tabTitles = categoryList;
     }
 
