@@ -25,12 +25,11 @@ class MediaDrawerPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return MediaPageFragment.newInstance(position + 1);
+        return MediaFragment.newInstance(tabTitles.get(position));
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        // Generate title based on item position
         return tabTitles.get(position);
     }
 }
