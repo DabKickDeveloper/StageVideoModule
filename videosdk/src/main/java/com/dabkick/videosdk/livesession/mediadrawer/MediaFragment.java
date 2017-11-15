@@ -5,14 +5,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.dabkick.videosdk.R;
 import com.dabkick.videosdk.SdkApp;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -21,7 +19,6 @@ public class MediaFragment extends Fragment {
 
     public static final String ARG_CATEGORY = "ARG_CATEGORY";
     private String category;
-    private List<String> items;
 
     @Inject MediaDatabase mediaDatabase;
 
@@ -41,16 +38,34 @@ public class MediaFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         category = getArguments().getString(ARG_CATEGORY);
-        items = new ArrayList<>();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         ListView listView = (ListView) inflater.inflate(R.layout.fragment_media, container, false);
 
-        ArrayAdapter<String> listAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, items);
+        // ignore placeholder code
+        if (category.equals("1") || category.equals("2")) return listView;
+
+
+        ArrayAdapter<String> listAdapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_list_item_1, mediaDatabase.getVideoList(category));
         listView.setAdapter(listAdapter);
+
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {}
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (visibleItemCount == totalItemCount) {
+
+                    listAdapter.addAll(mediaDatabase.loadMoreVideos(category));
+                    listAdapter.notifyDataSetChanged();
+                }
+            }
+        });
 
 
         return listView;

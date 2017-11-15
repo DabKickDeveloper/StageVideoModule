@@ -388,31 +388,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public ArrayList<DabKickVideoInfo> provideVideos(String category, int offset) {
 
-                //Get the video list from the holder
-                ArrayList<DabKickVideoInfo> list = (videosHolder.get(category));
+                int totalSize = videosHolder.get(category).size();
+                //int endIndex = Math.min(totalSize, offset + 2);
+                ArrayList<DabKickVideoInfo> list = new ArrayList<>(videosHolder.get(category).subList(offset, 2));
+                return list;
 
-                //Create a new list to return required value
-                ArrayList<DabKickVideoInfo> categoryVideoList = new ArrayList<>();
-
-                //If offset is equal to list size
-                //return the entire list
-                if(offset == list.size() - 1)
-                    return list;
-
-                //If the size of the list from the offset is > 5
-                //Return only 5 videos
-                if((list.size() - 1 - offset) > 5){
-
-                    for(int i = offset; i < 5; i++)
-                        categoryVideoList.add(list.get(i));
-                }else{ //If the size of the list from the offset <=5, then copy the entire list from the offset
-
-                    for(int i = offset; i < list.size() ; i++)
-                        categoryVideoList.add(list.get(i));
-
-                }
-
-                return categoryVideoList;
             }
 
             @Override
