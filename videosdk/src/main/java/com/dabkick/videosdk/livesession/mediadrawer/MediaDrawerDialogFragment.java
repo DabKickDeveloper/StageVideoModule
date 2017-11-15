@@ -51,9 +51,7 @@ public class MediaDrawerDialogFragment extends DialogFragment {
             // hacky solution to make sure we keep loading
             // ViewPager has a bug where it won't call onPageSelected until it has two or more items
             @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Timber.i("pos: %s", position);
                 if (position == 0 || (position == mediaDatabase.getCategoryList().size() - 1)) {
-                    Timber.i("inside");
                     // reached end of categories - query more
                     mediaDatabase.loadMoreCategories(new Observer<List<String>>() {
                         @Override public void onSubscribe(Disposable d) {}
