@@ -29,8 +29,8 @@ public class OverviewDatabase {
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                OverviewModel overviewModel = dataSnapshot.getValue(OverviewModel.class);
-                listener.onOverviewChanged();
+                OverviewModel item = dataSnapshot.getValue(OverviewModel.class);
+                listener.onStageIndexFromDatabaseChanged(item.getStagedVideoPosition());
             }
             public void onChildRemoved(DataSnapshot dataSnapshot) {}
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
@@ -45,16 +45,15 @@ public class OverviewDatabase {
         //databaseReference.push().setValue(overviewModel);
     }
 
-    public void setStageIndex(int stageIndex) {
+    void setStageIndex(int stageIndex) {
         databaseReference.child(OverviewDatabaseReferences.STAGED_VIDEO_POSITION).setValue(stageIndex);
     }
 
-    public interface OverviewListener {
-        void onOverviewChanged();
+    interface OverviewListener {
         void onStageIndexFromDatabaseChanged(int newIndex);
     }
 
-    public void setListener(OverviewListener listener) {
+    void setListener(OverviewListener listener) {
         this.listener = listener;
     }
 

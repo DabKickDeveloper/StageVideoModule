@@ -28,12 +28,8 @@ public class OverviewPresenterImpl implements OverviewPresenter, OverviewDatabas
     }
 
     @Override
-    public void onOverviewChanged() {
-
-    }
-
-    @Override
     public void onStageIndexFromDatabaseChanged(int newIndex) {
         view.setStageIndex(newIndex);
     }
+
 }
