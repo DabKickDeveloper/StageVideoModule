@@ -62,12 +62,14 @@ public class StageDatabase {
                 for (int i = 0; i < stageModelList.size(); i++) {
                     if (changedStageModel.equals(stageModelList.get(i))) {
                         // update stage time
-                        if (changedStageModel.getPlayedMillis() != stageModelList.get(0).getPlayedMillis()) {
+                        if (changedStageModel.getPlayedMillis() != stageModelList.get(
+                                overviewDatabase.getStagedVideoPosition()).getPlayedMillis()) {
                             Timber.i("changed time: %s", changedStageModel.getPlayedMillis());
                             callback.onStageVideoTimeChanged(i, changedStageModel.getPlayedMillis());
                         }
                         // do not update play/pause
-                        if (!changedStageModel.getState().equals(stageModelList.get(0).getState())) {
+                        if (!changedStageModel.getState().equals(stageModelList.get(
+                                overviewDatabase.getStagedVideoPosition()).getState())) {
                             Timber.i("changed state: %s", changedStageModel.getState());
                             callback.onStageVideoStateChanged(i, changedStageModel.getState());
                         }
@@ -94,22 +96,25 @@ public class StageDatabase {
 
     void pauseVideo(long milliseconds) {
         Timber.i("pauseVideo: %s", milliseconds);
-        stageModelList.get(0).setPlayedMillis(milliseconds);
-        stageModelList.get(0).setState(StageModel.PAUSED);
-        databaseReference.child(stageModelList.get(0).getKey()).setValue(stageModelList.get(0));
+        stageModelList.get(overviewDatabase.getStagedVideoPosition()).setPlayedMillis(milliseconds);
+        stageModelList.get(overviewDatabase.getStagedVideoPosition()).setState(StageModel.PAUSED);
+        databaseReference.child(stageModelList.get(
+                overviewDatabase.getStagedVideoPosition()).getKey()).setValue(
+                        stageModelList.get(overviewDatabase.getStagedVideoPosition()));
     }
 
     void resumeVideo(long milliseconds) {
         Timber.i("resumeVideo: %s", milliseconds);
-        stageModelList.get(0).setPlayedMillis(milliseconds);
-        stageModelList.get(0).setState(StageModel.PLAYING);
-        databaseReference.child(stageModelList.get(0).getKey()).setValue(stageModelList.get(0));
+        stageModelList.get(overviewDatabase.getStagedVideoPosition()).setPlayedMillis(milliseconds);
+        stageModelList.get(overviewDatabase.getStagedVideoPosition()).setState(StageModel.PLAYING);
+        databaseReference.child(stageModelList.get(overviewDatabase.getStagedVideoPosition())
+                .getKey()).setValue(stageModelList.get(overviewDatabase.getStagedVideoPosition()));
     }
 
     void seekTo(long secs) {
         Timber.i("seekTo: %s", secs);
-        //stageModelList.get(0).setPlayedMillis(secs);
-        databaseReference.child(stageModelList.get(0).getKey()).child("playedMillis").setValue(secs);
+        databaseReference.child(stageModelList.get(overviewDatabase.getStagedVideoPosition())
+                .getKey()).child(StageDatabaseReferences.PLAYED_MILLIS).setValue(secs);
     }
 
     List<StageModel> getStageModelList() {

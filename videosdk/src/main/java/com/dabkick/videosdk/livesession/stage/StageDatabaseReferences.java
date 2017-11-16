@@ -9,6 +9,8 @@ public class StageDatabaseReferences extends AbstractDatabaseReferences {
 
     private static String VIDEOS = "videos";
 
+    public final static String PLAYED_MILLIS = "playedMillis";
+
     static String getStageReference(@NonNull final String roomId) {
         String roomRef = getRoomReference();
         return roomRef + SEPARATOR +

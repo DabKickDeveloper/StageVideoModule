@@ -12,6 +12,7 @@ public class OverviewDatabase {
 
     private OverviewListener listener;
     private DatabaseReference databaseReference;
+    private OverviewModel overviewModel;
 
     public OverviewDatabase() {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -23,14 +24,14 @@ public class OverviewDatabase {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 databaseReference = databaseReference.child(dataSnapshot.getKey());
-                OverviewModel item = dataSnapshot.getValue(OverviewModel.class);
-                listener.onStageIndexFromDatabaseChanged(item.getStagedVideoPosition());
+                overviewModel = dataSnapshot.getValue(OverviewModel.class);
+                listener.onStageIndexFromDatabaseChanged(overviewModel.getStagedVideoPosition());
 
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                OverviewModel item = dataSnapshot.getValue(OverviewModel.class);
-                listener.onStageIndexFromDatabaseChanged(item.getStagedVideoPosition());
+                overviewModel = dataSnapshot.getValue(OverviewModel.class);
+                listener.onStageIndexFromDatabaseChanged(overviewModel.getStagedVideoPosition());
             }
             public void onChildRemoved(DataSnapshot dataSnapshot) {}
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
@@ -47,6 +48,10 @@ public class OverviewDatabase {
 
     void setStageIndex(int stageIndex) {
         databaseReference.child(OverviewDatabaseReferences.STAGED_VIDEO_POSITION).setValue(stageIndex);
+    }
+
+    public int getStagedVideoPosition() {
+        return overviewModel.getStagedVideoPosition();
     }
 
     interface OverviewListener {
