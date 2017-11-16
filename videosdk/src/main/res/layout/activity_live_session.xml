@@ -44,6 +44,23 @@
         app:layout_constraintStart_toEndOf="@+id/iv_media_drawer"
         tools:listitem="@layout/livestream_add_friend_viewholder" />
 
+    <ListView
+        android:id="@+id/listview_livesession_chat"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_alignParentStart="true"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerview_livestream"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/background_chat_list"
+        android:divider="@null"
+        android:fadingEdgeLength="70dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:requiresFadingEdge="vertical"
+        android:stackFromBottom="true"
+        android:visibility="invisible" />
+
     <include
         android:id="@+id/layout_chat"
         layout="@layout/layout_chat"
