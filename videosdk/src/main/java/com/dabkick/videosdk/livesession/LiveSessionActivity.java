@@ -26,12 +26,12 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,8 +39,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.dabkick.videosdk.livesession.chat.EmojiLayout;
-import com.dabkick.videosdk.livesession.mediadrawer.MediaDrawerDialogFragment;
 import com.dabkick.videosdk.R;
 import com.dabkick.videosdk.Util;
 import com.dabkick.videosdk.livesession.chat.ChatAdapter;
@@ -48,10 +46,15 @@ import com.dabkick.videosdk.livesession.chat.ChatModel;
 import com.dabkick.videosdk.livesession.chat.ChatPresenter;
 import com.dabkick.videosdk.livesession.chat.ChatView;
 import com.dabkick.videosdk.livesession.chat.ClearFocusBackPressedEditText;
+import com.dabkick.videosdk.livesession.chat.EmojiLayout;
 import com.dabkick.videosdk.livesession.livestream.LivestreamPresenter;
 import com.dabkick.videosdk.livesession.livestream.LivestreamPresenterImpl;
 import com.dabkick.videosdk.livesession.livestream.LivestreamView;
 import com.dabkick.videosdk.livesession.livestream.SessionParticipantsAdapter;
+import com.dabkick.videosdk.livesession.mediadrawer.MediaDrawerDialogFragment;
+import com.dabkick.videosdk.livesession.overviews.OverviewPresenter;
+import com.dabkick.videosdk.livesession.overviews.OverviewPresenterImpl;
+import com.dabkick.videosdk.livesession.overviews.OverviewView;
 import com.dabkick.videosdk.livesession.stage.StagePresenter;
 import com.dabkick.videosdk.livesession.stage.StagePresenterImpl;
 import com.dabkick.videosdk.livesession.stage.StageRecyclerViewAdapter;
@@ -65,7 +68,8 @@ import java.util.Random;
 
 import timber.log.Timber;
 
-public class LiveSessionActivity extends AppCompatActivity implements ChatView, LivestreamView {
+public class LiveSessionActivity extends AppCompatActivity implements
+        ChatView, LivestreamView, OverviewView {
 
     // Chat MVP
     private ChatAdapter chatAdapter;
@@ -87,11 +91,15 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
 
     // Stage
     private StageRecyclerViewAdapter stageRecyclerViewAdapter;
+    private RecyclerView stageRecyclerView;
 
     //Emoji Layout
     private View emojiLayout;
     RelativeLayout innerContainer;
     ConstraintLayout container;
+
+    // Overview
+    private OverviewPresenter overviewPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,9 +186,12 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
                 livestreamPresenter.getLivestreamParticipants());
         livestreamRecyclerView.setAdapter(sessionParticipantsAdapter);
 
+        // Overview
+        overviewPresenter = new OverviewPresenterImpl(this);
+
 
         // setup stage
-        RecyclerView stageRecyclerView = findViewById(R.id.recyclerview_stage);
+        stageRecyclerView = findViewById(R.id.recyclerview_stage);
         RecyclerView.LayoutManager stageLayoutManager = new LinearLayoutManager(
                 this, LinearLayoutManager.HORIZONTAL, false);
         stageRecyclerView.setLayoutManager(stageLayoutManager);
@@ -195,6 +206,18 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
 
         stageRecyclerView.setAdapter(stageRecyclerViewAdapter);
 
+        stageRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                    View centerView = stageSnapHelper.findSnapView(stageLayoutManager);
+                    int position = stageLayoutManager.getPosition(centerView);
+                    overviewPresenter.onUserSwipedStage(position);
+                }
+            }
+        });
 
         innerContainer = findViewById(R.id.container_layout);
         container = findViewById(R.id.container);
@@ -663,5 +686,10 @@ public class LiveSessionActivity extends AppCompatActivity implements ChatView, 
     protected void onStop() {
         super.onStop();
         stagePresenter.onStop();
+    }
+
+    @Override
+    public void setStageIndex(int newPosition) {
+        stageRecyclerView.smoothScrollToPosition(newPosition);
     }
 }

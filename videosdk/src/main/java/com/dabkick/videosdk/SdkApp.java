@@ -3,8 +3,6 @@ package com.dabkick.videosdk;
 import android.app.Application;
 import android.content.Context;
 
-import com.dabkick.videosdk.livesession.overviews.OverviewDatabase;
-
 import timber.log.Timber;
 
 
@@ -24,12 +22,8 @@ public class SdkApp extends Application {
             Timber.plant(new Timber.DebugTree());
         }
 
-        OverviewDatabase.OverviewListener listener = () -> {
-
-        };
-
         livesessionComponent = DaggerLivesessionComponent.builder()
-                .livesessionModule(new LivesessionModule(listener))
+                .livesessionModule(new LivesessionModule())
                 .build();
 
     }
