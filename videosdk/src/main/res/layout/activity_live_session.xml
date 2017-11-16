@@ -7,7 +7,8 @@
     android:keepScreenOn="true"
     android:background="@android:color/holo_orange_light"
     android:layout_height="match_parent"
-    tools:context="com.dabkick.videosdk.livesession.LiveSessionActivity">
+    tools:context="com.dabkick.videosdk.livesession.LiveSessionActivity"
+    android:id="@+id/container">
 
     <ImageView
         android:id="@+id/iv_leave_session_btn"
@@ -49,5 +50,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent" />
+
+    <RelativeLayout
+        android:id="@+id/container_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

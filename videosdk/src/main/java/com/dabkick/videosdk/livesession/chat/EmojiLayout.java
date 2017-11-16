@@ -8,7 +8,7 @@ import com.dabkick.videosdk.R;
 
 public class EmojiLayout extends LinearLayout {
 
-    private EmojiClickCallback emojiClickCallbackListener;
+    private static EmojiClickCallback emojiClickCallbackListener;
 
     public EmojiLayout(Context context) {
         super(context);
@@ -27,20 +27,14 @@ public class EmojiLayout extends LinearLayout {
 
     private void init() {
         inflate(getContext(), R.layout.emoji_layout, this);
-
-        findViewById(R.id.emoji_icon1).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.SMILE));
-        findViewById(R.id.emoji_icon2).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.COOL));
-        findViewById(R.id.emoji_icon3).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.WINK));
-        findViewById(R.id.emoji_icon4).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.LOVE));
-        findViewById(R.id.emoji_icon5).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.TONGUE));
-        findViewById(R.id.emoji_icon6).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.ROFL));
-        findViewById(R.id.emoji_icon7).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.CRY));
-        findViewById(R.id.emoji_icon8).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.ANGRY));
-        findViewById(R.id.emoji_icon9).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.XEYES));
-        findViewById(R.id.emoji_icon10).setOnClickListener(view -> emojiClickCallbackListener.emojiClicked(Emoji.SHOCKED));
     }
 
-    public void setEmojiClickCallbackListener(EmojiClickCallback listener){
+    public static  EmojiClickCallback getEmojiClickCallbackListener(){
+
+        return emojiClickCallbackListener;
+    }
+
+    public static void setEmojiClickCallbackListener(EmojiClickCallback listener){
         emojiClickCallbackListener = listener;
     }
 

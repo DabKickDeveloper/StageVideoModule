@@ -72,6 +72,7 @@ dependencies {
     compile 'io.reactivex.rxjava2:rxjava:2.1.5'
     compile "com.android.support:appcompat-v7:${googleSupportLib}"
     compile "com.android.support:design:${googleSupportLib}"
+    compile 'com.github.jd-alexander:LikeButton:0.2.3'
     testCompile 'junit:junit:4.12'
 
     compile "com.google.dagger:dagger-android:${dagger2}"
