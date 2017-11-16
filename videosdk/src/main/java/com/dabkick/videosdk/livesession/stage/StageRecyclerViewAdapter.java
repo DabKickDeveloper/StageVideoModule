@@ -43,6 +43,8 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         StageViewHolder vh = (StageViewHolder) holder;
+
+        vh.videoView.setReleaseOnDetachFromWindow(false);
         vh.videoView.setVideoPath(items.get(position).getUrl());
         StageModel stageModel = items.get(position);
 
