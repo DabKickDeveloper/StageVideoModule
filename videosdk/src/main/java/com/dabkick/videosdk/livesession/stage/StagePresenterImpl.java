@@ -1,6 +1,8 @@
 package com.dabkick.videosdk.livesession.stage;
 
+import com.dabkick.videosdk.SdkApp;
 import com.dabkick.videosdk.livesession.mediadrawer.MediaItemClickEvent;
+import com.dabkick.videosdk.livesession.overviews.OverviewDatabase;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -8,14 +10,21 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 public class StagePresenterImpl implements StagePresenter, StageDatabase.StageDatabaseCallback {
 
     private StageView view;
     private StageDatabase model;
+    @Inject OverviewDatabase overviewDatabase;
+    private NotifyStageListener stageViewListener;
 
-    public StagePresenterImpl(StageView view) {
+    public StagePresenterImpl(StageView view, NotifyStageListener stageViewListener) {
+
+        ((SdkApp) SdkApp.getAppContext()).getLivesessionComponent().inject(this);
+        this.stageViewListener = stageViewListener;
         this.view = view;
         model = new StageDatabase(this);
     }
@@ -23,6 +32,7 @@ public class StagePresenterImpl implements StagePresenter, StageDatabase.StageDa
     @Override
     public void onStageVideoAdded() {
         view.onStageDataUpdated();
+        stageViewListener.notifyStageRecyclerView();
     }
 
     @Override
@@ -33,12 +43,12 @@ public class StagePresenterImpl implements StagePresenter, StageDatabase.StageDa
     @Override
     public void onStageVideoStateChanged(int i, String newState) {
         // if video is playing and server state changes to paused
-        if (model.getStageModelList().get(0).isPlaying() &&
+        if (model.getStageModelList().get(overviewDatabase.getStagedVideoPosition()).isPlaying() &&
                 newState.equals("paused")) {
             Timber.i("newState: %s, pausing video...", newState);
             view.onStageVideoStateChanged(i, true);
         // if video is paused and server state changes to playing
-        } else if (!model.getStageModelList().get(0).isPlaying() &&
+        } else if (!model.getStageModelList().get(overviewDatabase.getStagedVideoPosition()).isPlaying() &&
                 newState.equals("playing")) {
             Timber.i("newState: %s, playing video...", newState);
             view.onStageVideoStateChanged(i, false);
@@ -83,6 +93,11 @@ public class StagePresenterImpl implements StagePresenter, StageDatabase.StageDa
     @Override
     public void onStop() {
         EventBus.getDefault().unregister(this);
+    }
+
+
+    public interface NotifyStageListener {
+        void notifyStageRecyclerView();
     }
 
 }

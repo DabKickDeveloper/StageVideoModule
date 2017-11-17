@@ -1,16 +1,11 @@
 package com.dabkick.videosdk.livesession;
 
 import android.Manifest;
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
@@ -21,18 +16,11 @@ import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.text.InputFilter;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -40,6 +28,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.dabkick.videosdk.R;
+import com.dabkick.videosdk.SdkApp;
 import com.dabkick.videosdk.Util;
 import com.dabkick.videosdk.livesession.chat.ChatAdapter;
 import com.dabkick.videosdk.livesession.chat.ChatModel;
@@ -52,6 +41,7 @@ import com.dabkick.videosdk.livesession.livestream.LivestreamPresenterImpl;
 import com.dabkick.videosdk.livesession.livestream.LivestreamView;
 import com.dabkick.videosdk.livesession.livestream.SessionParticipantsAdapter;
 import com.dabkick.videosdk.livesession.mediadrawer.MediaDrawerDialogFragment;
+import com.dabkick.videosdk.livesession.overviews.OverviewDatabase;
 import com.dabkick.videosdk.livesession.overviews.OverviewPresenter;
 import com.dabkick.videosdk.livesession.overviews.OverviewPresenterImpl;
 import com.dabkick.videosdk.livesession.overviews.OverviewView;
@@ -59,17 +49,16 @@ import com.dabkick.videosdk.livesession.stage.StagePresenter;
 import com.dabkick.videosdk.livesession.stage.StagePresenterImpl;
 import com.dabkick.videosdk.livesession.stage.StageRecyclerViewAdapter;
 import com.dabkick.videosdk.livesession.usersetup.GetUserDetailsFragment;
-import com.like.CircleView;
-import com.like.DotsView;
 import com.twilio.video.VideoView;
 
 import java.util.ArrayList;
-import java.util.Random;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
 public class LiveSessionActivity extends AppCompatActivity implements
-        ChatView, LivestreamView, OverviewView {
+        ChatView, LivestreamView, OverviewView, StagePresenterImpl.NotifyStageListener {
 
     // Chat MVP
     private ChatAdapter chatAdapter;
@@ -101,6 +90,8 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
     // Overview
     private OverviewPresenter overviewPresenter;
+    @Inject OverviewDatabase overviewDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +101,8 @@ public class LiveSessionActivity extends AppCompatActivity implements
         if (savedInstanceState == null) {
             Util.register();
         }
+
+        ((SdkApp) SdkApp.getAppContext()).getLivesessionComponent().inject(this);
 
         innerContainer = findViewById(R.id.container_layout);
         container = findViewById(R.id.container);
@@ -211,7 +204,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
         stageSnapHelper.attachToRecyclerView(stageRecyclerView);
 
         stageRecyclerViewAdapter = new StageRecyclerViewAdapter(this);
-        stagePresenter = new StagePresenterImpl(stageRecyclerViewAdapter);
+        stagePresenter = new StagePresenterImpl(stageRecyclerViewAdapter, this);
         stageRecyclerViewAdapter.setVideoControlListener(stagePresenter.getVideoControlsListener());
         stageRecyclerViewAdapter.setItems(stagePresenter.getStageItems());
 
@@ -229,6 +222,13 @@ public class LiveSessionActivity extends AppCompatActivity implements
                 }
             }
         });
+
+    }
+
+    @Override
+    public void notifyStageRecyclerView() {
+        Timber.i("notify scroll to %s", overviewDatabase.getStagedVideoPosition());
+        stageRecyclerView.scrollToPosition(overviewDatabase.getStagedVideoPosition());
     }
 
     public void showContentDialog(View view) {
@@ -392,4 +392,5 @@ public class LiveSessionActivity extends AppCompatActivity implements
     public void setStageIndex(int newPosition) {
         stageRecyclerView.smoothScrollToPosition(newPosition);
     }
+
 }

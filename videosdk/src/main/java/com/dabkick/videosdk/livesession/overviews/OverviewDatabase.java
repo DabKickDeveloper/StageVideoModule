@@ -8,6 +8,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import timber.log.Timber;
+
 public class OverviewDatabase {
 
     private OverviewListener listener;
@@ -25,12 +27,14 @@ public class OverviewDatabase {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 databaseReference = databaseReference.child(dataSnapshot.getKey());
                 overviewModel = dataSnapshot.getValue(OverviewModel.class);
+                Timber.i("added stage position: %s", overviewModel.getStagedVideoPosition());
                 listener.onStageIndexFromDatabaseChanged(overviewModel.getStagedVideoPosition());
 
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 overviewModel = dataSnapshot.getValue(OverviewModel.class);
+                Timber.i("changed stage position: %s", overviewModel.getStagedVideoPosition());
                 listener.onStageIndexFromDatabaseChanged(overviewModel.getStagedVideoPosition());
             }
             public void onChildRemoved(DataSnapshot dataSnapshot) {}
@@ -51,14 +55,15 @@ public class OverviewDatabase {
     }
 
     public int getStagedVideoPosition() {
-        return overviewModel.getStagedVideoPosition();
+        Timber.i("overviewModel is null: %s", overviewModel == null);
+        return (overviewModel == null) ? 0 : overviewModel.getStagedVideoPosition();
     }
 
     interface OverviewListener {
         void onStageIndexFromDatabaseChanged(int newIndex);
     }
 
-    void setListener(OverviewListener listener) {
+    public void setListener(OverviewListener listener) {
         this.listener = listener;
     }
 

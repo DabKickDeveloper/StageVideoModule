@@ -52,10 +52,6 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             if (stageModel.isPlaying()) vh.videoView.start();
         });
 
-        vh.videoView.setOnSeekCompletionListener(() -> {
-            videoControlListener.onSeekBarChanged(vh.videoView.getCurrentPosition());
-        });
-
         if (vh.videoView.getVideoControls() != null) {
             vh.videoView.getVideoControls().setButtonListener(new VideoControlsButtonListener() {
                 @Override
@@ -100,6 +96,14 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         });
 
         vh.videoView.seekTo(stageModel.getPlayedMillis());
+
+        // set seek listener, wait until first seek complete
+        Runnable r = () ->  {
+            vh.videoView.setOnSeekCompletionListener(() -> {
+                videoControlListener.onSeekBarChanged(vh.videoView.getCurrentPosition());
+            });
+        };
+        new Handler().postDelayed(r, 2000);
 
     }
 

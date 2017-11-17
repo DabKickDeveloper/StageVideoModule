@@ -5,6 +5,8 @@ import com.dabkick.videosdk.SdkApp;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 public class OverviewPresenterImpl implements OverviewPresenter, OverviewDatabase.OverviewListener {
 
     @Inject OverviewDatabase overviewDatabase;
@@ -16,19 +18,15 @@ public class OverviewPresenterImpl implements OverviewPresenter, OverviewDatabas
         overviewDatabase.setListener(this);
     }
 
-
     @Override
     public void onUserSwipedStage(int newPosition) {
+        Timber.i("on user swiped stage", newPosition);
         overviewDatabase.setStageIndex(newPosition);
     }
 
     @Override
-    public void onDatabaseStageIndexChanged(int newPosition) {
-        view.setStageIndex(newPosition);
-    }
-
-    @Override
     public void onStageIndexFromDatabaseChanged(int newIndex) {
+        Timber.i("database changed stage index :%s", newIndex);
         view.setStageIndex(newIndex);
     }
 
