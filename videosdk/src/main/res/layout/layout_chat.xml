@@ -45,7 +45,8 @@
 
             <com.dabkick.videosdk.livesession.chat.EmojiLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:id="@+id/emojis"/>
 
         </HorizontalScrollView>
 
