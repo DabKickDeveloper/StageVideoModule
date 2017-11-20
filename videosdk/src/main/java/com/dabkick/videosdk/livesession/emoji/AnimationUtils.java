@@ -27,9 +27,9 @@ import com.like.DotsView;
 
 import java.util.Random;
 
-class AnimationUtils {
+public class AnimationUtils {
 
-    static void slideToAbove(Drawable emojiIcons, RelativeLayout innerContainer, ConstraintLayout container, Context mActivity) {
+    public static void slideToAbove(Drawable emojiIcons, RelativeLayout innerContainer, ConstraintLayout container, Context mActivity) {
 
         Random r = new Random();
         int Low = 10;

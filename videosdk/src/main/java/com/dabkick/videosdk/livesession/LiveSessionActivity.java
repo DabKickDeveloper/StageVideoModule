@@ -35,7 +35,11 @@ import com.dabkick.videosdk.livesession.chat.ChatModel;
 import com.dabkick.videosdk.livesession.chat.ChatPresenter;
 import com.dabkick.videosdk.livesession.chat.ChatView;
 import com.dabkick.videosdk.livesession.chat.ClearFocusBackPressedEditText;
+import com.dabkick.videosdk.livesession.emoji.AnimationUtils;
+import com.dabkick.videosdk.livesession.emoji.Constants;
 import com.dabkick.videosdk.livesession.emoji.EmojiLayout;
+import com.dabkick.videosdk.livesession.emoji.EmojiPresenter;
+import com.dabkick.videosdk.livesession.emoji.EmojiView;
 import com.dabkick.videosdk.livesession.livestream.LivestreamPresenter;
 import com.dabkick.videosdk.livesession.livestream.LivestreamPresenterImpl;
 import com.dabkick.videosdk.livesession.livestream.LivestreamView;
@@ -82,7 +86,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
     private StageRecyclerViewAdapter stageRecyclerViewAdapter;
     private RecyclerView stageRecyclerView;
 
-    //Emoji Layout
+    //EmojiModel Layout
     private View emojiLayout;
     RelativeLayout innerContainer;
     ConstraintLayout container;
@@ -108,11 +112,51 @@ public class LiveSessionActivity extends AppCompatActivity implements
         container = findViewById(R.id.container);
 
         emojiLayout = findViewById(R.id.layout_emoji);
-        // emojiLayout.setOnClickListener();
         emojis = findViewById(R.id.emojis);
 
         emojis.setInnerContainer(innerContainer);
         emojis.setContainer(container);
+
+
+        EmojiView emojiView = emojiType -> {
+            Drawable drawable;
+            switch (emojiType) {
+                case Constants.SMILE:
+                    drawable = getResources().getDrawable(R.drawable.reactions_default);
+                    break;
+                case Constants.COOL:
+                    drawable = getResources().getDrawable(R.drawable.cool);
+                    break;
+                case Constants.WINK:
+                    drawable = getResources().getDrawable(R.drawable.winky);
+                    break;
+                case Constants.LOVE:
+                    drawable = getResources().getDrawable(R.drawable.love);
+                    break;
+                case Constants.TONGUE:
+                    drawable = getResources().getDrawable(R.drawable.tongue);
+                    break;
+                case Constants.ROFL:
+                    drawable = getResources().getDrawable(R.drawable.rofl);
+                    break;
+                case Constants.CRY:
+                    drawable = getResources().getDrawable(R.drawable.crying);
+                    break;
+                case Constants.ANGRY:
+                    drawable = getResources().getDrawable(R.drawable.angry);
+                    break;
+                case Constants.XEYES:
+                    drawable = getResources().getDrawable(R.drawable.x_eyes);
+                    break;
+                default: // shocked
+                    drawable = getResources().getDrawable(R.drawable.shocked);
+                    break;
+            }
+            AnimationUtils.slideToAbove(drawable, innerContainer,
+                    container,LiveSessionActivity.this);
+        };
+        EmojiPresenter emojiPresenter = new EmojiPresenter(emojiView);
+        emojis.setListener(emojiPresenter);
 
         chatListView = findViewById(R.id.listview_livesession_chat);
         chatAdapter = new ChatAdapter(this, new ArrayList<>());
