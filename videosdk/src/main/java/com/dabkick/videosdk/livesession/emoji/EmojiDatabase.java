@@ -3,44 +3,47 @@ package com.dabkick.videosdk.livesession.emoji;
 
 import com.dabkick.videosdk.Prefs;
 import com.dabkick.videosdk.Util;
+import com.dabkick.videosdk.livesession.AbstractDatabaseReferences;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import timber.log.Timber;
-
 public class EmojiDatabase {
 
-    private DatabaseReference databaseReference;
+    // receiver is for database listening, sender for posting updates
+    private DatabaseReference receiverDatabaseReference, senderDatabaserReference;
     private EmojiListener listener;
 
     public EmojiDatabase() {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
-        String path = EmojiDatabaseReferences.getEmojiReference();
-        databaseReference = firebaseDatabase.getReference(path);
+        String senderPath = EmojiDatabaseReferences.getEmojiRoomReference(AbstractDatabaseReferences.getSessionId());
+        senderDatabaserReference = firebaseDatabase.getReference(senderPath);
+
+        String receiverPath = EmojiDatabaseReferences.getEmojiReference();
+        receiverDatabaseReference = firebaseDatabase.getReference(receiverPath);
 
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                EmojiModel emoji = dataSnapshot.getValue(EmojiModel.class);
-                Timber.i("emoji added: %s", emoji.getKey());
-                listener.onDatabaseEvent(emoji.getEmojiType());
-
+                handleListenEvents(dataSnapshot);
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                EmojiModel emoji = dataSnapshot.getValue(EmojiModel.class);
-                Timber.i("emoji changed: %s", emoji.getKey());
-                listener.onDatabaseEvent(emoji.getEmojiType());
+                handleListenEvents(dataSnapshot);
             }
             public void onChildRemoved(DataSnapshot dataSnapshot) {}
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
             public void onCancelled(DatabaseError databaseError) {}
         };
-        databaseReference.addChildEventListener(childEventListener);
+        receiverDatabaseReference.addChildEventListener(childEventListener);
+    }
+
+    private void handleListenEvents(DataSnapshot dataSnapshot) {
+        EmojiModel emoji = dataSnapshot.getValue(EmojiModel.class);
+        listener.onDatabaseEvent(emoji.getEmojiType());
     }
 
     void setListener(EmojiListener listener) {
@@ -51,12 +54,11 @@ public class EmojiDatabase {
         String key = Util.getSaltString();
         String participantName = Prefs.getDabname();
         EmojiModel model = new EmojiModel(emojiType, key, participantName);
-        databaseReference.setValue(model);
+        senderDatabaserReference.setValue(model);
     }
 
     interface EmojiListener {
         void onDatabaseEvent(String emojiType);
     }
-
 
 }
