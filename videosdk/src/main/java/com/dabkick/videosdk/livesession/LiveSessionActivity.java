@@ -108,11 +108,11 @@ public class LiveSessionActivity extends AppCompatActivity implements
         container = findViewById(R.id.container);
 
         emojiLayout = findViewById(R.id.layout_emoji);
+        // emojiLayout.setOnClickListener();
         emojis = findViewById(R.id.emojis);
 
         emojis.setInnerContainer(innerContainer);
         emojis.setContainer(container);
-        emojis.initOnClickListeners();
 
         chatListView = findViewById(R.id.listview_livesession_chat);
         chatAdapter = new ChatAdapter(this, new ArrayList<>());

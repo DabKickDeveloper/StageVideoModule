@@ -10,7 +10,7 @@ import com.dabkick.videosdk.R;
 
 public class EmojiLayout extends LinearLayout {
 
-    EmojiClickCallback emojiClickCallbackListener;
+    EmojiClickCallback listener;
     RelativeLayout innerContainer;
     ConstraintLayout container;
     Context mContext;
@@ -35,10 +35,7 @@ public class EmojiLayout extends LinearLayout {
 
     private void init() {
         inflate(getContext(), R.layout.emoji_layout, this);
-    }
-
-    public RelativeLayout getInnerContainer() {
-        return innerContainer;
+        initOnClickListeners();
     }
 
     public void setInnerContainer(RelativeLayout innerContainer) {
@@ -53,119 +50,100 @@ public class EmojiLayout extends LinearLayout {
         this.container = container;
     }
 
-    public EmojiClickCallback getEmojiClickCallbackListener() {
-        return emojiClickCallbackListener;
+    public void setListener(EmojiClickCallback listener) {
+        this.listener = listener;
     }
 
-    public void setEmojiClickCallbackListener(EmojiClickCallback emojiClickCallbackListener) {
-        this.emojiClickCallbackListener = emojiClickCallbackListener;
-    }
-
-    public void initOnClickListeners(){
+    private void initOnClickListeners(){
 
         findViewById(R.id.emoji_icon1).setOnClickListener(view -> {
-            AnimationUtils.SlideToAbove(getResources().getDrawable(R.drawable.reactions_default), innerContainer, container,
+            AnimationUtils.slideToAbove(getResources().getDrawable(R.drawable.reactions_default), innerContainer, container,
                     mContext);
-            if(emojiClickCallbackListener != null)
-                emojiClickCallbackListener.emojiClicked(Emoji.SMILE);
+            if(listener != null) listener.onSmile();
         });
 
         findViewById(R.id.emoji_icon2).setOnClickListener(view -> {
 
-            AnimationUtils.SlideToAbove(getResources().getDrawable(R.drawable.cool), innerContainer, container,
+            AnimationUtils.slideToAbove(getResources().getDrawable(R.drawable.cool), innerContainer, container,
                     mContext);
-            if(emojiClickCallbackListener != null)
-                emojiClickCallbackListener.emojiClicked(Emoji.COOL);
+            if(listener != null) listener.onCool();
         });
 
         findViewById(R.id.emoji_icon3).setOnClickListener(view -> {
 
-            AnimationUtils.SlideToAbove(getResources().getDrawable(R.drawable.winky), innerContainer, container,
+            AnimationUtils.slideToAbove(getResources().getDrawable(R.drawable.winky), innerContainer, container,
                     mContext);
-            if(emojiClickCallbackListener != null)
-                emojiClickCallbackListener.emojiClicked(Emoji.WINK);
+            if(listener != null) listener.onWink();
         });
 
         findViewById(R.id.emoji_icon4).setOnClickListener(view -> {
 
-            AnimationUtils.SlideToAbove(getResources().getDrawable(R.drawable.love), innerContainer, container,
+            AnimationUtils.slideToAbove(getResources().getDrawable(R.drawable.love), innerContainer, container,
                     mContext);
-            if(emojiClickCallbackListener != null)
-                emojiClickCallbackListener.emojiClicked(Emoji.LOVE);
+            if(listener != null) listener.onLove();
         });
 
         findViewById(R.id.emoji_icon5).setOnClickListener(view -> {
 
-            AnimationUtils.SlideToAbove(getResources().getDrawable(R.drawable.tongue), innerContainer, container,
+            AnimationUtils.slideToAbove(getResources().getDrawable(R.drawable.tongue), innerContainer, container,
                     mContext);
-            if(emojiClickCallbackListener != null)
-                emojiClickCallbackListener.emojiClicked(Emoji.TONGUE);
+            if(listener != null) listener.onTongue();
 
         });
 
         findViewById(R.id.emoji_icon6).setOnClickListener(view -> {
 
-            AnimationUtils.SlideToAbove(getResources().getDrawable(R.drawable.rofl), innerContainer, container,
+            AnimationUtils.slideToAbove(getResources().getDrawable(R.drawable.rofl), innerContainer, container,
                     mContext);
-            if(emojiClickCallbackListener != null)
-                emojiClickCallbackListener.emojiClicked(Emoji.ROFL);
+            if(listener != null)
+                listener.onRofl();
 
         });
 
         findViewById(R.id.emoji_icon7).setOnClickListener(view -> {
 
-            AnimationUtils.SlideToAbove(getResources().getDrawable(R.drawable.crying), innerContainer, container,
+            AnimationUtils.slideToAbove(getResources().getDrawable(R.drawable.crying), innerContainer, container,
                     mContext);
-            if(emojiClickCallbackListener != null)
-                emojiClickCallbackListener.emojiClicked(Emoji.CRY);
+            if(listener != null) listener.onCrying();
 
         });
 
         findViewById(R.id.emoji_icon8).setOnClickListener(view -> {
 
-            AnimationUtils.SlideToAbove(getResources().getDrawable(R.drawable.angry), innerContainer, container,
+            AnimationUtils.slideToAbove(getResources().getDrawable(R.drawable.angry), innerContainer, container,
                     mContext);
-            if(emojiClickCallbackListener != null)
-                emojiClickCallbackListener.emojiClicked(Emoji.ANGRY);
+            if(listener != null) listener.onAngry();
 
         });
 
         findViewById(R.id.emoji_icon9).setOnClickListener(view -> {
 
-            AnimationUtils.SlideToAbove(getResources().getDrawable(R.drawable.x_eyes), innerContainer, container,
+            AnimationUtils.slideToAbove(getResources().getDrawable(R.drawable.x_eyes), innerContainer, container,
                     mContext);
-            if(emojiClickCallbackListener != null)
-                emojiClickCallbackListener.emojiClicked(Emoji.XEYES);
+            if(listener != null) listener.onXeyes();
 
         });
 
         findViewById(R.id.emoji_icon10).setOnClickListener(view -> {
 
-            AnimationUtils.SlideToAbove(getResources().getDrawable(R.drawable.shocked), innerContainer, container,
+            AnimationUtils.slideToAbove(getResources().getDrawable(R.drawable.shocked), innerContainer, container,
                     mContext);
-            if(emojiClickCallbackListener != null)
-                emojiClickCallbackListener.emojiClicked(Emoji.SHOCKED);
+            if(listener != null) listener.onShocked();
 
         });
 
     }
 
-    public enum Emoji{
-        SMILE,
-        COOL,
-        WINK,
-        LOVE,
-        TONGUE,
-        ROFL,
-        CRY,
-        ANGRY,
-        XEYES,
-        SHOCKED
-    }
-
     public interface EmojiClickCallback{
-
-        void emojiClicked(Emoji emoji);
-
+        void onSmile();
+        void onCool();
+        void onWink();
+        void onLove();
+        void onTongue();
+        void onRofl();
+        void onCrying();
+        void onAngry();
+        void onXeyes();
+        void onShocked();
     }
 }

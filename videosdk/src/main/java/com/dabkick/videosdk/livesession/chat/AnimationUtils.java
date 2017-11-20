@@ -27,13 +27,9 @@ import com.like.DotsView;
 
 import java.util.Random;
 
-/**
- * Created by iFocus on 17-11-2017.
- */
+class AnimationUtils {
 
-public class AnimationUtils {
-
-    public static void SlideToAbove(Drawable emojiIcons, RelativeLayout innerContainer, ConstraintLayout container, Context mActivity) {
+    static void slideToAbove(Drawable emojiIcons, RelativeLayout innerContainer, ConstraintLayout container, Context mActivity) {
 
         Random r = new Random();
         int Low = 10;
@@ -118,7 +114,7 @@ public class AnimationUtils {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                perFormCustomAnimation(bounceimage, dotsView, circleView, friendImageIcon, container, mActivity);
+                performCustomAnimation(bounceimage, dotsView, circleView, friendImageIcon, container, mActivity);
             }
 
             @Override
@@ -134,7 +130,7 @@ public class AnimationUtils {
 
     }
 
-    static void perFormCustomAnimation(ImageView icon, DotsView dotsView, CircleView circleView, CircularImageView friendImage, ConstraintLayout container, Context mActivity) {
+    private static void performCustomAnimation(ImageView icon, DotsView dotsView, CircleView circleView, CircularImageView friendImage, ConstraintLayout container, Context mActivity) {
         int indexForDots = container.indexOfChild(icon);
         for (int i = 0; i < indexForDots; i++) {
             container.bringChildToFront(container.getChildAt(i));
@@ -251,14 +247,14 @@ public class AnimationUtils {
     }
 
 
-    static float convertDpToPixel(Context c, float dp) {
+    private static float convertDpToPixel(Context c, float dp) {
         float density = c.getResources().getDisplayMetrics().density;
         float pixel = dp * density;
 
         return pixel;
     }
 
-    static void fadeOut(CircularImageView friendImage){
+    private static void fadeOut(CircularImageView friendImage){
 
         ObjectAnimator fadeOut = ObjectAnimator.ofFloat(friendImage, "alpha",  1f, 0f);
         fadeOut.setDuration(2000);
