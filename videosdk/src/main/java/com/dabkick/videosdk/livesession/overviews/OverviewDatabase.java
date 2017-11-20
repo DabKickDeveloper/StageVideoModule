@@ -55,7 +55,6 @@ public class OverviewDatabase {
     }
 
     public int getStagedVideoPosition() {
-        Timber.i("overviewModel is null: %s", overviewModel == null);
         return (overviewModel == null) ? 0 : overviewModel.getStagedVideoPosition();
     }
 

@@ -112,7 +112,7 @@ class StreamingManager implements StreamingManagerInterface {
 
                     @Override
                     public void onSuccess(TwilioAccessToken twilioAccessToken) {
-                        Timber.d("retrieved Twilio access token");
+                        Timber.i("retrieved Twilio access token");
                         accessToken = twilioAccessToken.getAccessToken();
                         connectToRoom(ROOM_NAME_TODO_DYNAMICALLY_OBTAIN);
                     }

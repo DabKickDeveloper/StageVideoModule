@@ -227,7 +227,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
     @Override
     public void notifyStageRecyclerView() {
-        Timber.i("notify scroll to %s", overviewDatabase.getStagedVideoPosition());
         stageRecyclerView.scrollToPosition(overviewDatabase.getStagedVideoPosition());
     }
 
