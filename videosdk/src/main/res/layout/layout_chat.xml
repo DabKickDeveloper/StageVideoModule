@@ -43,7 +43,7 @@
             android:paddingLeft="4dp"
             android:scrollbars="none">
 
-            <com.dabkick.videosdk.livesession.chat.EmojiLayout
+            <com.dabkick.videosdk.livesession.emoji.EmojiLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/emojis"/>

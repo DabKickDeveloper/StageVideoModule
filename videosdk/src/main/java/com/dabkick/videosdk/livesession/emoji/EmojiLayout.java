@@ -1,4 +1,4 @@
-package com.dabkick.videosdk.livesession.chat;
+package com.dabkick.videosdk.livesession.emoji;
 
 import android.content.Context;
 import android.support.constraint.ConstraintLayout;

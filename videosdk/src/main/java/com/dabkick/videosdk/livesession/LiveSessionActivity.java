@@ -35,7 +35,7 @@ import com.dabkick.videosdk.livesession.chat.ChatModel;
 import com.dabkick.videosdk.livesession.chat.ChatPresenter;
 import com.dabkick.videosdk.livesession.chat.ChatView;
 import com.dabkick.videosdk.livesession.chat.ClearFocusBackPressedEditText;
-import com.dabkick.videosdk.livesession.chat.EmojiLayout;
+import com.dabkick.videosdk.livesession.emoji.EmojiLayout;
 import com.dabkick.videosdk.livesession.livestream.LivestreamPresenter;
 import com.dabkick.videosdk.livesession.livestream.LivestreamPresenterImpl;
 import com.dabkick.videosdk.livesession.livestream.LivestreamView;
