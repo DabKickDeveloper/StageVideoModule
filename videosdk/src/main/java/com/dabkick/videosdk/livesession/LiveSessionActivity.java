@@ -27,6 +27,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.dabkick.videosdk.Prefs;
 import com.dabkick.videosdk.R;
 import com.dabkick.videosdk.SdkApp;
 import com.dabkick.videosdk.Util;
@@ -392,7 +393,11 @@ public class LiveSessionActivity extends AppCompatActivity implements
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
         String appName = Util.getAppName(this);
-        String text = "Let's watch videos together on " + appName + " by clicking link <link-from-server>";
+        String serverLink = String.format(
+                "http://stagingquery.dabkick.com/sdk/user/sdkInvite.php?s=%s&d=%s",
+                ((SdkApp)SdkApp.getAppContext()).getDabKickSession().getDeveloperKey(),
+                Prefs.getDeveloperId());
+        String text = "Let's watch videos together on " + appName + " by clicking " + serverLink;
         shareIntent.putExtra(Intent.EXTRA_TEXT, text);
         Intent chooserIntent = Intent.createChooser(shareIntent, "Share Room With");
         startActivity(chooserIntent);
