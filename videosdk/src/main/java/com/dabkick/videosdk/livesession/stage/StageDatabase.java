@@ -50,7 +50,7 @@ public class StageDatabase {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 StageModel sv = dataSnapshot.getValue(StageModel.class);
                 sv.setKey(dataSnapshot.getKey());
-                Timber.i("onChildAdded: %s", dataSnapshot.getKey());
+                Timber.d("onChildAdded: %s", dataSnapshot.getKey());
                 stageModelList.add(sv);
                 callback.onStageVideoAdded();
             }
@@ -58,7 +58,7 @@ public class StageDatabase {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 StageModel changedStageModel = dataSnapshot.getValue(StageModel.class);
-                Timber.i("onChildChanged: %s", dataSnapshot.getKey());
+                Timber.d("onChildChanged: %s", dataSnapshot.getKey());
                 for (int i = 0; i < stageModelList.size(); i++) {
                     if (changedStageModel.equals(stageModelList.get(i))) {
                         // update stage time

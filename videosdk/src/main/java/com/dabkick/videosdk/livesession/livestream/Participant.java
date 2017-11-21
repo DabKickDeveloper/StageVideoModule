@@ -17,11 +17,11 @@ public class Participant {
         return profilePicUrl;
     }
 
-    public boolean isVideoEnabled() {
+    public boolean getIsVideoEnabled() {
         return isVideoEnabled;
     }
 
-    public boolean isAudioEnabled() {
+    public boolean getIsAudioEnabled() {
         return isAudioEnabled;
     }
 
