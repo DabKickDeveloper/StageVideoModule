@@ -1,7 +1,6 @@
 package com.dabkick.videosdk.livesession;
 
 import android.Manifest;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -64,8 +63,6 @@ import com.twilio.video.VideoView;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
-
-import timber.log.Timber;
 
 public class LiveSessionActivity extends AppCompatActivity implements
         ChatView, LivestreamView, OverviewView, StagePresenterImpl.NotifyStageListener {
@@ -416,10 +413,8 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
     }
 
-    @Override
-    public void addFriendClicked() {
-        Timber.d("addFriendClicked");
-        // waiting on Ronnie to finish server auth work before this can work fully
+    // TODO use this to invite friends
+    public void showInviteFriendChooser() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
         String appName = Util.getAppName(this);
@@ -430,7 +425,9 @@ public class LiveSessionActivity extends AppCompatActivity implements
         String text = "Let's watch videos together on " + appName + " by clicking " + serverLink;
         shareIntent.putExtra(Intent.EXTRA_TEXT, text);
         Intent chooserIntent = Intent.createChooser(shareIntent, "Share Room With");
-        startActivity(chooserIntent);
+        if (chooserIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(chooserIntent);
+        }
     }
 
     @Override

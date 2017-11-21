@@ -43,17 +43,11 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
                 vh = new ParticipantViewHolder(view);
                 break;
             }
-            case AddFriendViewHolder.TYPE: {
-                View view = LayoutInflater.from(context)
-                        .inflate(R.layout.livestream_add_friend_viewholder, parent, false);
-                vh = new AddFriendViewHolder(view);
-                break;
-            }
             default: {
                 Timber.e("unable to create viewholder for %s", viewType);
                 View view = LayoutInflater.from(context)
                         .inflate(R.layout.livestream_add_friend_viewholder, parent, false);
-                vh = new AddFriendViewHolder(view);
+                vh = new ParticipantViewHolder(view);
             }
 
         }
@@ -68,26 +62,12 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
             case MyViewHolder.TYPE: {
                 MyViewHolder myViewHolder = (MyViewHolder) holder;
                 livestreamView.myVideoViewCreated(myViewHolder.videoView);
-
-                holder.itemView.setOnClickListener(v -> {
-                    livestreamView.myStreamClicked();
-                    /*
-                    int isVisible = myViewHolder.videoView.getVisibility();
-                    if (isVisible == View.VISIBLE) {
-                        myViewHolder.videoView.setVisibility(View.INVISIBLE);
-                    } else {
-                        myViewHolder.videoView.setVisibility(View.VISIBLE);
-                    } */
-                });
+                holder.itemView.setOnClickListener(v -> livestreamView.myStreamClicked());
                 break;
             }
             case ParticipantViewHolder.TYPE: {
                 ParticipantViewHolder participantViewHolder = (ParticipantViewHolder) holder;
                 participantViewHolder.name.setText(participantList.get(position - 1).dabname);
-            }
-            case AddFriendViewHolder.TYPE: {
-                holder.itemView.setOnClickListener(v -> livestreamView.addFriendClicked());
-                break;
             }
         }
 
@@ -97,8 +77,6 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
     public int getItemViewType(int position) {
         if (position == 0) {
             return MyViewHolder.TYPE;
-        } else if (position == getItemCount() - 1){
-            return AddFriendViewHolder.TYPE;
         } else {
             return ParticipantViewHolder.TYPE;
         }
@@ -133,16 +111,6 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
         ParticipantViewHolder(View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.livestream_participant_name);
-        }
-    }
-
-    // the last ViewHolder, always exists at last spot
-    class AddFriendViewHolder extends RecyclerView.ViewHolder {
-
-        static final int TYPE = 2;
-
-        AddFriendViewHolder(View itemView) {
-            super(itemView);
         }
     }
 }
