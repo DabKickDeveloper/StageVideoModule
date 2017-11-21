@@ -1,23 +1,24 @@
 package com.dabkick.videosdk.livesession.livestream;
 
 
+import com.dabkick.videosdk.Prefs;
 import com.twilio.video.VideoView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LivestreamPresenterImpl implements LivestreamPresenter, ParticipantModel.ParticipantModelCallback {
+public class LivestreamPresenterImpl implements LivestreamPresenter, ParticipantDatabase.ParticipantModelCallback {
 
     private LivestreamView view;
     private StreamingManager streamingManager;
     private VideoView myVideoView;
-    private ParticipantModel participantModel;
+    private ParticipantDatabase participantDatabase;
     private List<Participant> participantList;
 
     public LivestreamPresenterImpl(LivestreamView view) {
         this.view = view;
         streamingManager = new StreamingManager(this);
-        participantModel = new ParticipantModel(this);
+        participantDatabase = new ParticipantDatabase(this);
         participantList = new ArrayList<>();
     }
 
@@ -37,11 +38,15 @@ public class LivestreamPresenterImpl implements LivestreamPresenter, Participant
 
     @Override
     public void onFinishing() {
-        participantModel.removeSelfFromDatabase();
+        participantDatabase.removeSelfFromDatabase();
     }
 
     @Override
     public void onParticipantAdded(Participant participant) {
+        if (participant.dabname.equals(Prefs.getDabname())) {
+            // do not add participant with same dabname
+            return;
+        }
         participantList.add(participant);
         view.notifyDataSetChanged();
     }

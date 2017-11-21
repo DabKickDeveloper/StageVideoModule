@@ -12,7 +12,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import timber.log.Timber;
 
-class ParticipantModel {
+class ParticipantDatabase {
 
     interface ParticipantModelCallback {
         void onParticipantAdded(Participant participant);
@@ -23,7 +23,7 @@ class ParticipantModel {
     private FirebaseDatabase firebaseDatabase;
     private String myParticipantKey;
 
-    ParticipantModel(@NonNull ParticipantModelCallback callback) {
+    ParticipantDatabase(@NonNull ParticipantModelCallback callback) {
         firebaseDatabase = FirebaseDatabase.getInstance();
 
         String participantPath = ParticipantDatabaseReferences.getParticipantReference(ParticipantDatabaseReferences.getSessionId());
@@ -44,16 +44,12 @@ class ParticipantModel {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Participant participant = dataSnapshot.getValue(Participant.class);
                 Timber.i("onChildAdded: %s", participant.dabname);
-                // do not add participant with same dabname
-                if (participant.dabname.equals(Prefs.getDabname())) {
-                    return;
-                }
                 callback.onParticipantAdded(participant);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                // TODO
             }
 
             @Override
@@ -61,18 +57,9 @@ class ParticipantModel {
                 Participant participant = dataSnapshot.getValue(Participant.class);
                 Timber.i("onChildRemoved: %s", participant.dabname);
                 callback.onParticipantRemoved(participant);
-
             }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
+            @Override public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            @Override public void onCancelled(DatabaseError databaseError) {}
         };
         databaseReference.addChildEventListener(childEventListener);
 
