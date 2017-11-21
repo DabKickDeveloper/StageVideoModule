@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.dabkick.videosdk.livesession.AbstractDatabaseReferences;
 
-public class ParticipantDatabaseReferences extends AbstractDatabaseReferences {
+class ParticipantDatabaseReferences extends AbstractDatabaseReferences {
 
     private static String PARTICIPANTS = "participants";
 

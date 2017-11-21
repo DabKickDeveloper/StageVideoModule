@@ -28,16 +28,8 @@ class ParticipantDatabase {
 
         String participantPath = ParticipantDatabaseReferences.getParticipantReference(ParticipantDatabaseReferences.getSessionId());
         databaseReference = firebaseDatabase.getReference(participantPath);
-        Participant myParticipant = new Participant(
-                Prefs.getUserId(),
-                Prefs.getDabname(),
-                Prefs.getProfilePicUrl(),
-                false,
-                false
-        );
-        myParticipantKey = databaseReference.push().getKey();
-        databaseReference.child(myParticipantKey).setValue(myParticipant);
-        databaseReference.child(myParticipantKey).onDisconnect().removeValue();
+
+        addSelfToDatabase();
 
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
@@ -63,12 +55,23 @@ class ParticipantDatabase {
         };
         databaseReference.addChildEventListener(childEventListener);
 
+    }
 
+    private void addSelfToDatabase() {
+        Participant myParticipant = new Participant(
+                Prefs.getUserId(),
+                Prefs.getDabname(),
+                Prefs.getProfilePicUrl(),
+                false,
+                false
+        );
+        myParticipantKey = databaseReference.push().getKey();
+        databaseReference.child(myParticipantKey).setValue(myParticipant);
+        databaseReference.child(myParticipantKey).onDisconnect().removeValue();
     }
 
     void removeSelfFromDatabase() {
         databaseReference.child(myParticipantKey).removeValue();
     }
-
 
 }
