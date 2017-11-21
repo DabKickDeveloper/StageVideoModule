@@ -4,7 +4,7 @@ package com.dabkick.videosdk.livesession.stage;
 import android.support.annotation.NonNull;
 
 import com.dabkick.videosdk.SdkApp;
-import com.dabkick.videosdk.livesession.livestream.ParticipantDatabaseReferences;
+import com.dabkick.videosdk.livesession.AbstractDatabaseReferences;
 import com.dabkick.videosdk.livesession.overviews.OverviewDatabase;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -42,7 +42,7 @@ public class StageDatabase {
 
         firebaseDatabase = FirebaseDatabase.getInstance();
 
-        String stagePath = StageDatabaseReferences.getStageReference(ParticipantDatabaseReferences.getSessionId());
+        String stagePath = StageDatabaseReferences.getStageReference(AbstractDatabaseReferences.getSessionId());
         databaseReference = firebaseDatabase.getReference(stagePath);
 
         ChildEventListener childEventListener = new ChildEventListener() {

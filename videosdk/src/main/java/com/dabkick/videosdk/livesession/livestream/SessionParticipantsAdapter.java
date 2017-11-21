@@ -68,6 +68,7 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
             case ParticipantViewHolder.TYPE: {
                 ParticipantViewHolder participantViewHolder = (ParticipantViewHolder) holder;
                 participantViewHolder.name.setText(participantList.get(position - 1).dabname);
+                holder.itemView.setOnClickListener(v -> livestreamView.otherUserStreamClicked(position - 1));
             }
         }
 
@@ -84,9 +85,8 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
 
     @Override
     public int getItemCount() {
-        int count = 2 + // my view + add friend view
-                participantList.size();
-        return count;
+        // my view + participants
+        return 1 + participantList.size();
     }
 
     // this device's Viewholder
