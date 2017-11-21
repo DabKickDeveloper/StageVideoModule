@@ -394,11 +394,11 @@ public class LiveSessionActivity extends AppCompatActivity implements
         if (isFinishing()) {
             livestreamPresenter.onFinishing();
         }
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frag_media_drawer);
-        if(fragment != null)
-            ft.remove(fragment);
-        ft.commit();
+//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frag_media_drawer);
+//        if(fragment != null)
+//            ft.remove(fragment);
+//        ft.commit();
     }
 
     @Override
