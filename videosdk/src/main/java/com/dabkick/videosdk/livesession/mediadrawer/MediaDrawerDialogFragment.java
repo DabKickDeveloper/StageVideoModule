@@ -42,7 +42,7 @@ public class MediaDrawerDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootLayout = inflater.inflate(R.layout.layout_content_dialog_fragment, container);
+        View rootLayout = inflater.inflate(R.layout.layout_content_dialog_fragment, container,false);
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = rootLayout.findViewById(R.id.viewpager);

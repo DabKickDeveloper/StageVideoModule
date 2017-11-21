@@ -1,6 +1,7 @@
 package com.dabkick.videosdk.livesession;
 
 import android.Manifest;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,6 +10,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +25,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -276,8 +281,28 @@ public class LiveSessionActivity extends AppCompatActivity implements
     }
 
     public void showContentDialog(View view) {
-        MediaDrawerDialogFragment mediaDrawerDialogFragment = MediaDrawerDialogFragment.newInstance();
-        mediaDrawerDialogFragment.show(getSupportFragmentManager(), "contentdialogfragment");
+//        MediaDrawerDialogFragment mediaDrawerDialogFragment = MediaDrawerDialogFragment.newInstance();
+//        mediaDrawerDialogFragment.show(getSupportFragmentManager(), "contentdialogfragment");
+
+        FrameLayout frameLayout = findViewById(R.id.frag_media_drawer);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
+        if(frameLayout.getVisibility() == View.GONE) {
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frag_media_drawer);
+            if(fragment == null) {
+                DialogFragment mediaDrawerDialogFragment = MediaDrawerDialogFragment.newInstance();
+                ft.add(R.id.frag_media_drawer, mediaDrawerDialogFragment);
+                ft.commit();
+            }
+            frameLayout.setVisibility(View.VISIBLE);
+        }else{
+            frameLayout.setVisibility(View.GONE);
+//            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frag_media_drawer);
+//            if(fragment != null)
+//                ft.remove(fragment);
+//            ft.commit();
+
+        }
     }
 
     // toggle visibility of chat UI and swap button drawable
@@ -369,6 +394,11 @@ public class LiveSessionActivity extends AppCompatActivity implements
         if (isFinishing()) {
             livestreamPresenter.onFinishing();
         }
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frag_media_drawer);
+        if(fragment != null)
+            ft.remove(fragment);
+        ft.commit();
     }
 
     @Override
