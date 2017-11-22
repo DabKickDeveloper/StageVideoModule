@@ -413,8 +413,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
     }
 
-    // TODO use this to invite friends
-    public void showInviteFriendChooser() {
+    public void showInviteFriendChooser(View view) {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
         String appName = Util.getAppName(this);

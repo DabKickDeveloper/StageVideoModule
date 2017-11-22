@@ -36,12 +36,22 @@
         app:layout_constraintStart_toEndOf="@+id/frag_media_drawer"
         android:src="@drawable/ic_group_add_white_36dp"/>
 
+    <ImageView
+        android:id="@+id/iv_add_friends"
+        android:onClick="showInviteFriendChooser"
+        android:layout_width="50dp"
+        android:layout_height="@dimen/height_livestream_bar"
+        android:background="@drawable/right_corner"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerview_livestream"
+        app:layout_constraintRight_toRightOf="parent"
+        android:src="@android:drawable/ic_lock_idle_alarm"/>
+
     <FrameLayout
         android:id="@+id/frag_media_drawer"
         android:layout_width="250dp"
         android:layout_height="180dp"
         app:layout_constraintBottom_toBottomOf="@+id/recyclerview_livestream"
-        android:visibility="gone"></FrameLayout>
+        android:visibility="gone"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview_livestream"
@@ -50,7 +60,7 @@
         android:layout_marginBottom="?android:attr/actionBarSize"
         android:layout_marginStart="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/iv_add_friends"
         tools:listitem="@layout/livestream_add_friend_viewholder" />
 
     <ListView
