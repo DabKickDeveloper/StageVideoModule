@@ -1,11 +1,9 @@
 package com.dabkick.videosdk.livesession;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,7 +21,6 @@ import android.support.v7.widget.SnapHelper;
 import android.text.InputFilter;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
@@ -328,13 +325,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
     @Override
     public void addChatMessage(ChatModel chatModel) {
         chatAdapter.add(chatModel);
-        chatListView.post(new Runnable() {
-            @Override
-            public void run() {
-                // Select the last row so it will scroll into view...
-                chatListView.setSelection(chatAdapter.getCount() - 1);
-            }
-        });
     }
 
     @Override

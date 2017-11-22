@@ -91,6 +91,7 @@
         android:paddingBottom="10dp"
         android:paddingLeft="10dp"
         android:requiresFadingEdge="vertical"
+        android:transcriptMode="alwaysScroll"
         android:stackFromBottom="true"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/layout_chat"
