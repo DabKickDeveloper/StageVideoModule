@@ -15,7 +15,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:padding="4dp"
-        android:src="@drawable/ic_directions_boat_white_36dp"
+        android:src="@drawable/ic_exit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

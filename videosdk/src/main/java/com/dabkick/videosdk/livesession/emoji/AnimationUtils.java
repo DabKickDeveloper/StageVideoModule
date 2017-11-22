@@ -294,7 +294,7 @@ public class AnimationUtils {
 
     }
 
-    public static void RightToLeft(View frameLayout, Activity mActivity){
+    public static void rightToLeft(View frameLayout, Activity mActivity){
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity)mActivity).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);

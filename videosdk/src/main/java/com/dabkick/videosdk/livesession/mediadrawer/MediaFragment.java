@@ -6,9 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.ListView;
 
 import com.dabkick.videosdk.DabKickVideoInfo;
 import com.dabkick.videosdk.R;
@@ -92,12 +90,8 @@ public class MediaFragment extends Fragment {
         return listView;
     }
 
-    public static boolean isListviewReachBottom(AbsListView listview) {
-        if (listview.getLastVisiblePosition() == listview.getAdapter().getCount() - 1 && listview.getChildCount() != 0 &&
-                listview.getChildAt(listview.getChildCount() - 1).getBottom() <= listview.getHeight()) {
-            //It is scrolled all the way down here
-            return true;
-        }
-        return false;
+    private boolean isListviewReachBottom(AbsListView listview) {
+        return listview.getLastVisiblePosition() == listview.getAdapter().getCount() - 1 && listview.getChildCount() != 0 &&
+                listview.getChildAt(listview.getChildCount() - 1).getBottom() <= listview.getHeight();
     }
 }

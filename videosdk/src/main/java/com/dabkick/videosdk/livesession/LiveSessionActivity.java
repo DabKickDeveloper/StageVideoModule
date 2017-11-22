@@ -294,8 +294,8 @@ public class LiveSessionActivity extends AppCompatActivity implements
             AnimationUtils.leftToRight(frameLayout, LiveSessionActivity.this);
         }else{
 
-            //AnimationUtils.RightToLeft(findViewById(R.id.iv_media_drawer), LiveSessionActivity.this);
-            AnimationUtils.RightToLeft(frameLayout, LiveSessionActivity.this);
+            //AnimationUtils.rightToLeft(findViewById(R.id.iv_media_drawer), LiveSessionActivity.this);
+            AnimationUtils.rightToLeft(frameLayout, LiveSessionActivity.this);
             frameLayout.setVisibility(View.GONE);
         }
     }
@@ -307,12 +307,12 @@ public class LiveSessionActivity extends AppCompatActivity implements
         if (visibility == View.INVISIBLE) {
             chatListView.setVisibility(View.VISIBLE);
             Drawable drawable = ContextCompat.getDrawable(
-                    this, R.drawable.ic_accessible_white_36dp);
+                    this, R.drawable.ic_show_chat);
             chatToggleButton.setImageDrawable(drawable);
         } else {
             chatListView.setVisibility(View.INVISIBLE);
             Drawable drawable = ContextCompat.getDrawable(
-                    this, R.drawable.ic_directions_boat_white_36dp);
+                    this, R.drawable.ic_hide_chat);
             chatToggleButton.setImageDrawable(drawable);
         }
     }
