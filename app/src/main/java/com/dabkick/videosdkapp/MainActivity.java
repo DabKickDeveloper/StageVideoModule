@@ -389,7 +389,7 @@ public class MainActivity extends AppCompatActivity {
             public ArrayList<DabKickVideoInfo> provideVideos(String category, int offset) {
 
                 int totalSize = videosHolder.get(category).size();
-                int endIndex = Math.min(totalSize, offset + 2);
+                int endIndex = Math.min(totalSize, offset + 3);
                 ArrayList<DabKickVideoInfo> list = new ArrayList<>(videosHolder.get(category).subList(offset, endIndex));
                 return list;
 

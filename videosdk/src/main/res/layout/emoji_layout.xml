@@ -8,80 +8,80 @@
 
             <ImageView
                 android:id="@+id/emoji_icon1"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:onClick="onClickDefault"
                 android:src="@drawable/reactions_default" />
 
 
             <ImageView
                 android:id="@+id/emoji_icon2"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginLeft="4dp"
                 android:onClick="onClickCool"
                 android:src="@drawable/cool" />
 
             <ImageView
                 android:id="@+id/emoji_icon3"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginLeft="4dp"
                 android:onClick="onClickWinky"
                 android:src="@drawable/winky" />
 
             <ImageView
                 android:id="@+id/emoji_icon4"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginLeft="4dp"
                 android:onClick="onClickLove"
                 android:src="@drawable/love" />
 
             <ImageView
                 android:id="@+id/emoji_icon5"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginLeft="4dp"
                 android:onClick="onClicktongue"
                 android:src="@drawable/tongue" />
 
             <ImageView
                 android:id="@+id/emoji_icon6"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginLeft="4dp"
                 android:onClick="onClickRofl"
                 android:src="@drawable/rofl" />
 
             <ImageView
                 android:id="@+id/emoji_icon7"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginLeft="4dp"
                 android:onClick="onClickCrying"
                 android:src="@drawable/crying" />
 
             <ImageView
                 android:id="@+id/emoji_icon8"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginLeft="4dp"
                 android:onClick="onClickAngry"
                 android:src="@drawable/angry" />
 
             <ImageView
                 android:id="@+id/emoji_icon9"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginLeft="4dp"
                 android:onClick="onClickXEyes"
                 android:src="@drawable/x_eyes" />
 
             <ImageView
                 android:id="@+id/emoji_icon10"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginLeft="4dp"
                 android:onClick="onClickShocked"
                 android:src="@drawable/shocked" />

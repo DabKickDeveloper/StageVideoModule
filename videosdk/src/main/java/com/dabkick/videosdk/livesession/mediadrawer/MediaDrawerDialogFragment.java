@@ -84,7 +84,7 @@ public class MediaDrawerDialogFragment extends DialogFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MediaItemClickEvent event) {
-        dismiss();
+        //dismiss();
     };
 
 

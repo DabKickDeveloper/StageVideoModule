@@ -33,7 +33,7 @@ public class AnimationUtils {
 
         Random r = new Random();
         int Low = 10;
-        int High = 200;
+        int High = 100;
         int rightValue = r.nextInt(High - Low) + Low;
 
         ImageView bounceimage = new ImageView(mActivity);
@@ -44,7 +44,6 @@ public class AnimationUtils {
         vp.bottomMargin = 250;
         vp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         vp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        vp.rightMargin = rightValue;
         bounceimage.setImageDrawable(emojiIcons);
 
         FrameLayout frameLayout = new FrameLayout(mActivity);
@@ -61,22 +60,22 @@ public class AnimationUtils {
         relativeLayoutParams.addRule(RelativeLayout.ABOVE, R.id.layout_chat);
         relativeLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         relativeLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        relativeLayoutParams.rightMargin = rightValue - 72;
+        relativeLayoutParams.rightMargin = rightValue - 120;
         frameLayout.requestLayout();
         frameLayout.setLayoutParams(relativeLayoutParams);
 
         FrameLayout.LayoutParams dotsParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dotsParams.gravity = Gravity.CENTER;
-        dotsParams.bottomMargin = -(height / 2 - 238 - 420);
+        dotsParams.bottomMargin = -30;
         FrameLayout.LayoutParams circleParams = new FrameLayout.LayoutParams(90, 90);
         circleParams.gravity = Gravity.CENTER;
-        circleParams.bottomMargin = -(height / 2 - 238 - 420);
+        circleParams.bottomMargin = -30;
         FrameLayout.LayoutParams iconParams = new FrameLayout.LayoutParams(90, 90);
         iconParams.gravity = Gravity.CENTER;
-        iconParams.bottomMargin = -(height / 2 - 238);
+        iconParams.bottomMargin = -30;
         FrameLayout.LayoutParams bounceEmojiParams = new FrameLayout.LayoutParams(90, 2500);
         bounceEmojiParams.gravity = Gravity.CENTER;
-        bounceEmojiParams.bottomMargin = -(height / 2 - 238 -420);
+        bounceEmojiParams.bottomMargin = -30;
 
         dotsView.requestLayout();
         dotsView.setLayoutParams(dotsParams);
@@ -103,7 +102,14 @@ public class AnimationUtils {
         friendImageIcon.setVisibility(View.VISIBLE);
         bounceimage.setVisibility(View.GONE);
 
-        ObjectAnimator objectanimator = ObjectAnimator.ofFloat(friendImageIcon, "translationY", -420);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                performCustomAnimation(bounceimage, dotsView, circleView, friendImageIcon, container, mActivity);
+            }
+        }, 500);
+
+        /*ObjectAnimator objectanimator = ObjectAnimator.ofFloat(friendImageIcon, "translationY", -420);
         objectanimator.setDuration(1500);
         objectanimator.start();
         objectanimator.addListener(new Animator.AnimatorListener() {
@@ -126,7 +132,7 @@ public class AnimationUtils {
             public void onAnimationRepeat(Animator animation) {
 
             }
-        });
+        });*/
 
     }
 
@@ -210,7 +216,7 @@ public class AnimationUtils {
                 int height = displayMetrics.heightPixels;
 
                 ObjectAnimator objectanimator = ObjectAnimator.ofFloat(icon, "translationY", -(height/2 + 200));
-                objectanimator.setDuration(7000);
+                objectanimator.setDuration(2000);
                 objectanimator.start();
                 objectanimator.addListener(new Animator.AnimatorListener() {
 
@@ -242,7 +248,7 @@ public class AnimationUtils {
             public void run() {
                 fadeOut(friendImage);
             }
-        }, 6000);
+        }, 1000);
 
     }
 
@@ -272,5 +278,36 @@ public class AnimationUtils {
         });
         mAnimationSet.start();
     }
+
+    public static void leftToRight(View frameLayout, Activity mActivity){
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity)mActivity).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+
+        AnimatorSet set = new AnimatorSet();
+        ObjectAnimator animation = ObjectAnimator.ofFloat(frameLayout,
+                "translationX", -width, 0f);
+        animation.setDuration(700);
+        set.play(animation);
+        set.start();
+
+    }
+
+    public static void RightToLeft(View frameLayout, Activity mActivity){
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity)mActivity).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+
+        AnimatorSet set = new AnimatorSet();
+        ObjectAnimator animation = ObjectAnimator.ofFloat(frameLayout,
+                "translationX", 0f, -width);
+        animation.setDuration(700);
+        set.play(animation);
+        set.start();
+
+    }
+
 
 }

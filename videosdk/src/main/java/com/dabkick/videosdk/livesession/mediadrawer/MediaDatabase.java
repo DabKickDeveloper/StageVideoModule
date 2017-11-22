@@ -64,13 +64,13 @@ public class MediaDatabase {
     }
 
 
-    List<String> getVideoList(String category) {
+    List<DabKickVideoInfo> getVideoList(String category) {
         List<DabKickVideoInfo> videoList = videoMap.get(category);
         if (videoList == null) videoList = new ArrayList<>();
-        return getDabKickVideoUrlsFromList(videoList);
+        return getDabKickVideoUrlsFromList(videoList,0);
     }
 
-    ArrayList<String> loadMoreVideos(String category) {
+    List<DabKickVideoInfo> loadMoreVideos(String category) {
 
         if (videoIndexMap.get(category) == null) {
             videoIndexMap.put(category, 0);
@@ -83,13 +83,13 @@ public class MediaDatabase {
         videoMap.get(category).addAll(videos);
         videoIndexMap.put(category, index + videos.size());
 
-        return (ArrayList<String>) getDabKickVideoUrlsFromList(videoMap.get(category));
+        return getDabKickVideoUrlsFromList(videoMap.get(category),index);
     }
 
-    private List<String> getDabKickVideoUrlsFromList(List<DabKickVideoInfo> videoList) {
-        List<String> result = new ArrayList<>();
-        for (DabKickVideoInfo video : videoList) {
-            result.add(video.getVideoUrl());
+    private List<DabKickVideoInfo> getDabKickVideoUrlsFromList(List<DabKickVideoInfo> videoList, int fromIndex) {
+        List<DabKickVideoInfo> result = new ArrayList<>();
+        for (int index = fromIndex; index < videoList.size(); index++) {
+            result.add(videoList.get(index));
         }
         return result;
     }

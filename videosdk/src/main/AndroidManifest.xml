@@ -15,7 +15,8 @@
         <activity android:name=".livesession.LiveSessionActivity"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleBarTheme"/>
+            android:theme="@style/NoTitleBarTheme"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
     </application>
 
 </manifest>
