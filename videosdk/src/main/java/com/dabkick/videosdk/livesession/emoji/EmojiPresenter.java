@@ -27,7 +27,6 @@ public class EmojiPresenter implements EmojiDatabase.EmojiListener, EmojiLayout.
         this.view = view;
     }
 
-
     @Override
     public void onDatabaseEvent(String emojiType) {
         view.showEmoji(emojiType);
@@ -41,13 +40,11 @@ public class EmojiPresenter implements EmojiDatabase.EmojiListener, EmojiLayout.
     @Override
     public void onCool() {
         database.sendEvent(COOL);
-
     }
 
     @Override
     public void onWink() {
         database.sendEvent(WINK);
-
     }
 
     @Override

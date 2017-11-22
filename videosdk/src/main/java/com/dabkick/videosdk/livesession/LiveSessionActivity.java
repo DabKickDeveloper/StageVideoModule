@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dabkick.videosdk.Prefs;
@@ -111,6 +112,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
         ((SdkApp) SdkApp.getAppContext()).getLivesessionComponent().inject(this);
 
+        // Emojis
         innerContainer = findViewById(R.id.container_layout);
         container = findViewById(R.id.container);
 
@@ -171,61 +173,14 @@ public class LiveSessionActivity extends AppCompatActivity implements
         chatToggleButton.setOnClickListener(v -> toggleChatUi());
 
         chatEditText = findViewById(R.id.message_edit_text);
-        chatEditText.setOnEditorActionListener((v, actionId, event) -> {
-            boolean handled = false;
-            if (actionId == EditorInfo.IME_ACTION_SEND) {
-                // do not handle empty strings
-                if (chatEditText.getText().toString().length() == 0) {
-                    return true;
-                }
-                handled = true;
-                clickSendButton(chatEditText.getText().toString());
-                chatEditText.setText("");
-            }
-
-            return handled;
-        });
-
-        chatEditText.setOnFocusChangeListener((v, hasFocus) -> {
-            // show keyboard if widget has focus
-            if (hasFocus) {
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null) {
-                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-                }
-
-                chatEditText.setWidth(0);
-                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        1.0f
-                );
-                param.setMargins(4,4,4,12);
-                chatEditText.setLayoutParams(param);
-                emojiLayout.setVisibility(View.GONE);
-
-                toggleChatUi();
-            } else {
-
-                int px = Math.round(TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP, 180,getResources().getDisplayMetrics()));
-                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                        px,LinearLayout.LayoutParams.MATCH_PARENT);
-                param.setMargins(4,4,4,4);
-                chatEditText.setLayoutParams(param);
-                emojiLayout.setVisibility(View.VISIBLE);
-
-                toggleChatUi();
-            }
-        });
-
+        chatEditText.setOnEditorActionListener(getChatEditorActionListener());
+        chatEditText.setOnFocusChangeListener(getChatFocusListener());
         chatEditText.setFilters(new InputFilter[]{
                 new InputFilter.LengthFilter(DEFAULT_CHAT_MSG_LENGTH_LIMIT)});
 
         // back button
         ImageView backBtn = findViewById(R.id.iv_leave_session_btn);
         backBtn.setOnClickListener(view -> finish());
-
 
         // setup livestream
         RecyclerView livestreamRecyclerView = findViewById(R.id.recyclerview_livestream);
@@ -270,6 +225,57 @@ public class LiveSessionActivity extends AppCompatActivity implements
             }
         });
 
+    }
+
+    private TextView.OnEditorActionListener getChatEditorActionListener() {
+        return (v, actionId, event) -> {
+            boolean handled = false;
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                // do not handle empty strings
+                if (chatEditText.getText().toString().length() == 0) {
+                    return true;
+                }
+                handled = true;
+                clickSendButton(chatEditText.getText().toString());
+                chatEditText.setText("");
+            }
+
+            return handled;
+        };
+    }
+
+    private View.OnFocusChangeListener getChatFocusListener() {
+        return (v, hasFocus) -> {
+            if (hasFocus) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                }
+
+                chatEditText.setWidth(0);
+                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        1.0f
+                );
+                param.setMargins(4,4,4,12);
+                chatEditText.setLayoutParams(param);
+                emojiLayout.setVisibility(View.GONE);
+
+                toggleChatUi();
+            } else {
+
+                int px = Math.round(TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP, 180,getResources().getDisplayMetrics()));
+                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                        px,LinearLayout.LayoutParams.MATCH_PARENT);
+                param.setMargins(4,4,4,4);
+                chatEditText.setLayoutParams(param);
+                emojiLayout.setVisibility(View.VISIBLE);
+
+                toggleChatUi();
+            }
+        };
     }
 
     @Override
