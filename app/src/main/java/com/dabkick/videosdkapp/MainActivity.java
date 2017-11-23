@@ -401,8 +401,8 @@ public class MainActivity extends AppCompatActivity {
                     // cannot provide any more categories
                     return new ArrayList<>();
                 }
-                ArrayList<String> categoryList = new ArrayList<>();
-                categoryList.add(categories.get(offset));
+                int endIndex = Math.min(categories.size(), offset + 3);
+                ArrayList<String> categoryList = new ArrayList<>(categories.subList(offset,endIndex));
                 return categoryList;
             }
 

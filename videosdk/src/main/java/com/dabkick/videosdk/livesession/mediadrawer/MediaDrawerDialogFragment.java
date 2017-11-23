@@ -46,11 +46,11 @@ public class MediaDrawerDialogFragment extends DialogFragment {
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = rootLayout.findViewById(R.id.viewpager);
+        TabLayout tabLayout = rootLayout.findViewById(R.id.sliding_tabs);
         MediaDrawerPagerAdapter adapter = new MediaDrawerPagerAdapter(
                 getChildFragmentManager(), mediaDatabase.getCategoryList());
 
-
-        ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
+        /*ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
             // hacky solution to make sure we keep loading
             // ViewPager has a bug where it won't call onPageSelected until it has two or more items
             @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -72,12 +72,59 @@ public class MediaDrawerDialogFragment extends DialogFragment {
         };
 
         viewPager.addOnPageChangeListener(onPageChangeListener);
-        viewPager.post(() -> onPageChangeListener.onPageScrolled(viewPager.getCurrentItem(), 0, 0));
+        viewPager.post(() -> onPageChangeListener.onPageScrolled(viewPager.getCurrentItem(), 0, 0));*/
+
+        mediaDatabase.loadMoreCategories(new Observer<List<String>>() {
+            @Override public void onSubscribe(Disposable d) {}
+
+            @Override
+            public void onNext(List<String> strings) {
+                adapter.notifyDataSetChanged();
+                tabLayout.getTabAt(0).select();
+            }
+
+            @Override public void onError(Throwable e) {}
+            @Override public void onComplete() {}
+        });
 
         viewPager.setAdapter(adapter);
 
-        TabLayout tabLayout = rootLayout.findViewById(R.id.sliding_tabs);
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int i = tab.getPosition();
+                viewPager.setCurrentItem(i);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                int i =  tab.getPosition();
+                if (i == 0 || (i == mediaDatabase.getCategoryList().size() - 1)) {
+                    // reached end of categories - query more
+                    mediaDatabase.loadMoreCategories(new Observer<List<String>>() {
+                        @Override public void onSubscribe(Disposable d) {}
+
+                        @Override
+                        public void onNext(List<String> strings) {
+                            adapter.notifyDataSetChanged();
+                        }
+
+                        @Override public void onError(Throwable e) {}
+                        @Override public void onComplete() {}
+                    });
+                }
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
         return rootLayout;
     }
