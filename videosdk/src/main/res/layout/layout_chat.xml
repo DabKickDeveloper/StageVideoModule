@@ -33,7 +33,7 @@
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:layout_gravity="center_vertical"
-            android:inputType="text"
+            android:inputType="textNoSuggestions"
             android:imeOptions="actionSend"/>
 
         <HorizontalScrollView

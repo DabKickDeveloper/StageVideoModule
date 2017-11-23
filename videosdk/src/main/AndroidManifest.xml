@@ -16,7 +16,7 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBarTheme"
-            android:windowSoftInputMode="stateHidden|adjustPan"/>
+            android:windowSoftInputMode="stateHidden|adjustPan|adjustResize"/>
     </application>
 
 </manifest>
