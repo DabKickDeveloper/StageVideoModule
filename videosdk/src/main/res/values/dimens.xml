@@ -3,4 +3,7 @@
     <dimen name="height_livestream_bar">180dp</dimen>
     <dimen name="width_livestream_bar_item">130dp</dimen>
     <dimen name="height_stage">200dp</dimen>
+    <dimen name="round_corner_radius">20dp</dimen>
+    <dimen name="straight_corner">0dp</dimen>
+    <dimen name="stroke_width">1dp</dimen>
 </resources>
