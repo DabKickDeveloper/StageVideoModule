@@ -8,4 +8,5 @@
     <dimen name="stroke_width">1dp</dimen>
     <dimen name="emoji_height_width">30dp</dimen>
     <dimen name="emoji_margin_left">4dp</dimen>
+    <dimen name="chat_msges_margin_left">40dp</dimen>
 </resources>

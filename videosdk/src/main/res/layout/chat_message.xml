@@ -16,13 +16,15 @@
         tools:text="Chat Message"
         android:textColor="@android:color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chat_message_author" />
+        app:layout_constraintTop_toBottomOf="@+id/chat_message_author"
+        android:layout_marginLeft="@dimen/chat_msges_margin_left"/>
 
     <TextView
         android:id="@+id/chat_message_author"
         android:layout_width="wrap_content"
         android:layout_marginTop="10dp"
         android:textSize="12sp"
+        android:layout_marginLeft="@dimen/chat_msges_margin_left"
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
         tools:text="Author name"

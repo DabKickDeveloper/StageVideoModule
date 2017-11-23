@@ -100,6 +100,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
     private OverviewPresenter overviewPresenter;
     @Inject OverviewDatabase overviewDatabase;
 
+    ImageView downKarat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,6 +165,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
         emojis.setListener(emojiPresenter);
 
         chatListView = findViewById(R.id.listview_livesession_chat);
+        downKarat = findViewById(R.id.close_chat_list);
         chatAdapter = new ChatAdapter(this, new ArrayList<>());
         chatListView.setAdapter(chatAdapter);
 
@@ -312,11 +314,13 @@ public class LiveSessionActivity extends AppCompatActivity implements
         int visibility = chatListView.getVisibility();
         if (visibility == View.INVISIBLE) {
             chatListView.setVisibility(View.VISIBLE);
+            downKarat.setVisibility(View.VISIBLE);
             Drawable drawable = ContextCompat.getDrawable(
                     this, R.drawable.ic_show_chat);
             chatToggleButton.setImageDrawable(drawable);
         } else {
             chatListView.setVisibility(View.INVISIBLE);
+            downKarat.setVisibility(View.GONE);
             Drawable drawable = ContextCompat.getDrawable(
                     this, R.drawable.ic_hide_chat);
             chatToggleButton.setImageDrawable(drawable);
@@ -431,6 +435,10 @@ public class LiveSessionActivity extends AppCompatActivity implements
         if (chooserIntent.resolveActivity(getPackageManager()) != null) {
             startActivity(chooserIntent);
         }
+    }
+
+    public void closeChatList(View view){
+        toggleChatUi();
     }
 
     @Override

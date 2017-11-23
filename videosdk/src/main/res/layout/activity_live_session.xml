@@ -81,7 +81,7 @@
 
     <ListView
         android:id="@+id/listview_livesession_chat"
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
@@ -99,5 +99,17 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"/>
+
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_down_karat"
+        app:layout_constraintTop_toTopOf="@+id/listview_livesession_chat"
+        app:layout_constraintLeft_toLeftOf="@id/listview_livesession_chat"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:onClick="closeChatList"
+        android:id="@+id/close_chat_list"
+        android:visibility="gone"/>
 
 </android.support.constraint.ConstraintLayout>
