@@ -297,14 +297,9 @@ public class LiveSessionActivity extends AppCompatActivity implements
                 ft.add(R.id.frag_media_drawer, mediaDrawerDialogFragment);
                 ft.commit();
             }
-            frameLayout.setVisibility(View.VISIBLE);
-            AnimationUtils.leftToRight(findViewById(R.id.iv_media_drawer), LiveSessionActivity.this);
-            AnimationUtils.leftToRight(frameLayout, LiveSessionActivity.this);
+            AnimationUtils.leftToRight(frameLayout, LiveSessionActivity.this, findViewById(R.id.iv_media_drawer));
         }else{
-
-            //AnimationUtils.rightToLeft(findViewById(R.id.iv_media_drawer), LiveSessionActivity.this);
-            AnimationUtils.rightToLeft(frameLayout, LiveSessionActivity.this);
-            frameLayout.setVisibility(View.GONE);
+            AnimationUtils.rightToLeft(frameLayout, LiveSessionActivity.this,findViewById(R.id.iv_media_drawer));
         }
     }
 

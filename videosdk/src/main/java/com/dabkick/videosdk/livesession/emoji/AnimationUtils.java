@@ -279,33 +279,73 @@ public class AnimationUtils {
         mAnimationSet.start();
     }
 
-    public static void leftToRight(View frameLayout, Activity mActivity){
-
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        ((Activity)mActivity).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int width = displayMetrics.widthPixels;
+    public static void leftToRight(FrameLayout frameLayout, Activity mActivity, ImageView imageView){
 
         AnimatorSet set = new AnimatorSet();
-        ObjectAnimator animation = ObjectAnimator.ofFloat(frameLayout,
-                "translationX", -width, 0f);
-        animation.setDuration(700);
-        set.play(animation);
+        ObjectAnimator frameAnimation = ObjectAnimator.ofFloat(frameLayout,
+                "translationX", -convertDpToPixel(mActivity,250), 0);
+        frameAnimation.setDuration(700);
+        frameAnimation.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+                    frameLayout.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+        ObjectAnimator imageAnimation = ObjectAnimator.ofFloat(imageView,
+                "translationX", 0, convertDpToPixel(mActivity,250));
+        imageAnimation.setDuration(700);
+        set.playTogether(new Animator[]{frameAnimation,imageAnimation});
         set.start();
 
     }
 
-    public static void rightToLeft(View frameLayout, Activity mActivity){
-
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        ((Activity)mActivity).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int width = displayMetrics.widthPixels;
+    public static void rightToLeft(View frameLayout, Activity mActivity, ImageView imageView){
 
         AnimatorSet set = new AnimatorSet();
-        ObjectAnimator animation = ObjectAnimator.ofFloat(frameLayout,
-                "translationX", 0f, -width);
-        animation.setDuration(700);
-        set.play(animation);
+        ObjectAnimator frameAnimation = ObjectAnimator.ofFloat(frameLayout,
+                "translationX", 0, -convertDpToPixel(mActivity,250));
+        frameAnimation.setDuration(700);
+        frameAnimation.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                frameLayout.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+        ObjectAnimator imageAnimation = ObjectAnimator.ofFloat(imageView,
+                "translationX", convertDpToPixel(mActivity,250), 0);
+        imageAnimation.setDuration(700);
+        set.playTogether(new Animator[]{frameAnimation,imageAnimation});
         set.start();
+
 
     }
 
