@@ -29,7 +29,7 @@ public class StageDatabase {
 
     private DatabaseReference databaseReference;
     private FirebaseDatabase firebaseDatabase;
-
+    private ChildEventListener childEventListener;
     private List<StageModel> stageModelList;
 
     @Inject OverviewDatabase overviewDatabase;
@@ -45,7 +45,7 @@ public class StageDatabase {
         String stagePath = StageDatabaseReferences.getStageReference(AbstractDatabaseReferences.getSessionId());
         databaseReference = firebaseDatabase.getReference(stagePath);
 
-        ChildEventListener childEventListener = new ChildEventListener() {
+        childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 StageModel sv = dataSnapshot.getValue(StageModel.class);
@@ -81,17 +81,21 @@ public class StageDatabase {
                 }
             }
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {}
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            @Override public void onChildRemoved(DataSnapshot dataSnapshot) {}
+            @Override public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            @Override public void onCancelled(DatabaseError databaseError) {}
         };
-        databaseReference.addChildEventListener(childEventListener);
 
+    }
+
+    void addChildEventListener() {
+        Timber.i("addChildEventListener");
+        databaseReference.addChildEventListener(childEventListener);
+    }
+
+    void removeChildEventListener() {
+        Timber.i("removeChildEventListener");
+        databaseReference.removeEventListener(childEventListener);
     }
 
     void pauseVideo(long milliseconds) {

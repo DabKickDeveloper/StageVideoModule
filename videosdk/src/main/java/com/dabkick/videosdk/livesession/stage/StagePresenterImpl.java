@@ -87,11 +87,13 @@ public class StagePresenterImpl implements StagePresenter, StageDatabase.StageDa
 
     @Override
     public void onStart() {
+        model.addChildEventListener();
         EventBus.getDefault().register(this);
     }
 
     @Override
     public void onStop() {
+        model.removeChildEventListener();
         EventBus.getDefault().unregister(this);
     }
 
