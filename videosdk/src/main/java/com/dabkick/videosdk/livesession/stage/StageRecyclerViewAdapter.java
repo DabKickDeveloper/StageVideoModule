@@ -88,7 +88,7 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
         vh.videoView.setOnCompletionListener(() -> {
             vh.videoView.restart();
-            vh.videoView.seekTo(items.get(0).getPlayedMillis());
+            vh.videoView.seekTo(items.get(position).getPlayedMillis());
             Runnable r = () ->  {
                 if (vh.videoView.isPlaying()) vh.videoView.pause();
             };
