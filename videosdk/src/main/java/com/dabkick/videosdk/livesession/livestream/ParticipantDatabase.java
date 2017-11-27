@@ -22,16 +22,46 @@ class ParticipantDatabase {
     private DatabaseReference databaseReference;
     private FirebaseDatabase firebaseDatabase;
     private String myParticipantKey;
+    private ChildEventListener childEventListener;
+    private ParticipantModelCallback callback;
 
     ParticipantDatabase(@NonNull ParticipantModelCallback callback) {
         firebaseDatabase = FirebaseDatabase.getInstance();
+        this.callback = callback;
 
         String participantPath = ParticipantDatabaseReferences.getParticipantReference(ParticipantDatabaseReferences.getSessionId());
         databaseReference = firebaseDatabase.getReference(participantPath);
 
         addSelfToDatabase();
+    }
 
-        ChildEventListener childEventListener = new ChildEventListener() {
+    private void addSelfToDatabase() {
+        Participant myParticipant = new Participant(
+                Prefs.getUserId(),
+                Prefs.getDabname(),
+                Prefs.getProfilePicUrl(),
+                false,
+                false
+        );
+        myParticipantKey = databaseReference.push().getKey();
+        databaseReference.child(myParticipantKey).setValue(myParticipant);
+        databaseReference.child(myParticipantKey).onDisconnect().removeValue();
+    }
+
+    void addChildEventListener() {
+        Timber.d("addChildEventListener");
+        childEventListener = createChildEventListener();
+        databaseReference.addChildEventListener(childEventListener);
+    }
+
+    void removeChildEventListener() {
+        Timber.d("removeChildEventListener");
+        databaseReference.removeEventListener(childEventListener);
+        childEventListener = null;
+    }
+
+    private ChildEventListener createChildEventListener() {
+        return new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Participant participant = dataSnapshot.getValue(Participant.class);
@@ -53,21 +83,6 @@ class ParticipantDatabase {
             @Override public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
             @Override public void onCancelled(DatabaseError databaseError) {}
         };
-        databaseReference.addChildEventListener(childEventListener);
-
-    }
-
-    private void addSelfToDatabase() {
-        Participant myParticipant = new Participant(
-                Prefs.getUserId(),
-                Prefs.getDabname(),
-                Prefs.getProfilePicUrl(),
-                false,
-                false
-        );
-        myParticipantKey = databaseReference.push().getKey();
-        databaseReference.child(myParticipantKey).setValue(myParticipant);
-        databaseReference.child(myParticipantKey).onDisconnect().removeValue();
     }
 
     void removeSelfFromDatabase() {

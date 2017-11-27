@@ -1,8 +1,6 @@
 package com.dabkick.videosdk.livesession.stage;
 
 
-import android.support.annotation.NonNull;
-
 import com.dabkick.videosdk.SdkApp;
 import com.dabkick.videosdk.livesession.AbstractDatabaseReferences;
 import com.dabkick.videosdk.livesession.overviews.OverviewDatabase;
@@ -27,6 +25,7 @@ public class StageDatabase {
         void onStageVideoStateChanged(int i, String newState);
     }
 
+    private StageDatabaseCallback callback;
     private DatabaseReference databaseReference;
     private FirebaseDatabase firebaseDatabase;
     private ChildEventListener childEventListener;
@@ -34,7 +33,7 @@ public class StageDatabase {
 
     @Inject OverviewDatabase overviewDatabase;
 
-    StageDatabase(@NonNull StageDatabaseCallback callback) {
+    public StageDatabase() {
 
         ((SdkApp) SdkApp.getAppContext()).getLivesessionComponent().inject(this);
 
@@ -45,57 +44,18 @@ public class StageDatabase {
         String stagePath = StageDatabaseReferences.getStageReference(AbstractDatabaseReferences.getSessionId());
         databaseReference = firebaseDatabase.getReference(stagePath);
 
-        childEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                StageModel sv = dataSnapshot.getValue(StageModel.class);
-                sv.setKey(dataSnapshot.getKey());
-                Timber.d("onChildAdded: %s", dataSnapshot.getKey());
-                stageModelList.add(sv);
-                callback.onStageVideoAdded();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                StageModel changedStageModel = dataSnapshot.getValue(StageModel.class);
-                Timber.d("onChildChanged: %s", dataSnapshot.getKey());
-                for (int i = 0; i < stageModelList.size(); i++) {
-                    if (changedStageModel.equals(stageModelList.get(i))) {
-                        // update stage time
-                        if (changedStageModel.getPlayedMillis() != stageModelList.get(
-                                overviewDatabase.getStagedVideoPosition()).getPlayedMillis()) {
-                            Timber.i("changed time: %s", changedStageModel.getPlayedMillis());
-                            callback.onStageVideoTimeChanged(i, changedStageModel.getPlayedMillis());
-                        }
-                        // do not update play/pause
-                        if (!changedStageModel.getState().equals(stageModelList.get(
-                                overviewDatabase.getStagedVideoPosition()).getState())) {
-                            Timber.i("changed state: %s", changedStageModel.getState());
-                            callback.onStageVideoStateChanged(i, changedStageModel.getState());
-                        }
-
-
-                        stageModelList.set(i, changedStageModel);
-                        break;
-                    }
-                }
-            }
-
-            @Override public void onChildRemoved(DataSnapshot dataSnapshot) {}
-            @Override public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
-            @Override public void onCancelled(DatabaseError databaseError) {}
-        };
-
     }
 
     void addChildEventListener() {
-        Timber.i("addChildEventListener");
+        Timber.d("addChildEventListener");
+        childEventListener = createChildEventListener();
         databaseReference.addChildEventListener(childEventListener);
     }
 
     void removeChildEventListener() {
-        Timber.i("removeChildEventListener");
+        Timber.d("removeChildEventListener");
         databaseReference.removeEventListener(childEventListener);
+        childEventListener = null;
     }
 
     void pauseVideo(long milliseconds) {
@@ -131,5 +91,50 @@ public class StageDatabase {
         databaseReference.push().setValue(stageModel);
     }
 
+    private ChildEventListener createChildEventListener() {
+        return new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                StageModel sv = dataSnapshot.getValue(StageModel.class);
+                sv.setKey(dataSnapshot.getKey());
+                Timber.d("onChildAdded: %s", dataSnapshot.getKey());
+                stageModelList.add(sv);
+                if (callback != null) callback.onStageVideoAdded();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                StageModel changedStageModel = dataSnapshot.getValue(StageModel.class);
+                Timber.d("onChildChanged: %s", dataSnapshot.getKey());
+                for (int i = 0; i < stageModelList.size(); i++) {
+                    if (changedStageModel.equals(stageModelList.get(i))) {
+                        // update stage time
+                        if (changedStageModel.getPlayedMillis() != stageModelList.get(
+                                overviewDatabase.getStagedVideoPosition()).getPlayedMillis()) {
+                            Timber.i("changed time: %s", changedStageModel.getPlayedMillis());
+                            if (callback != null) callback.onStageVideoTimeChanged(i, changedStageModel.getPlayedMillis());
+                        }
+                        // do not update play/pause
+                        if (!changedStageModel.getState().equals(stageModelList.get(
+                                overviewDatabase.getStagedVideoPosition()).getState())) {
+                            Timber.i("changed state: %s", changedStageModel.getState());
+                            if (callback != null) callback.onStageVideoStateChanged(i, changedStageModel.getState());
+                        }
+
+                        stageModelList.set(i, changedStageModel);
+                        break;
+                    }
+                }
+            }
+
+            @Override public void onChildRemoved(DataSnapshot dataSnapshot) {}
+            @Override public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            @Override public void onCancelled(DatabaseError databaseError) {}
+        };
+    }
+
+    void setCallback(StageDatabaseCallback callback) {
+        this.callback = callback;
+    }
 
 }

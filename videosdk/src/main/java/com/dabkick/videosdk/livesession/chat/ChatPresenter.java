@@ -24,4 +24,13 @@ public class ChatPresenter implements Presenter {
         model.sendMessage(message);
     }
 
+    @Override
+    public void onStart() {
+
+    }
+
+    @Override
+    public void onStop() {
+
+    }
 }

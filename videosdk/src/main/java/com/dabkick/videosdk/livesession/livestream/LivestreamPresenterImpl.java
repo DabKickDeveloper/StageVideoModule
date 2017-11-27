@@ -2,12 +2,13 @@ package com.dabkick.videosdk.livesession.livestream;
 
 
 import com.dabkick.videosdk.Prefs;
+import com.dabkick.videosdk.livesession.Presenter;
 import com.twilio.video.VideoView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LivestreamPresenterImpl implements LivestreamPresenter, ParticipantDatabase.ParticipantModelCallback {
+public class LivestreamPresenterImpl implements LivestreamPresenter, ParticipantDatabase.ParticipantModelCallback, Presenter {
 
     private LivestreamView view;
     private StreamingManager streamingManager;
@@ -62,4 +63,13 @@ public class LivestreamPresenterImpl implements LivestreamPresenter, Participant
         return participantList;
     }
 
+    @Override
+    public void onStart() {
+        participantDatabase.addChildEventListener();
+    }
+
+    @Override
+    public void onStop() {
+        participantDatabase.removeChildEventListener();
+    }
 }

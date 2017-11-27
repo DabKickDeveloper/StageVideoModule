@@ -460,12 +460,14 @@ public class LiveSessionActivity extends AppCompatActivity implements
     @Override
     protected void onStart() {
         super.onStart();
+        livestreamPresenter.onStart();
         stagePresenter.onStart();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        livestreamPresenter.onStop();
         stagePresenter.onStop();
     }
 
