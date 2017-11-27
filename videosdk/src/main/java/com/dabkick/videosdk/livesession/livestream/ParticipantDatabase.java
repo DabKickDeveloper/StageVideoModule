@@ -76,7 +76,7 @@ class ParticipantDatabase {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Participant participant = dataSnapshot.getValue(Participant.class);
-                Timber.i("onChildAdded: %s", participant.dabname);
+                Timber.i("onChildAdded: %s", participant.getDabname());
                 callback.onParticipantAdded(participant);
                 handleOnAudioVideoEnabled(participant);
             }
@@ -84,14 +84,14 @@ class ParticipantDatabase {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Participant participant = dataSnapshot.getValue(Participant.class);
-                Timber.i("onChildChanged: %s", participant.dabname);
+                Timber.i("onChildChanged: %s", participant.getDabname());
                 handleOnAudioVideoEnabled(participant);
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Participant participant = dataSnapshot.getValue(Participant.class);
-                Timber.i("onChildRemoved: %s", participant.dabname);
+                Timber.i("onChildRemoved: %s", participant.getDabname());
                 callback.onParticipantRemoved(participant);
             }
             @Override public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
@@ -100,7 +100,7 @@ class ParticipantDatabase {
     }
 
     private void handleOnAudioVideoEnabled(Participant participant) {
-        if (participant.isVideoEnabled || participant.isAudioEnabled) {
+        if (participant.getIsVideoEnabled() || participant.getIsAudioEnabled()) {
             callback.onParticipantAudioVideoEnabled();
         }
     }

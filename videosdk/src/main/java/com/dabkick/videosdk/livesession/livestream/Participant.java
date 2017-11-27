@@ -25,8 +25,8 @@ public class Participant {
         return isAudioEnabled;
     }
 
-    String dabname, profilePicUrl;
-    boolean isVideoEnabled, isAudioEnabled;
+    private String dabname, profilePicUrl;
+    private boolean isVideoEnabled, isAudioEnabled;
 
     public Participant() {
         // required Firebase empty constructor

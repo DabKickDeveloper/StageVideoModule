@@ -46,7 +46,7 @@ public class LivestreamPresenterImpl implements LivestreamPresenter, Participant
 
     @Override
     public void onParticipantAdded(Participant participant) {
-        if (participant.dabname.equals(Prefs.getDabname())) {
+        if (participant.getDabname().equals(Prefs.getDabname())) {
             // do not add participant with same dabname
             return;
         }

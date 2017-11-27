@@ -67,7 +67,7 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
             }
             case ParticipantViewHolder.TYPE: {
                 ParticipantViewHolder participantViewHolder = (ParticipantViewHolder) holder;
-                participantViewHolder.name.setText(participantList.get(position - 1).dabname);
+                participantViewHolder.name.setText(participantList.get(position - 1).getDabname());
                 holder.itemView.setOnClickListener(v -> livestreamView.otherUserStreamClicked(position - 1));
             }
         }
