@@ -12,11 +12,14 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import timber.log.Timber;
 
+import static com.dabkick.videosdk.livesession.livestream.ParticipantDatabaseReferences.*;
+
 class ParticipantDatabase {
 
     interface ParticipantModelCallback {
         void onParticipantAdded(Participant participant);
         void onParticipantRemoved(Participant participant);
+        void onParticipantAudioVideoEnabled();
     }
 
     private DatabaseReference databaseReference;
@@ -29,7 +32,7 @@ class ParticipantDatabase {
         firebaseDatabase = FirebaseDatabase.getInstance();
         this.callback = callback;
 
-        String participantPath = ParticipantDatabaseReferences.getParticipantReference(ParticipantDatabaseReferences.getSessionId());
+        String participantPath = getParticipantReference(getSessionId());
         databaseReference = firebaseDatabase.getReference(participantPath);
 
         addSelfToDatabase();
@@ -46,6 +49,14 @@ class ParticipantDatabase {
         myParticipantKey = databaseReference.push().getKey();
         databaseReference.child(myParticipantKey).setValue(myParticipant);
         databaseReference.child(myParticipantKey).onDisconnect().removeValue();
+    }
+
+    void setIsAudioEnabled(boolean isEnabled){
+        databaseReference.child(myParticipantKey).child(IS_AUDIO_ENABLED).setValue(isEnabled);
+    }
+
+    void setisVideoEnabled(boolean isEnabled){
+        databaseReference.child(myParticipantKey).child(IS_VIDEO_ENABLED).setValue(isEnabled);
     }
 
     void addChildEventListener() {
@@ -67,11 +78,14 @@ class ParticipantDatabase {
                 Participant participant = dataSnapshot.getValue(Participant.class);
                 Timber.i("onChildAdded: %s", participant.dabname);
                 callback.onParticipantAdded(participant);
+                handleOnAudioVideoEnabled(participant);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                // TODO
+                Participant participant = dataSnapshot.getValue(Participant.class);
+                Timber.i("onChildChanged: %s", participant.dabname);
+                handleOnAudioVideoEnabled(participant);
             }
 
             @Override
@@ -83,6 +97,12 @@ class ParticipantDatabase {
             @Override public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
             @Override public void onCancelled(DatabaseError databaseError) {}
         };
+    }
+
+    private void handleOnAudioVideoEnabled(Participant participant) {
+        if (participant.isVideoEnabled || participant.isAudioEnabled) {
+            callback.onParticipantAudioVideoEnabled();
+        }
     }
 
     void removeSelfFromDatabase() {

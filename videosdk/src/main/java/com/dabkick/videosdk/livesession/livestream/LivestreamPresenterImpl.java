@@ -8,6 +8,8 @@ import com.twilio.video.VideoView;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 public class LivestreamPresenterImpl implements LivestreamPresenter, ParticipantDatabase.ParticipantModelCallback, Presenter {
 
     private LivestreamView view;
@@ -56,6 +58,13 @@ public class LivestreamPresenterImpl implements LivestreamPresenter, Participant
     public void onParticipantRemoved(Participant participant) {
         participantList.remove(participant);
         view.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onParticipantAudioVideoEnabled() {
+        Timber.i("onParticipantAudioVideoEnabled");
+        // TODO
+        // streamingManager.joinRoom()
     }
 
     @Override
