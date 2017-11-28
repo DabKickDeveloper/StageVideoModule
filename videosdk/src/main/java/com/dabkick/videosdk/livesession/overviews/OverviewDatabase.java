@@ -49,7 +49,7 @@ public class OverviewDatabase {
         //databaseReference.push().setValue(overviewModel);
     }
 
-    void setStageKey(String newKey) {
+    public void setStageKey(String newKey) {
         databaseReference.child(OverviewDatabaseReferences.STAGED_VIDEO_KEY).setValue(newKey);
     }
 
@@ -57,7 +57,7 @@ public class OverviewDatabase {
         return (overviewModel == null) ? "" : overviewModel.getStagedVideoKey();
     }
 
-    interface OverviewListener {
+    public interface OverviewListener {
         void onStageKeyFromDatabaseChanged(String newIndex);
     }
 

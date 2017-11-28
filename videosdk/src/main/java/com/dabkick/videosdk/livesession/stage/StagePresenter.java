@@ -8,6 +8,7 @@ import java.util.List;
 public interface StagePresenter extends Presenter {
 
     List<StageModel> getStageItems();
-
     StageRecyclerViewAdapter.VideoControlListener getVideoControlsListener();
+    void onUserSwipedStage(int newPosition);
+
 }

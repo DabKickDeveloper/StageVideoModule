@@ -52,13 +52,10 @@ import com.dabkick.videosdk.livesession.livestream.LivestreamView;
 import com.dabkick.videosdk.livesession.livestream.SessionParticipantsAdapter;
 import com.dabkick.videosdk.livesession.mediadrawer.MediaDrawerDialogFragment;
 import com.dabkick.videosdk.livesession.overviews.OverviewDatabase;
-import com.dabkick.videosdk.livesession.overviews.OverviewPresenter;
-import com.dabkick.videosdk.livesession.overviews.OverviewPresenterImpl;
 import com.dabkick.videosdk.livesession.overviews.OverviewView;
 import com.dabkick.videosdk.livesession.stage.StagePresenter;
 import com.dabkick.videosdk.livesession.stage.StagePresenterImpl;
 import com.dabkick.videosdk.livesession.stage.StageRecyclerViewAdapter;
-import com.dabkick.videosdk.livesession.usersetup.GetUserDetailsFragment;
 import com.twilio.video.VideoView;
 
 import java.util.ArrayList;
@@ -97,7 +94,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
     EmojiLayout emojis;
 
     // Overview
-    private OverviewPresenter overviewPresenter;
     @Inject OverviewDatabase overviewDatabase;
 
     ImageView downKarat;
@@ -194,9 +190,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
                 livestreamPresenter.getLivestreamParticipants());
         livestreamRecyclerView.setAdapter(sessionParticipantsAdapter);
 
-        // Overview
-        overviewPresenter = new OverviewPresenterImpl(this);
-
 
         // setup stage
         stageRecyclerView = findViewById(R.id.recyclerview_stage);
@@ -208,7 +201,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
         stageSnapHelper.attachToRecyclerView(stageRecyclerView);
 
         stageRecyclerViewAdapter = new StageRecyclerViewAdapter(this);
-        stagePresenter = new StagePresenterImpl(stageRecyclerViewAdapter);
+        stagePresenter = new StagePresenterImpl(stageRecyclerViewAdapter, this);
         stageRecyclerViewAdapter.setVideoControlListener(stagePresenter.getVideoControlsListener());
         stageRecyclerViewAdapter.setItems(stagePresenter.getStageItems());
 
@@ -222,7 +215,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
                 if(newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
                     View centerView = stageSnapHelper.findSnapView(stageLayoutManager);
                     int position = stageLayoutManager.getPosition(centerView);
-                    overviewPresenter.onUserSwipedStage(position);
+                    stagePresenter.onUserSwipedStage(position);
                 }
             }
         });
@@ -389,11 +382,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
         if (isFinishing()) {
             livestreamPresenter.onFinishing();
         }
-//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frag_media_drawer);
-//        if(fragment != null)
-//            ft.remove(fragment);
-//        ft.commit();
     }
 
     @Override
@@ -434,22 +422,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
     @Override
     public void notifyDataSetChanged() {
         sessionParticipantsAdapter.notifyDataSetChanged();
-    }
-
-    private void showGetUserDetailsFragment() {
-
-        android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
-
-        // remove any currently shown dialog
-        android.app.Fragment prev = getFragmentManager().findFragmentByTag(GetUserDetailsFragment.class.getName());
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
-        // show Fragment
-        GetUserDetailsFragment newGetUserDetailsFragment = new GetUserDetailsFragment();
-        newGetUserDetailsFragment.show(ft, GetUserDetailsFragment.class.getName());
-
     }
 
     @Override

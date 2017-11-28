@@ -3,6 +3,7 @@ package com.dabkick.videosdk.livesession.stage;
 import com.dabkick.videosdk.SdkApp;
 import com.dabkick.videosdk.livesession.mediadrawer.MediaItemClickEvent;
 import com.dabkick.videosdk.livesession.overviews.OverviewDatabase;
+import com.dabkick.videosdk.livesession.overviews.OverviewView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -14,28 +15,51 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-public class StagePresenterImpl implements StagePresenter, StageDatabase.StageDatabaseCallback {
+public class StagePresenterImpl implements StagePresenter, StageDatabase.StageDatabaseCallback,
+        OverviewDatabase.OverviewListener{
 
-    private StageView view;
+    private StageView stageView;
+    private OverviewView overviewView;
 
     // models
     @Inject StageDatabase stageDatabase;
     @Inject OverviewDatabase overviewDatabase;
 
-    public StagePresenterImpl(StageView view) {
+    public StagePresenterImpl(StageView stageView, OverviewView overviewView) {
         ((SdkApp) SdkApp.getAppContext()).getLivesessionComponent().inject(this);
-        this.view = view;
+        this.stageView = stageView;
+        this.overviewView = overviewView;
         stageDatabase.setCallback(this);
+        overviewDatabase.setListener(this);
+
     }
 
     @Override
+    public void onUserSwipedStage(int newPosition) {
+        Timber.i("on user swiped stage", newPosition);
+        String newKey = stageDatabase.getKeyFromIndex(newPosition);
+        overviewDatabase.setStageKey(newKey);
+    }
+
+    @Override
+    public void onStageKeyFromDatabaseChanged(String newKey) {
+        Timber.i("database changed stage index :%s", newKey);
+        int newIndex = stageDatabase.getIndexFromKey(newKey);
+
+        if (newIndex == -1) Timber.w("key is not present in stage video list: %s", newKey);
+        else overviewView.setStageIndexByKey(newIndex);
+
+    }
+
+
+    @Override
     public void onStageVideoAdded() {
-        view.onStageDataUpdated();
+        stageView.onStageDataUpdated();
     }
 
     @Override
     public void onStageVideoTimeChanged(int position, long playedMillis) {
-        view.onStageVideoTimeChanged(position, playedMillis);
+        stageView.onStageVideoTimeChanged(position, playedMillis);
     }
 
     @Override
@@ -46,12 +70,12 @@ public class StagePresenterImpl implements StagePresenter, StageDatabase.StageDa
         if (stageDatabase.getStageModelList().get(index).isPlaying() &&
                 newState.equals("paused")) {
             Timber.i("newState: %s, pausing video...", newState);
-            view.onStageVideoStateChanged(i, true);
+            stageView.onStageVideoStateChanged(i, true);
         // if video is paused and server state changes to playing
         } else if (!stageDatabase.getStageModelList().get(index).isPlaying() &&
                 newState.equals("playing")) {
             Timber.i("newState: %s, playing video...", newState);
-            view.onStageVideoStateChanged(i, false);
+            stageView.onStageVideoStateChanged(i, false);
         }
     }
 
