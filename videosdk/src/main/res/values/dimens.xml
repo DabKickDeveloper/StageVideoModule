@@ -9,6 +9,7 @@
     <dimen name="emoji_height_width">30dp</dimen>
     <dimen name="emoji_margin_left">4dp</dimen>
     <dimen name="chat_msges_margin_left">40dp</dimen>
-    <dimen name="video_thumbnail_ht_wdth">130dp</dimen>
+    <dimen name="video_thumbnail_ht">100dp</dimen>
+    <dimen name="video_thumbnail_wdth">130dp</dimen>
     <dimen name="video_thumbnail_margin_lft_btm">5dp</dimen>
 </resources>
