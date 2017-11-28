@@ -8,7 +8,7 @@ import com.dabkick.videosdk.livesession.AbstractDatabaseReferences;
 class OverviewDatabaseReferences extends AbstractDatabaseReferences {
 
     private static final String OVERVIEWS = "overviews";
-    static final String STAGED_VIDEO_POSITION = "stagedVideoPosition";
+    static final String STAGED_VIDEO_KEY = "stagedVideoKey";
 
     static String getOverviewRoomReference(@NonNull final String roomId) {
         String roomRef = getOverviewReference();

@@ -66,7 +66,7 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 public class LiveSessionActivity extends AppCompatActivity implements
-        ChatView, LivestreamView, OverviewView, StagePresenterImpl.NotifyStageListener {
+        ChatView, LivestreamView, OverviewView {
 
     // Chat MVP
     private ChatAdapter chatAdapter;
@@ -208,7 +208,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
         stageSnapHelper.attachToRecyclerView(stageRecyclerView);
 
         stageRecyclerViewAdapter = new StageRecyclerViewAdapter(this);
-        stagePresenter = new StagePresenterImpl(stageRecyclerViewAdapter, this);
+        stagePresenter = new StagePresenterImpl(stageRecyclerViewAdapter);
         stageRecyclerViewAdapter.setVideoControlListener(stagePresenter.getVideoControlsListener());
         stageRecyclerViewAdapter.setItems(stagePresenter.getStageItems());
 
@@ -278,11 +278,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
                 toggleChatUi();
             }
         };
-    }
-
-    @Override
-    public void notifyStageRecyclerView() {
-        stageRecyclerView.scrollToPosition(overviewDatabase.getStagedVideoPosition());
     }
 
     public void showContentDialog(View view) {
@@ -472,7 +467,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void setStageIndex(int newPosition) {
+    public void setStageIndexByKey(int newPosition) {
         stageRecyclerView.smoothScrollToPosition(newPosition);
     }
 

@@ -60,24 +60,27 @@ public class StageDatabase {
 
     void pauseVideo(long milliseconds) {
         Timber.i("pauseVideo: %s", milliseconds);
-        stageModelList.get(overviewDatabase.getStagedVideoPosition()).setPlayedMillis(milliseconds);
-        stageModelList.get(overviewDatabase.getStagedVideoPosition()).setState(StageModel.PAUSED);
+        int index = getIndexFromKey(overviewDatabase.getStagedVideoKey());
+        stageModelList.get(index).setPlayedMillis(milliseconds);
+        stageModelList.get(index).setState(StageModel.PAUSED);
         databaseReference.child(stageModelList.get(
-                overviewDatabase.getStagedVideoPosition()).getKey()).setValue(
-                        stageModelList.get(overviewDatabase.getStagedVideoPosition()));
+                index).getKey()).setValue(
+                        stageModelList.get(index));
     }
 
     void resumeVideo(long milliseconds) {
         Timber.i("resumeVideo: %s", milliseconds);
-        stageModelList.get(overviewDatabase.getStagedVideoPosition()).setPlayedMillis(milliseconds);
-        stageModelList.get(overviewDatabase.getStagedVideoPosition()).setState(StageModel.PLAYING);
-        databaseReference.child(stageModelList.get(overviewDatabase.getStagedVideoPosition())
-                .getKey()).setValue(stageModelList.get(overviewDatabase.getStagedVideoPosition()));
+        int index = getIndexFromKey(overviewDatabase.getStagedVideoKey());
+        stageModelList.get(index).setPlayedMillis(milliseconds);
+        stageModelList.get(index).setState(StageModel.PLAYING);
+        databaseReference.child(stageModelList.get(index)
+                .getKey()).setValue(stageModelList.get(index));
     }
 
     void seekTo(long secs) {
         Timber.i("seekTo: %s", secs);
-        databaseReference.child(stageModelList.get(overviewDatabase.getStagedVideoPosition())
+        int index = getIndexFromKey(overviewDatabase.getStagedVideoKey());
+        databaseReference.child(stageModelList.get(index)
                 .getKey()).child(StageDatabaseReferences.PLAYED_MILLIS).setValue(secs);
     }
 
@@ -108,15 +111,16 @@ public class StageDatabase {
                 Timber.d("onChildChanged: %s", dataSnapshot.getKey());
                 for (int i = 0; i < stageModelList.size(); i++) {
                     if (changedStageModel.equals(stageModelList.get(i))) {
+
                         // update stage time
-                        if (changedStageModel.getPlayedMillis() != stageModelList.get(
-                                overviewDatabase.getStagedVideoPosition()).getPlayedMillis()) {
+                        int index = getIndexFromKey(overviewDatabase.getStagedVideoKey());
+                        if (changedStageModel.getPlayedMillis() != stageModelList.get(index).getPlayedMillis()) {
                             Timber.i("changed time: %s", changedStageModel.getPlayedMillis());
                             if (callback != null) callback.onStageVideoTimeChanged(i, changedStageModel.getPlayedMillis());
                         }
+
                         // do not update play/pause
-                        if (!changedStageModel.getState().equals(stageModelList.get(
-                                overviewDatabase.getStagedVideoPosition()).getState())) {
+                        if (!changedStageModel.getState().equals(stageModelList.get(index).getState())) {
                             Timber.i("changed state: %s", changedStageModel.getState());
                             if (callback != null) callback.onStageVideoStateChanged(i, changedStageModel.getState());
                         }
@@ -131,6 +135,29 @@ public class StageDatabase {
             @Override public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
             @Override public void onCancelled(DatabaseError databaseError) {}
         };
+    }
+
+    // return a video's index in stageModelList from given key
+    public int getIndexFromKey(String key) {
+        for (int i = 0; i < stageModelList.size(); i++) {
+            StageModel sm = stageModelList.get(i);
+            if (sm.getKey().equals(key)) {
+                return i;
+            }
+        }
+        Timber.w("unable to find index for %s", key);
+        return -1;
+    }
+
+    // return a video's key in stageModelList from given index
+    public String getKeyFromIndex(int index) {
+        try {
+            return stageModelList.get(index).getKey();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            Timber.e("unable to find key for index %s", index);
+            return "";
+        }
+
     }
 
     void setCallback(StageDatabaseCallback callback) {

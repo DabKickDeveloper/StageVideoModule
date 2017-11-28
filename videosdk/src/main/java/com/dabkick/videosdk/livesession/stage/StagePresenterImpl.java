@@ -17,15 +17,13 @@ import timber.log.Timber;
 public class StagePresenterImpl implements StagePresenter, StageDatabase.StageDatabaseCallback {
 
     private StageView view;
-    private NotifyStageListener stageViewListener;
 
     // models
     @Inject StageDatabase stageDatabase;
     @Inject OverviewDatabase overviewDatabase;
 
-    public StagePresenterImpl(StageView view, NotifyStageListener stageViewListener) {
+    public StagePresenterImpl(StageView view) {
         ((SdkApp) SdkApp.getAppContext()).getLivesessionComponent().inject(this);
-        this.stageViewListener = stageViewListener;
         this.view = view;
         stageDatabase.setCallback(this);
     }
@@ -33,7 +31,6 @@ public class StagePresenterImpl implements StagePresenter, StageDatabase.StageDa
     @Override
     public void onStageVideoAdded() {
         view.onStageDataUpdated();
-        stageViewListener.notifyStageRecyclerView();
     }
 
     @Override
@@ -44,12 +41,14 @@ public class StagePresenterImpl implements StagePresenter, StageDatabase.StageDa
     @Override
     public void onStageVideoStateChanged(int i, String newState) {
         // if video is playing and server state changes to paused
-        if (stageDatabase.getStageModelList().get(overviewDatabase.getStagedVideoPosition()).isPlaying() &&
+        int index = stageDatabase.getIndexFromKey(overviewDatabase.getStagedVideoKey());
+
+        if (stageDatabase.getStageModelList().get(index).isPlaying() &&
                 newState.equals("paused")) {
             Timber.i("newState: %s, pausing video...", newState);
             view.onStageVideoStateChanged(i, true);
         // if video is paused and server state changes to playing
-        } else if (!stageDatabase.getStageModelList().get(overviewDatabase.getStagedVideoPosition()).isPlaying() &&
+        } else if (!stageDatabase.getStageModelList().get(index).isPlaying() &&
                 newState.equals("playing")) {
             Timber.i("newState: %s, playing video...", newState);
             view.onStageVideoStateChanged(i, false);
@@ -96,10 +95,6 @@ public class StagePresenterImpl implements StagePresenter, StageDatabase.StageDa
     public void onStop() {
         stageDatabase.removeChildEventListener();
         EventBus.getDefault().unregister(this);
-    }
-
-    public interface NotifyStageListener {
-        void notifyStageRecyclerView();
     }
 
 }

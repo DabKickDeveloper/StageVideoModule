@@ -3,18 +3,18 @@ package com.dabkick.videosdk.livesession.overviews;
 
 public class OverviewModel {
 
-    private int stagedVideoPosition;
+    private String stagedVideoKey;
 
     public OverviewModel() {
         // required Firebase empty constructor
     }
 
-    public OverviewModel(int stagedVideoPosition) {
-        this.stagedVideoPosition = stagedVideoPosition;
+    public OverviewModel(String stagedVideoKey) {
+        this.stagedVideoKey = stagedVideoKey;
     }
 
-    public int getStagedVideoPosition() {
-        return stagedVideoPosition;
+    public String getStagedVideoKey() {
+        return stagedVideoKey;
     }
 
 
