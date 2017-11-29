@@ -6,18 +6,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.dabkick.videosdk.R;
+import com.twilio.video.VideoTrack;
 import com.twilio.video.VideoView;
 
 import java.util.List;
+import java.util.Map;
 
 import timber.log.Timber;
 
 public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
+    Map<String, VideoTrack> videoTrackList = VideoActivity.getInstance().videoTrackList;
     private LivestreamView livestreamView;
     private List<Participant> participantList;
 
@@ -67,7 +69,8 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
             }
             case ParticipantViewHolder.TYPE: {
                 ParticipantViewHolder participantViewHolder = (ParticipantViewHolder) holder;
-                participantViewHolder.name.setText(participantList.get(position - 1).getDabname());
+                String userId = participantList.get(position).getUserId();
+                videoTrackList.get(userId).addRenderer(participantViewHolder.videoView);
                 holder.itemView.setOnClickListener(v -> livestreamView.otherUserStreamClicked(position - 1));
             }
         }
@@ -106,11 +109,11 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
 
         static final int TYPE = 1;
 
-        TextView name;
+        VideoView videoView;
 
         ParticipantViewHolder(View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.livestream_participant_name);
+            videoView = itemView.findViewById(R.id.livestream_my_viewholder_videoview);
         }
     }
 }

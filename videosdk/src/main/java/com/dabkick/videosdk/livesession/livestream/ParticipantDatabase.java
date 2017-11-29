@@ -14,7 +14,7 @@ import timber.log.Timber;
 
 import static com.dabkick.videosdk.livesession.livestream.ParticipantDatabaseReferences.*;
 
-class ParticipantDatabase {
+public class ParticipantDatabase {
 
     interface ParticipantModelCallback {
         void onParticipantAdded(Participant participant);

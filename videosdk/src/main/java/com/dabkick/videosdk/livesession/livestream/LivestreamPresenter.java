@@ -11,6 +11,8 @@ public interface LivestreamPresenter extends Presenter {
     List<Participant> getLivestreamParticipants();
     void toggleMyStream();
     void bindMyVideoView(VideoView videoView);
+    void setAudioEnabled(boolean b);
+    void setVideoEnabled(boolean b);
 
     void onFinishing();
 

@@ -3,6 +3,7 @@ package com.dabkick.videosdk.livesession.livestream;
 
 import com.dabkick.videosdk.Prefs;
 import com.dabkick.videosdk.livesession.Presenter;
+import com.twilio.video.RoomState;
 import com.twilio.video.VideoView;
 
 import java.util.ArrayList;
@@ -13,25 +14,41 @@ import timber.log.Timber;
 public class LivestreamPresenterImpl implements LivestreamPresenter, ParticipantDatabase.ParticipantModelCallback, Presenter {
 
     private LivestreamView view;
-    private StreamingManager streamingManager;
+//    private StreamingManager streamingManager;
     private VideoView myVideoView;
     private ParticipantDatabase participantDatabase;
     private List<Participant> participantList;
 
+    VideoActivity va;
+
     public LivestreamPresenterImpl(LivestreamView view) {
         this.view = view;
-        streamingManager = new StreamingManager(this);
+//        streamingManager = new StreamingManager(this);
         participantDatabase = new ParticipantDatabase(this);
         participantList = new ArrayList<>();
     }
 
     @Override
     public void toggleMyStream() {
-        if (streamingManager.isStreaming()) {
-            streamingManager.stopStreaming(myVideoView);
-        } else {
-            streamingManager.startStreaming(myVideoView);
+
+
+        //gopal
+//        if (streamingManager.isStreaming()) {
+//            streamingManager.stopStreaming(myVideoView);
+//        } else {
+//            streamingManager.startStreaming(myVideoView);
+//        }
+
+        if (va.getInstance().isStreaming)
+        {
+
         }
+
+        else
+        {
+
+        }
+
     }
 
     @Override
@@ -54,6 +71,14 @@ public class LivestreamPresenterImpl implements LivestreamPresenter, Participant
         view.notifyDataSetChanged();
     }
 
+    public void setAudioEnabled(boolean b) {
+        participantDatabase.setIsAudioEnabled(b);
+    }
+
+    public void setVideoEnabled(boolean b) {
+        participantDatabase.setisVideoEnabled(b);
+    }
+
     @Override
     public void onParticipantRemoved(Participant participant) {
         participantList.remove(participant);
@@ -65,6 +90,14 @@ public class LivestreamPresenterImpl implements LivestreamPresenter, Participant
         Timber.i("onParticipantAudioVideoEnabled");
         // TODO
         // streamingManager.joinRoom()
+        //enter room and the rest happens via listner
+
+        if (va.room == null || va.room.getState() == RoomState.DISCONNECTED)
+
+        {
+            view.enterRoomTwilio(); //this will also secure new token if expired
+        }
+
     }
 
     @Override

@@ -22,6 +22,8 @@ import timber.log.Timber;
 
 public class Util {
 
+
+
     public static void register() {
 
         // String devId, String devToken
@@ -110,5 +112,10 @@ public class Util {
         return salt.toString();
 
     }
+
+
+
+
+
 
 }
