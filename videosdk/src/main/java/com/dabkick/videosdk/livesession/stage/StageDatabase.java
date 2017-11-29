@@ -146,7 +146,7 @@ public class StageDatabase {
             }
         }
         Timber.w("unable to find index for %s", key);
-        return -1;
+        return 0;
     }
 
     // return a video's key in stageModelList from given index
