@@ -703,7 +703,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
             //enable video track - now listners in other connected devices will do the right thing
             va.localAudioTrack.enable(true);
-            va.mAudioManager.setMicrophoneMute(true);
+            va.mAudioManager.setMicrophoneMute(false);
 
             va.localVideoTrack.enable(true);
 
