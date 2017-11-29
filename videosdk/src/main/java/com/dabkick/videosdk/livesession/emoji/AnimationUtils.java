@@ -253,7 +253,7 @@ public class AnimationUtils {
     }
 
 
-    private static float convertDpToPixel(Context c, float dp) {
+    public static float convertDpToPixel(Context c, float dp) {
         float density = c.getResources().getDisplayMetrics().density;
         float pixel = dp * density;
 

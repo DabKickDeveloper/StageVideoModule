@@ -253,10 +253,10 @@ public class LiveSessionActivity extends AppCompatActivity implements
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         1.0f
                 );
-                param.setMargins(4,4,4,12);
+                param.setMargins((int)AnimationUtils.convertDpToPixel(LiveSessionActivity.this,50),7,(int)AnimationUtils.convertDpToPixel(LiveSessionActivity.this,10),7);
                 chatEditText.setLayoutParams(param);
                 emojiLayout.setVisibility(View.GONE);
-
+                chatToggleButton.setVisibility(View.GONE);
                 toggleChatUi();
             } else {
 
@@ -267,7 +267,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
                 param.setMargins(4,4,4,4);
                 chatEditText.setLayoutParams(param);
                 emojiLayout.setVisibility(View.VISIBLE);
-
+                chatToggleButton.setVisibility(View.VISIBLE);
                 toggleChatUi();
             }
         };
@@ -296,17 +296,33 @@ public class LiveSessionActivity extends AppCompatActivity implements
         // toggle chat list and icon
         int visibility = chatListView.getVisibility();
         if (visibility == View.INVISIBLE) {
+
+            if(chatEditText.isFocused()){
+
+                LinearLayout.LayoutParams param = (LinearLayout.LayoutParams)chatEditText.getLayoutParams();
+                param.setMargins((int)AnimationUtils.convertDpToPixel(LiveSessionActivity.this,50),7,(int)AnimationUtils.convertDpToPixel(LiveSessionActivity.this,10),7);
+                chatEditText.setLayoutParams(param);
+            }
+
             chatListView.setVisibility(View.VISIBLE);
             downKarat.setVisibility(View.VISIBLE);
             Drawable drawable = ContextCompat.getDrawable(
                     this, R.drawable.ic_show_chat);
             chatToggleButton.setImageDrawable(drawable);
+            chatToggleButton.setVisibility(View.GONE);
+
         } else {
+
+            LinearLayout.LayoutParams param = (LinearLayout.LayoutParams)chatEditText.getLayoutParams();
+            param.setMargins(4,7,4,7);
+            chatEditText.setLayoutParams(param);
+
             chatListView.setVisibility(View.INVISIBLE);
             downKarat.setVisibility(View.GONE);
             Drawable drawable = ContextCompat.getDrawable(
                     this, R.drawable.ic_hide_chat);
             chatToggleButton.setImageDrawable(drawable);
+            chatToggleButton.setVisibility(View.VISIBLE);
         }
     }
 
