@@ -70,7 +70,10 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
             case ParticipantViewHolder.TYPE: {
                 ParticipantViewHolder participantViewHolder = (ParticipantViewHolder) holder;
                 String userId = participantList.get(position-1).getUserId();
-                videoTrackList.get(userId).addRenderer(participantViewHolder.videoView);
+                if ((videoTrackList != null) && !videoTrackList.isEmpty() && videoTrackList.containsKey(userId))
+                {
+                    videoTrackList.get(userId).addRenderer(participantViewHolder.videoView);
+                }
                 holder.itemView.setOnClickListener(v -> livestreamView.otherUserStreamClicked(position - 1));
             }
         }

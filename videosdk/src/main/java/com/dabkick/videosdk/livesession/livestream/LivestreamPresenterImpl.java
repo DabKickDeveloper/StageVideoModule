@@ -19,7 +19,7 @@ public class LivestreamPresenterImpl implements LivestreamPresenter, Participant
     private ParticipantDatabase participantDatabase;
     private List<Participant> participantList;
 
-    VideoActivity va;
+    VideoActivity va = VideoActivity.getInstance();
 
     public LivestreamPresenterImpl(LivestreamView view) {
         this.view = view;
@@ -41,11 +41,12 @@ public class LivestreamPresenterImpl implements LivestreamPresenter, Participant
 
         if (va.getInstance().isStreaming)
         {
-
+            view.stopStreaming();
         }
 
         else
         {
+            view.startStreaming(myVideoView);
 
         }
 

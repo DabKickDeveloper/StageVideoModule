@@ -11,7 +11,11 @@ public interface LivestreamView {
     void otherUserVideoViewCreated(VideoView videoView, int index);
     void notifyDataSetChanged();
     void onEnterTwilio();
+    void onStartStreaming(VideoView videoView);
+    void onStopStreaming();
 
 
     void enterRoomTwilio();
+    void startStreaming(VideoView videoView);
+    void stopStreaming();
 }

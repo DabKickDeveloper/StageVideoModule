@@ -70,6 +70,7 @@ import java.util.concurrent.ConcurrentHashMap;
     private final boolean mUsePlatformAEC = true;
     public AudioManager mAudioManager;
 
+
     //audio recording feature
     public static final int RECORD_AUDIO_PERMISSION = 1;
     public static final int WRITE_EXTERNAL_STORAGE_PERMISSION = 2;
@@ -710,9 +711,10 @@ import java.util.concurrent.ConcurrentHashMap;
 //                    return;
 
                 String jid = participant.getIdentity();
+
                 //gopal
-//                if (jid != null)
-//                    addParticipantVideo(videoTrack, jid, true);
+                if (jid != null)
+                    addParticipantVideo(videoTrack, jid, true);
 
             }
 
@@ -882,11 +884,6 @@ import java.util.concurrent.ConcurrentHashMap;
             mAudioManager.setMicrophoneMute(previousMicrophoneMute);
         }
     }
-
-
-
-
-
 
 
 }

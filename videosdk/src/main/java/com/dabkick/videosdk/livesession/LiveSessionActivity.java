@@ -96,7 +96,6 @@ import timber.log.Timber;
 public class LiveSessionActivity extends AppCompatActivity implements
         ChatView, LivestreamView, OverviewView {
 
-
     public static Toast toast = null;
     public static AlertDialog alert11;
     boolean cameraGranted = true, isLiveStreamAudioGrant = false, isLiveStreamCameraGrant = true, isPermissionForLiveStreaming = false;
@@ -162,7 +161,11 @@ public class LiveSessionActivity extends AppCompatActivity implements
         //init twilio
         //get set w client ID and permissions etc
         //when user clicks on icon, enter room and livestream immediately
+
+        va.mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
         initTwilio();
+
 
         // Emojis
         innerContainer = findViewById(R.id.container_layout);
@@ -450,6 +453,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        va.clear();
         if (isFinishing()) {
             livestreamPresenter.onFinishing();
         }
@@ -490,15 +494,32 @@ public class LiveSessionActivity extends AppCompatActivity implements
         toggleChatUi();
     }
 
+
+
     @Override
     public void notifyDataSetChanged() {
         sessionParticipantsAdapter.notifyDataSetChanged();
     }
 
+    //    void onEnterTwilio();
+//    void onStartStreaming(VideoView videoView);
+//    void onStopStreaming();
+
     @Override
     public void onEnterTwilio() {
         enterRoomTwilio();
     }
+
+    @Override
+    public void onStartStreaming(VideoView videoView) {
+        startStreaming(videoView);
+    }
+
+    @Override
+    public void onStopStreaming() {
+        stopStreaming();
+    }
+
 
     private void showGetUserDetailsFragment() {
 
@@ -625,7 +646,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
     public void startStreaming(VideoView videoView) {
 //        createAudioVideoTracks();
-        va.localVideoView = videoView;
 //        localVideoTrack.addRenderer(localVideoView);
 //        if (accessToken == null) {
 //            initAccessToken();
@@ -658,8 +678,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
                 createLocalMedia();
 
 
-            //add renderer
-            va.localVideoTrack.addRenderer(va.localVideoView);
 
             //enter room if not alreasy in it
 
@@ -668,11 +686,24 @@ public class LiveSessionActivity extends AppCompatActivity implements
             {
                 enterRoomTwilio(); //this will also secure new token if expired
             }
+            // Share your camera if connected to room
+            if (va.localParticipant != null) {
+                va.localParticipant.addVideoTrack(va.localVideoTrack);
+            }
 
-            //enable local aud/vid tracks
+            //set up view
+            videoView.setMirror(true);
+            //add renderer
+            va.localVideoTrack.addRenderer(videoView);
+            //make visible
+            va.localVideoView = videoView;
+            videoView.setVisibility(View.VISIBLE);
+
+            //enable video track - now listners in other connected devices will do the right thing
             va.localAudioTrack.enable(true);
             va.localVideoTrack.enable(true);
 
+            //you are streaming!
             va.isStreaming = true;
 
         }
@@ -680,14 +711,27 @@ public class LiveSessionActivity extends AppCompatActivity implements
     }
 
 
-    public void stopStreaming(VideoView myVideoView) {
+    public void stopStreaming() {
 //        // free native memory resources
-        va.localVideoTrack.removeRenderer(myVideoView);
+        //stop sharing video & audio in room
+        va.localVideoTrack.enable(false);
+        va.localAudioTrack.enable(false);
+        va.localVideoTrack.removeRenderer(va.localVideoView);
 //        localAudioTrack.release();
 //        localAudioTrack = null;
 //        localVideoTrack.release();
 //        localVideoTrack = null;
     }
+
+
+
+
+//    public void removeVideoRenderer(String jid) {
+//        if (va.localVideoTrack != null)
+//            va.localVideoTrack.removeRenderer(fullScreenStreamingView);
+//        if (va.videoTrackList.containsKey(jid))
+//            va.videoTrackList.remove(jid);
+//    }
 
 
 
@@ -1188,6 +1232,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
     public void onMessageEvent(NotifyLivestreamAdapterEvent event) {
         sessionParticipantsAdapter.notifyDataSetChanged();
     };
+
 
 
 
