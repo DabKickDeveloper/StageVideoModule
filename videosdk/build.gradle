@@ -76,6 +76,7 @@ dependencies {
     compile 'com.github.jd-alexander:LikeButton:0.2.3'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     testCompile 'junit:junit:4.12'
+    compile 'com.github.HaarigerHarald:android-youtubeExtractor:master-SNAPSHOT'
 
     compile "com.google.dagger:dagger-android:${dagger2}"
     compile "com.google.dagger:dagger-android-support:${dagger2}"

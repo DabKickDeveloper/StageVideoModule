@@ -45,68 +45,44 @@ public class MainActivity extends AppCompatActivity {
         //Adding values to the holder
         ArrayList<DabKickVideoInfo> list1 = new ArrayList<>();
         DabKickVideoInfo detail1 = new DabKickVideoInfo("Sylvester", "Dabkick", "40000","https://crunchbase-production-res.cloudinary.com/image/upload/c_lpad,h_256,w_256,f_jpg/v1495574401/kmxsxqyvflfz1fzrxixs.png",
-                "http://dabkick.com/Assets/Promo%20Video.mp4");
+                "https://www.youtube.com/watch?v=MeE2E7nqe0w");
         DabKickVideoInfo detail2 = new DabKickVideoInfo("Peter Griffin", "Wonder Girl", "40000","https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX9449089.jpg",
-                "http://www.ebookfrenzy.com/android_book/movie.mp4");
+                "https://www.youtube.com/watch?v=Qeq0o6wxYCU");
         DabKickVideoInfo detail3 = new DabKickVideoInfo("Angelica Pickels", "Gud Morning", "24000","http://www.goodmorning.quotesms.com/images/morning-quote/famous-morning-quotes.jpg",
-                "http://s3.bravepeople.co/assets/media/process-loop.mp4");
+                "https://www.youtube.com/watch?v=QrRvyz6jAcg");
         DabKickVideoInfo detail4 = new DabKickVideoInfo("Tasmanian", "Morning at its best!!!", "124000","https://wellfinger.com/wellImage/first2016May18-07-24-11.jpg",
-                "http://s3.bravepeople.co/assets/media/video.mp4");
+                "https://www.youtube.com/watch?v=EXyrFdg5IIA");
         DabKickVideoInfo detail5 = new DabKickVideoInfo("Patrick Gonzales ", "Nature", "41000","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQagAwHm1sT1obnrkqz_4amGl1q6z6TsEwMQOyMYSliro_I4hRB",
-                "http://artsandculture.withgoogle.com/gcs/national-parks-service/en-us/9f885369-a52a-4a0b-8b2f-f3e5e41cdd54.mp4");
+                "https://www.youtube.com/watch?v=Dsg8JccRZCw");
         DabKickVideoInfo detail6 = new DabKickVideoInfo("Sylvester", "Dabkick", "40000","https://crunchbase-production-res.cloudinary.com/image/upload/c_lpad,h_256,w_256,f_jpg/v1495574401/kmxsxqyvflfz1fzrxixs.png",
-                "http://dabkick.com/Assets/Promo%20Video.mp4");
-        DabKickVideoInfo detail7 = new DabKickVideoInfo("Peter Griffin", "Wonder Girl", "40000","https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX9449089.jpg",
-                "http://www.ebookfrenzy.com/android_book/movie.mp4");
-        DabKickVideoInfo detail8 = new DabKickVideoInfo("Angelica Pickels", "Gud Morning", "24000","http://www.goodmorning.quotesms.com/images/morning-quote/famous-morning-quotes.jpg",
-                "http://s3.bravepeople.co/assets/media/process-loop.mp4");
-        DabKickVideoInfo detail9 = new DabKickVideoInfo("Tasmanian", "Morning at its best!!!", "124000","https://wellfinger.com/wellImage/first2016May18-07-24-11.jpg",
-                "http://s3.bravepeople.co/assets/media/video.mp4");
-        DabKickVideoInfo detail10 = new DabKickVideoInfo("Patrick Gonzales ", "Nature", "41000","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQagAwHm1sT1obnrkqz_4amGl1q6z6TsEwMQOyMYSliro_I4hRB",
-                "http://artsandculture.withgoogle.com/gcs/national-parks-service/en-us/9f885369-a52a-4a0b-8b2f-f3e5e41cdd54.mp4");
+                "https://www.youtube.com/watch?v=uAPTBIVVjBU");
         list1.add(detail1);
         list1.add(detail2);
         list1.add(detail3);
         list1.add(detail4);
         list1.add(detail5);
         list1.add(detail6);
-        list1.add(detail7);
-        list1.add(detail8);
-        list1.add(detail9);
-        list1.add(detail10);
         videosHolder.put(categories.get(0), list1);
 
         ArrayList<DabKickVideoInfo> list2 = new ArrayList<>();
         DabKickVideoInfo detail11 = new DabKickVideoInfo("Sylvester", "Dabkick", "40000","https://crunchbase-production-res.cloudinary.com/image/upload/c_lpad,h_256,w_256,f_jpg/v1495574401/kmxsxqyvflfz1fzrxixs.png",
-                "http://dabkick.com/Assets/Promo%20Video.mp4");
+                "https://www.youtube.com/watch?v=MeE2E7nqe0w");
         DabKickVideoInfo detail21 = new DabKickVideoInfo("Peter Griffin", "Wonder Girl", "40000","https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX9449089.jpg",
-                "http://www.ebookfrenzy.com/android_book/movie.mp4");
+                "https://www.youtube.com/watch?v=Qeq0o6wxYCU");
         DabKickVideoInfo detail31= new DabKickVideoInfo("Angelica Pickels", "Gud Morning", "24000","http://www.goodmorning.quotesms.com/images/morning-quote/famous-morning-quotes.jpg",
-                "http://s3.bravepeople.co/assets/media/process-loop.mp4");
+                "https://www.youtube.com/watch?v=QrRvyz6jAcg");
         DabKickVideoInfo detail41 = new DabKickVideoInfo("Tasmanian", "Morning at its best!!!", "124000","https://wellfinger.com/wellImage/first2016May18-07-24-11.jpg",
-                "http://s3.bravepeople.co/assets/media/video.mp4");
+                "https://www.youtube.com/watch?v=EXyrFdg5IIA");
         DabKickVideoInfo detail51 = new DabKickVideoInfo("Patrick Gonzales ", "Nature", "41000","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQagAwHm1sT1obnrkqz_4amGl1q6z6TsEwMQOyMYSliro_I4hRB",
-                "http://artsandculture.withgoogle.com/gcs/national-parks-service/en-us/9f885369-a52a-4a0b-8b2f-f3e5e41cdd54.mp4");
+                    "https://www.youtube.com/watch?v=Dsg8JccRZCw");
         DabKickVideoInfo detail61 = new DabKickVideoInfo("Sylvester", "Dabkick", "40000","https://crunchbase-production-res.cloudinary.com/image/upload/c_lpad,h_256,w_256,f_jpg/v1495574401/kmxsxqyvflfz1fzrxixs.png",
-                "http://dabkick.com/Assets/Promo%20Video.mp4");
-        DabKickVideoInfo detail71 = new DabKickVideoInfo("Peter Griffin", "Wonder Girl", "40000","https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX9449089.jpg",
-                "http://www.ebookfrenzy.com/android_book/movie.mp4");
-        DabKickVideoInfo detail81 = new DabKickVideoInfo("Angelica Pickels", "Gud Morning", "24000","http://www.goodmorning.quotesms.com/images/morning-quote/famous-morning-quotes.jpg",
-                "http://s3.bravepeople.co/assets/media/process-loop.mp4");
-        DabKickVideoInfo detail91 = new DabKickVideoInfo("Tasmanian", "Morning at its best!!!", "124000","https://wellfinger.com/wellImage/first2016May18-07-24-11.jpg",
-                "http://s3.bravepeople.co/assets/media/video.mp4");
-        DabKickVideoInfo detail101 = new DabKickVideoInfo("Patrick Gonzales ", "Nature", "41000","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQagAwHm1sT1obnrkqz_4amGl1q6z6TsEwMQOyMYSliro_I4hRB",
-                "http://artsandculture.withgoogle.com/gcs/national-parks-service/en-us/9f885369-a52a-4a0b-8b2f-f3e5e41cdd54.mp4");
+                "https://www.youtube.com/watch?v=uAPTBIVVjBU");
         list2.add(detail11);
         list2.add(detail21);
         list2.add(detail31);
         list2.add(detail41);
         list2.add(detail51);
         list2.add(detail61);
-        list2.add(detail71);
-        list2.add(detail81);
-        list2.add(detail91);
-        list2.add(detail101);
         videosHolder.put(categories.get(1), list2);
 
         ArrayList<DabKickVideoInfo> list3 = new ArrayList<>();

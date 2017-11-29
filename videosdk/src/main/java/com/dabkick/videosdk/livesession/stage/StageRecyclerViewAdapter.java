@@ -1,9 +1,11 @@
 package com.dabkick.videosdk.livesession.stage;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,9 @@ import com.devbrackets.android.exomedia.ui.widget.VideoView;
 
 import java.util.List;
 
+import at.huber.youtubeExtractor.VideoMeta;
+import at.huber.youtubeExtractor.YouTubeExtractor;
+import at.huber.youtubeExtractor.YtFile;
 import timber.log.Timber;
 
 
@@ -39,13 +44,31 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         return new StageViewHolder(view);
     }
 
+    @SuppressLint("StaticFieldLeak")
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         StageViewHolder vh = (StageViewHolder) holder;
 
         vh.videoView.setReleaseOnDetachFromWindow(false);
-        vh.videoView.setVideoPath(items.get(position).getUrl());
+
+        new YouTubeExtractor(context) {
+            @Override
+            public void onExtractionComplete(SparseArray<YtFile> ytFiles, VideoMeta vMeta) {
+                if (ytFiles != null) {
+                    for (int i = 0; i < ytFiles.size(); i++) {
+                        if (ytFiles.valueAt(i) != null) {
+                            String downloadUrl = ytFiles.valueAt(i).getUrl();
+                            vh.videoView.setVideoPath(downloadUrl);
+                            break;
+                        }
+                    }
+
+                }
+            }
+        }.extract(items.get(position).getUrl(), true, true);
+
+
         StageModel stageModel = items.get(position);
 
         vh.videoView.setOnPreparedListener(() -> {
