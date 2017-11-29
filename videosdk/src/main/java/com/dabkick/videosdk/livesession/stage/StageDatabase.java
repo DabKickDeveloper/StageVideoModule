@@ -55,6 +55,7 @@ public class StageDatabase {
     void removeChildEventListener() {
         Timber.d("removeChildEventListener");
         databaseReference.removeEventListener(childEventListener);
+        stageModelList.clear();
         childEventListener = null;
     }
 
