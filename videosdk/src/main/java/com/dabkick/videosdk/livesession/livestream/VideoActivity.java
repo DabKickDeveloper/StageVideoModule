@@ -133,7 +133,7 @@ import java.util.concurrent.ConcurrentHashMap;
                 }
 
                 //gopal
-//                LivesessionActivity.getLiveChatActivity().setAudioFocus(false);
+                setAudioFocus(false);
 
                 //replace all streaming videos of others w their respective avatar pic
                 //restore UI w/o video streaming here
@@ -471,6 +471,8 @@ import java.util.concurrent.ConcurrentHashMap;
 //                videoStatusTextView.setText("Failed to connect");
                 Log.d("gopal", "room connect failure for Twilio");
 
+                setAudioFocus(false);
+
                 //gopal
 //                if (BaseActivity.mCurrentActivity.getClass() == LiveChat.class)
 //                    LivesessionActivity.getLiveChatActivity().setAudioFocus(false);
@@ -485,7 +487,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
                 //gopal
 //                if (BaseActivity.mCurrentActivity.getClass() == LiveChat.class)
-//                    LivesessionActivity.getLiveChatActivity().setAudioFocus(false);
+                    setAudioFocus(false);
 
                 //restore UI w/o video streaming here
 
@@ -524,7 +526,6 @@ import java.util.concurrent.ConcurrentHashMap;
 //                if (!LiveSessionManager.getInstance().isLiveSessionStarted())
 //                    return;
                 addParticipant(participant);
-//                participant.getMedia().setListener(mediaListener());
 
 //                //add participant to local structure
                 if (participantIdentity.containsKey(participant.getIdentity())) {
@@ -585,7 +586,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
                 //gopal
 //                if (BaseActivity.mCurrentActivity.getClass() == LiveChat.class) {
-//                    ((LiveChat) BaseActivity.mCurrentActivity).setAudioFocus(true);
+                    setAudioFocus(true);
 //                    ((LiveChat) BaseActivity.mCurrentActivity).mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 5, AudioManager.FLAG_PLAY_SOUND);
 //                    ((LiveChat) BaseActivity.mCurrentActivity).mAudioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL,
 //                            ((LiveChat) BaseActivity.mCurrentActivity).mAudioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL), AudioManager.FLAG_PLAY_SOUND);
@@ -608,7 +609,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
                 //gopal
 //                if (BaseActivity.mCurrentActivity.getClass() == LiveChat.class) {
-//                    ((LiveChat) BaseActivity.mCurrentActivity).setAudioFocus(false);
+                    setAudioFocus(false);
 //                    ((LiveChat) BaseActivity.mCurrentActivity).setVolumeControlStream(AudioManager.STREAM_MUSIC);
 //                    ((LiveChat) BaseActivity.mCurrentActivity).mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
 //                            ((LiveChat) BaseActivity.mCurrentActivity).mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC), AudioManager.FLAG_PLAY_SOUND);
@@ -629,8 +630,8 @@ import java.util.concurrent.ConcurrentHashMap;
                 // get video track from list and enable it
 
                 //gopal
-//                if (jid != null)
-//                    addParticipantVideo(videoTrack, jid, true);
+                if (jid != null)
+                    addParticipantVideo(videoTrack, jid, true);
 
             }
 
@@ -648,8 +649,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
                 //gopal
-//                if (jid != null)
-//                    removeParticipantVideo(videoTrack, jid);
+                if (jid != null)
+                    removeParticipantVideo(videoTrack, jid);
             }
 
             @Override
@@ -662,6 +663,8 @@ import java.util.concurrent.ConcurrentHashMap;
                 Log.e("KESHAVA ", "is Audio Muted "+audioTrack.isEnabled());
 
                 String jid = participant.getIdentity();
+
+                setAudioFocus(true);
 
                 //gopal
 
@@ -690,6 +693,8 @@ import java.util.concurrent.ConcurrentHashMap;
                 Log.e("KESHAVA ", "is Audio Muted "+audioTrack.isEnabled());
 
                 String jid = participant.getIdentity();
+                setAudioFocus(false);
+
 
                 //gopal
 //                if (jid != null)
@@ -714,7 +719,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
                 //gopal
                 if (jid != null)
+                {
                     addParticipantVideo(videoTrack, jid, true);
+
+                }
 
             }
 
@@ -728,8 +736,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
                 String jid = participant.getIdentity();
                 //gopal
-//                if (jid != null)
-//                    removeParticipantVideo(videoTrack, jid);
+                if (jid != null)
+                    removeParticipantVideo(videoTrack, jid);
 
 
             }

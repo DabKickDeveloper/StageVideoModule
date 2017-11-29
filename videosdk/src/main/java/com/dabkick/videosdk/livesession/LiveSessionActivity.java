@@ -456,6 +456,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
         va.clear();
         if (isFinishing()) {
             livestreamPresenter.onFinishing();
+            va.clear();
         }
     }
 
@@ -653,6 +654,8 @@ public class LiveSessionActivity extends AppCompatActivity implements
 //            connectToRoom(ROOM_NAME_TODO_DYNAMICALLY_OBTAIN);
 //        }
 
+        va.localVideoView = videoView;
+
         //check that permissions are in order!
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
@@ -696,11 +699,12 @@ public class LiveSessionActivity extends AppCompatActivity implements
             //add renderer
             va.localVideoTrack.addRenderer(videoView);
             //make visible
-            va.localVideoView = videoView;
             videoView.setVisibility(View.VISIBLE);
 
             //enable video track - now listners in other connected devices will do the right thing
             va.localAudioTrack.enable(true);
+            va.mAudioManager.setMicrophoneMute(true);
+
             va.localVideoTrack.enable(true);
 
             //you are streaming!
@@ -1029,16 +1033,16 @@ public class LiveSessionActivity extends AppCompatActivity implements
                         && isLiveStreamAudioGrant) {
 
                     //gopal
-//                    LiveSessionActivity.startStreaming();
+                    startStreaming((VideoView) va.localVideoView);
 
-                    if (va.localAudioTrack == null)
-                        // Share your microphone
-                        va.localAudioTrack = LocalAudioTrack.create(SdkApp.getAppContext(), true);
-                    AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                    audioManager.setMicrophoneMute(false);
-
-                    // Share your camera
-                    createLocalVideoTrack(true);
+//                    if (va.localAudioTrack == null)
+//                        // Share your microphone
+//                        va.localAudioTrack = LocalAudioTrack.create(SdkApp.getAppContext(), true);
+//                    AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+//                    audioManager.setMicrophoneMute(false);
+//
+//                    // Share your camera
+//                    createLocalVideoTrack(true);
 
 
 
@@ -1048,14 +1052,12 @@ public class LiveSessionActivity extends AppCompatActivity implements
                     if (va.localAudioTrack == null)
                         // Share your microphone
                         va.localAudioTrack = LocalAudioTrack.create(SdkApp.getAppContext(), false);
-                    AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                    audioManager.setMicrophoneMute(false);
+//                    AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+                        va.mAudioManager.setMicrophoneMute(true);
 
                     // Share your camera
                     createLocalVideoTrack(false);
-
                 }
-
 
                 return;
             }
