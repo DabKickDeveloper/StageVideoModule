@@ -1051,7 +1051,8 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
                     if (va.localAudioTrack == null)
                         // Share your microphone
-                        va.localAudioTrack = LocalAudioTrack.create(SdkApp.getAppContext(), false);
+//                        va.localAudioTrack = LocalAudioTrack.create(SdkApp.getAppContext(), false);
+                        va.localAudioTrack = LocalAudioTrack.create(this, false);
 //                    AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
                         va.mAudioManager.setMicrophoneMute(true);
 
@@ -1093,7 +1094,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
                 && (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)) {
             if (va.localAudioTrack == null)
                 // Share your microphone
-                va.localAudioTrack = LocalAudioTrack.create(SdkApp.getAppContext(), false);
+                va.localAudioTrack = LocalAudioTrack.create(this, false);
             AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
             audioManager.setMicrophoneMute(false);
 
@@ -1112,9 +1113,9 @@ public class LiveSessionActivity extends AppCompatActivity implements
         // Share your camera
         if (va.localVideoTrack == null && checkPermissionForCameraAndMicrophone()) {
             if (isFrontCameraPresent(this))
-                va.cameraCapturer = new CameraCapturer(SdkApp.getAppContext(), CameraCapturer.CameraSource.FRONT_CAMERA);
+                va.cameraCapturer = new CameraCapturer(this, CameraCapturer.CameraSource.FRONT_CAMERA);
             else
-                va.cameraCapturer = new CameraCapturer(SdkApp.getAppContext(), CameraCapturer.CameraSource.BACK_CAMERA);
+                va.cameraCapturer = new CameraCapturer(this, CameraCapturer.CameraSource.BACK_CAMERA);
 
             // Setup video constraints
             VideoConstraints videoConstraints = new VideoConstraints.Builder()
@@ -1125,11 +1126,11 @@ public class LiveSessionActivity extends AppCompatActivity implements
                     .build();
 
             // Add a video track with constraints
-            va.localVideoTrack = LocalVideoTrack.create(SdkApp.getAppContext(), enable, va.cameraCapturer, videoConstraints);
+            va.localVideoTrack = LocalVideoTrack.create(this, enable, va.cameraCapturer, videoConstraints);
 
             // If the constraints are not satisfied a null track will be returned
             if (va.localVideoTrack == null) {
-                va.localVideoTrack = LocalVideoTrack.create(SdkApp.getAppContext(), false, va.cameraCapturer);
+                va.localVideoTrack = LocalVideoTrack.create(this, false, va.cameraCapturer);
             }
 
         }
