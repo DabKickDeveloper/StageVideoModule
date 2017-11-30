@@ -1131,9 +1131,9 @@ public class LiveSessionActivity extends AppCompatActivity implements
             // Setup video constraints
             VideoConstraints videoConstraints = new VideoConstraints.Builder()
                     .minVideoDimensions(VideoDimensions.CIF_VIDEO_DIMENSIONS)
-                    .maxVideoDimensions(VideoDimensions.HD_720P_VIDEO_DIMENSIONS)
-                    .minFps(5)
-                    .maxFps(24)
+                    .maxVideoDimensions(VideoDimensions.CIF_VIDEO_DIMENSIONS)
+                    .minFps(10)
+                    .maxFps(10)
                     .build();
 
             // Add a video track with constraints
