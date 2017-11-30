@@ -52,6 +52,17 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
         vh.videoView.setReleaseOnDetachFromWindow(false);
 
+        vh.videoView.setOnErrorListener(e -> {
+            if (e instanceof com.devbrackets.android.exomedia.core.exception.NativeMediaPlaybackException) {
+                Timber.e("error type : NativeMediaPlaybackException");
+            } else if (e instanceof com.google.android.exoplayer2.ExoPlayer) {
+                Timber.e("error type : com.google.android.exoplayer2.ExoPlayer");
+            }
+            Timber.e("Issue with VideoView at position %s", position);
+            Timber.e(e);
+            return false;
+        });
+
         new YouTubeExtractor(context) {
             @Override
             public void onExtractionComplete(SparseArray<YtFile> ytFiles, VideoMeta vMeta) {
