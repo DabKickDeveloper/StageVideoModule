@@ -39,14 +39,16 @@ public class LivestreamPresenterImpl implements LivestreamPresenter, Participant
 //            streamingManager.startStreaming(myVideoView);
 //        }
 
-        if (va.getInstance().isStreaming)
+        if (va.isStreaming)
         {
             view.stopStreaming();
+            va.isStreaming = false;
         }
 
         else
         {
             view.startStreaming(myVideoView);
+            va.isStreaming = true;
 
         }
 

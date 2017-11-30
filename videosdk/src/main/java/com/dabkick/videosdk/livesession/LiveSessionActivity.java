@@ -724,7 +724,12 @@ public class LiveSessionActivity extends AppCompatActivity implements
         //stop sharing video & audio in room
         va.localVideoTrack.enable(false);
         va.localAudioTrack.enable(false);
+        va.setAudioFocus(false);
         va.localVideoTrack.removeRenderer(va.localVideoView);
+        EventBus.getDefault().post(new NotifyLivestreamAdapterEvent());
+
+
+
 //        localAudioTrack.release();
 //        localAudioTrack = null;
 //        localVideoTrack.release();
