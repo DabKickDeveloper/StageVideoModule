@@ -727,6 +727,8 @@ public class LiveSessionActivity extends AppCompatActivity implements
         va.setAudioFocus(false);
         va.localVideoTrack.removeRenderer(va.localVideoView);
         EventBus.getDefault().post(new NotifyLivestreamAdapterEvent());
+        livestreamPresenter.setAudioEnabled(false);
+        livestreamPresenter.setVideoEnabled(false);
 
 
 
