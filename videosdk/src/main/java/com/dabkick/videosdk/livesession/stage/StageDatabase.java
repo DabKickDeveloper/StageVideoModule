@@ -154,7 +154,7 @@ public class StageDatabase {
     public String getKeyFromIndex(int index) {
         try {
             return stageModelList.get(index).getKey();
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             Timber.e("unable to find key for index %s", index);
             return "";
         }
