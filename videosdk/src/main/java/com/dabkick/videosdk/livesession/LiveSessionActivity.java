@@ -704,7 +704,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
             //enable video track - now listners in other connected devices will do the right thing
             va.localAudioTrack.enable(true);
-            va.mAudioManager.setMicrophoneMute(false);
+//            va.mAudioManager.setMicrophoneMute(false);
 
             va.localVideoTrack.enable(true);
 
@@ -1065,7 +1065,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
 //                        va.localAudioTrack = LocalAudioTrack.create(SdkApp.getAppContext(), false);
                         va.localAudioTrack = LocalAudioTrack.create(this, false);
 //                    AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                        va.mAudioManager.setMicrophoneMute(true);
+//                        va.mAudioManager.setMicrophoneMute(true);
 
                     // Share your camera
                     createLocalVideoTrack(false);
@@ -1107,7 +1107,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
                 // Share your microphone
                 va.localAudioTrack = LocalAudioTrack.create(this, false);
             AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-            audioManager.setMicrophoneMute(false);
+//            audioManager.setMicrophoneMute(false);
 
             // Share your camera
             createLocalVideoTrack(false);
@@ -1131,9 +1131,9 @@ public class LiveSessionActivity extends AppCompatActivity implements
             // Setup video constraints
             VideoConstraints videoConstraints = new VideoConstraints.Builder()
                     .minVideoDimensions(VideoDimensions.CIF_VIDEO_DIMENSIONS)
-                    .maxVideoDimensions(VideoDimensions.CIF_VIDEO_DIMENSIONS)
-                    .minFps(10)
-                    .maxFps(10)
+                    .maxVideoDimensions(VideoDimensions.HD_720P_VIDEO_DIMENSIONS)
+                    .minFps(5)
+                    .maxFps(24)
                     .build();
 
             // Add a video track with constraints
@@ -1141,7 +1141,9 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
             // If the constraints are not satisfied a null track will be returned
             if (va.localVideoTrack == null) {
-                va.localVideoTrack = LocalVideoTrack.create(this, false, va.cameraCapturer);
+                Timber.i("VideoConstraints NOT satisfied.");
+                Log.d("gopal", "Unable to satisfy constraints");
+                va.localVideoTrack = LocalVideoTrack.create(this, enable, va.cameraCapturer);
             }
 
         }

@@ -75,7 +75,9 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
                 String userId = participantList.get(position-1).getUserId();
                 if ((videoTrackList != null) && !videoTrackList.isEmpty() && videoTrackList.containsKey(userId))
                 {
+                    participantViewHolder.videoView.setMirror(false);
                     videoTrackList.get(userId).addRenderer(participantViewHolder.videoView);
+                    participantViewHolder.videoView.setVisibility(View.VISIBLE);
                 }
                 holder.itemView.setOnClickListener(v -> livestreamView.otherUserStreamClicked(position - 1));
                 String name = participantList.get(position - 1).getDabname();

@@ -170,6 +170,8 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public int getItemCount() {
+//        test only - to stop spinning forever if video loading is slow return zero
+//        return 0;
         return items.size();
     }
 
