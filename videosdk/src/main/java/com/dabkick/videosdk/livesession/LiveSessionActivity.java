@@ -280,6 +280,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
     }
 
+
     private TextView.OnEditorActionListener getChatEditorActionListener() {
         return (v, actionId, event) -> {
             boolean handled = false;
@@ -452,12 +453,12 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         va.clear();
         if (isFinishing()) {
             livestreamPresenter.onFinishing();
             va.clear();
         }
+        super.onDestroy();
     }
 
     @Override
@@ -709,6 +710,9 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
             //you are streaming!
             va.isStreaming = true;
+
+            livestreamPresenter.setAudioEnabled(true);
+            livestreamPresenter.setVideoEnabled(true);
 
         }
 
@@ -1235,6 +1239,14 @@ public class LiveSessionActivity extends AppCompatActivity implements
     public void onMessageEvent(NotifyLivestreamAdapterEvent event) {
         sessionParticipantsAdapter.notifyDataSetChanged();
     };
+
+
+    //back button enabeled and ends the sesion.
+    @Override
+    public void onBackPressed() {
+        va.clear();
+        super.onBackPressed();
+    }
 
 
 
