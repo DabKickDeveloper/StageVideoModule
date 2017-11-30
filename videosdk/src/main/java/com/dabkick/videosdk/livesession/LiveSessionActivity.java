@@ -764,8 +764,8 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
 
 //            LiveSessionManager.getInstance().setLiveStreamingStarted();
-            livestreamPresenter.setVideoEnabled(true);
-            livestreamPresenter.setAudioEnabled(true);
+//            livestreamPresenter.setVideoEnabled(true);
+//            livestreamPresenter.setAudioEnabled(true);
 
             connectToRoom(TwilioRoomName);
         } else {
