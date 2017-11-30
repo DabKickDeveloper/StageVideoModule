@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.dabkick.videosdk.R;
 import com.twilio.video.VideoTrack;
@@ -65,6 +66,8 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
                 MyViewHolder myViewHolder = (MyViewHolder) holder;
                 livestreamView.myVideoViewCreated(myViewHolder.videoView);
                 holder.itemView.setOnClickListener(v -> livestreamView.myStreamClicked());
+                String name = context.getString(R.string.me);
+                myViewHolder.nameView.setText(name);
                 break;
             }
             case ParticipantViewHolder.TYPE: {
@@ -75,6 +78,9 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
                     videoTrackList.get(userId).addRenderer(participantViewHolder.videoView);
                 }
                 holder.itemView.setOnClickListener(v -> livestreamView.otherUserStreamClicked(position - 1));
+                String name = participantList.get(position - 1).getDabname();
+                participantViewHolder.nameView.setText(name);
+                break;
             }
         }
 
@@ -95,28 +101,35 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
         return 1 + participantList.size();
     }
 
-    // this device's Viewholder
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    static abstract class AbstractViewHolder extends RecyclerView.ViewHolder {
 
-        static final int TYPE = 0;
         VideoView videoView;
+        TextView nameView;
 
-        MyViewHolder(View itemView) {
+        AbstractViewHolder(View itemView) {
             super(itemView);
             videoView = itemView.findViewById(R.id.livestream_my_viewholder_videoview);
+            nameView = itemView.findViewById(R.id.livestream_viewholder_name);
         }
     }
 
-    // any participant in the session besides this one
-    class ParticipantViewHolder extends RecyclerView.ViewHolder {
+    // this device's Viewholder
+    static class MyViewHolder extends AbstractViewHolder {
+
+        static final int TYPE = 0;
+
+        MyViewHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
+    // any participant who is not the current user
+    static class ParticipantViewHolder extends AbstractViewHolder {
 
         static final int TYPE = 1;
 
-        VideoView videoView;
-
         ParticipantViewHolder(View itemView) {
             super(itemView);
-            videoView = itemView.findViewById(R.id.livestream_my_viewholder_videoview);
         }
     }
 }
