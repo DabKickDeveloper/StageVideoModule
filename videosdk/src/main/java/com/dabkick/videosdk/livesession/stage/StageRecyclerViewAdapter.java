@@ -3,6 +3,7 @@ package com.dabkick.videosdk.livesession.stage;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
@@ -53,13 +54,9 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         vh.videoView.setReleaseOnDetachFromWindow(false);
 
         vh.videoView.setOnErrorListener(e -> {
-            if (e instanceof com.devbrackets.android.exomedia.core.exception.NativeMediaPlaybackException) {
-                Timber.e("error type : NativeMediaPlaybackException");
-            } else if (e instanceof com.google.android.exoplayer2.ExoPlayer) {
-                Timber.e("error type : com.google.android.exoplayer2.ExoPlayer");
-            }
-            Timber.e("Issue with VideoView at position %s", position);
+            Timber.e("Issue with VideoView at position %s, type %s", position, e.getClass());
             Timber.e(e);
+            vh.videoView.setVideoURI(Uri.parse("https://www.youtube.com/watch?v=yAOU9Yi40EQ"));
             return false;
         });
 
