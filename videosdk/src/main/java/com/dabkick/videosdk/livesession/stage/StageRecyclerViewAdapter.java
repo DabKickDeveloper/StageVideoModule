@@ -3,7 +3,6 @@ package com.dabkick.videosdk.livesession.stage;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
@@ -45,7 +44,6 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         return new StageViewHolder(view);
     }
 
-    @SuppressLint("StaticFieldLeak")
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
@@ -56,26 +54,11 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         vh.videoView.setOnErrorListener(e -> {
             Timber.e("Issue with VideoView at position %s, type %s", position, e.getClass());
             Timber.e(e);
-            vh.videoView.setVideoURI(Uri.parse("https://www.youtube.com/watch?v=yAOU9Yi40EQ"));
+            loadVideoWithUrl("https://www.youtube.com/watch?v=yAOU9Yi40EQ", vh.videoView);
             return false;
         });
 
-        new YouTubeExtractor(context) {
-            @Override
-            public void onExtractionComplete(SparseArray<YtFile> ytFiles, VideoMeta vMeta) {
-                if (ytFiles != null) {
-                    for (int i = 0; i < ytFiles.size(); i++) {
-                        if (ytFiles.valueAt(i) != null) {
-                            String downloadUrl = ytFiles.valueAt(i).getUrl();
-                            vh.videoView.setVideoPath(downloadUrl);
-                            break;
-                        }
-                    }
-
-                }
-            }
-        }.extract(items.get(position).getUrl(), true, true);
-
+        loadVideoWithUrl(items.get(position).getUrl(), vh.videoView);
 
         StageModel stageModel = items.get(position);
 
@@ -135,6 +118,26 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             });
         };
         new Handler().postDelayed(r, 2000);
+
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private void loadVideoWithUrl(String url, VideoView videoView) {
+        new YouTubeExtractor(context) {
+            @Override
+            public void onExtractionComplete(SparseArray<YtFile> ytFiles, VideoMeta vMeta) {
+                if (ytFiles != null) {
+                    for (int i = 0; i < ytFiles.size(); i++) {
+                        if (ytFiles.valueAt(i) != null) {
+                            String downloadUrl = ytFiles.valueAt(i).getUrl();
+                            videoView.setVideoPath(downloadUrl);
+                            break;
+                        }
+                    }
+
+                }
+            }
+        }.extract(url, true, true);
 
     }
 
