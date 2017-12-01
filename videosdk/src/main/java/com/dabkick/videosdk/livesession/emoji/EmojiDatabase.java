@@ -11,23 +11,24 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import timber.log.Timber;
 
 public class EmojiDatabase {
 
     // receiver is for database listening, sender for posting updates
-    private DatabaseReference receiverDatabaseReference, senderDatabaserReference;
+    private DatabaseReference databaseReference;
     private EmojiListener listener;
-    private String ignoreKey = "";
+    private Set<String> ignoreUserIds;
 
     public EmojiDatabase() {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        ignoreUserIds = new HashSet<>();
 
-        String senderPath = EmojiDatabaseReferences.getEmojiRoomReference(AbstractDatabaseReferences.getSessionId());
-        senderDatabaserReference = firebaseDatabase.getReference(senderPath);
-
-        String receiverPath = EmojiDatabaseReferences.getEmojiReference();
-        receiverDatabaseReference = firebaseDatabase.getReference(receiverPath);
+        String receiverPath = EmojiDatabaseReferences.getEmojiRoomReference(AbstractDatabaseReferences.getSessionId());
+        databaseReference = firebaseDatabase.getReference(receiverPath);
 
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
@@ -44,12 +45,23 @@ public class EmojiDatabase {
         };
 
         // this listener is to ignore the first emoji event, which falsely triggers the child listener
-        receiverDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                EmojiModel emoji = dataSnapshot.child(AbstractDatabaseReferences.getSessionId()).getValue(EmojiModel.class);
-                ignoreKey = emoji.getKey();
-                receiverDatabaseReference.addChildEventListener(childEventListener);
+
+                for (DataSnapshot tmp : dataSnapshot.getChildren()) {
+                    EmojiModel emoji = tmp.getValue(EmojiModel.class);
+                    ignoreUserIds.add(emoji.getUserId());
+                }
+
+                //EmojiModel emoji = dataSnapshot.child(AbstractDatabaseReferences.getSessionId()).getValue(EmojiModel.class);
+                /* if (emoji != null) {
+                    ignoreKey = emoji.getKey();
+                    return;
+                } */
+
+                databaseReference.addChildEventListener(childEventListener);
+
             }
             @Override public void onCancelled(DatabaseError databaseError) {}
         });
@@ -58,8 +70,9 @@ public class EmojiDatabase {
 
     private void handleListenEvents(DataSnapshot dataSnapshot) {
         EmojiModel emoji = dataSnapshot.getValue(EmojiModel.class);
-        if (emoji.getKey().equals(ignoreKey)) {
-            Timber.d("ignore key : %s", ignoreKey);
+        if (ignoreUserIds.contains(emoji.getUserId())) {
+            ignoreUserIds.remove(emoji.getUserId());
+            Timber.d("ignore key : %s", emoji.getUserId());
             return;
         }
         listener.onDatabaseEvent(emoji.getEmojiType());
@@ -71,9 +84,9 @@ public class EmojiDatabase {
 
     void sendEvent(String emojiType) {
         String key = Util.getSaltString();
-        String participantName = Prefs.getDabname();
-        EmojiModel model = new EmojiModel(emojiType, key, participantName);
-        senderDatabaserReference.setValue(model);
+        String userId = Prefs.getUserId();
+        EmojiModel model = new EmojiModel(emojiType, key, userId);
+        databaseReference.child(userId).setValue(model);
     }
 
     interface EmojiListener {
