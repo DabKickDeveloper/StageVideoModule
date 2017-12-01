@@ -15,8 +15,6 @@ import java.util.Random;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -24,7 +22,7 @@ public class Util {
 
 
 
-    public static void register() {
+    public static void register(SingleObserver<RegisterResponse> observer) {
 
         // String devId, String devToken
         RegisterRequestBody body = new RegisterRequestBody(
@@ -41,26 +39,10 @@ public class Util {
                 .register(body)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SingleObserver<RegisterResponse>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {}
-
-                    @Override
-                    public void onSuccess(@NonNull RegisterResponse registerResponse) {
-                        Timber.d("registered anonymous user");
-                        saveUserRegistrationInfo(registerResponse);
-                        registerUserWithFirebase();
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        Timber.e("unable to register anonymous user");
-                        Timber.e(e);
-                    }
-                });
+                .subscribe(observer);
     }
 
-    private static void saveUserRegistrationInfo(RegisterResponse resp) {
+    public static void saveUserRegistrationInfo(RegisterResponse resp) {
         Prefs.setAccessToken(resp.getAccessToken());
         Prefs.setRefreshToken(resp.getRefreshToken());
         Prefs.setFirebaseToken(resp.getFirebaseToken());
@@ -69,7 +51,7 @@ public class Util {
         Prefs.setProfilePicUrl(resp.getUserDetails().getUserphoto());
     }
 
-    private static void registerUserWithFirebase() {
+    public static void registerUserWithFirebase() {
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mAuth.signInWithCustomToken(Prefs.getFirebaseToken())

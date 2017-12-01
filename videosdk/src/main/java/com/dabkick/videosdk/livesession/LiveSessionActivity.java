@@ -65,6 +65,7 @@ import com.dabkick.videosdk.livesession.stage.StagePresenter;
 import com.dabkick.videosdk.livesession.stage.StagePresenterImpl;
 import com.dabkick.videosdk.livesession.stage.StageRecyclerViewAdapter;
 import com.dabkick.videosdk.livesession.usersetup.GetUserDetailsFragment;
+import com.dabkick.videosdk.retrofit.RegisterResponse;
 import com.dabkick.videosdk.retrofit.RetrofitCreator;
 import com.dabkick.videosdk.retrofit.TwilioAccessToken;
 import com.twilio.video.CameraCapturer;
@@ -89,6 +90,7 @@ import javax.inject.Inject;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
@@ -151,8 +153,27 @@ public class LiveSessionActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_session);
 
+        // register user with server -> register with Firebase
         if (savedInstanceState == null) {
-            Util.register();
+            SingleObserver<RegisterResponse> observer = new SingleObserver<RegisterResponse>() {
+                @Override
+                public void onSubscribe(@NonNull Disposable d) {}
+
+                @Override
+                public void onSuccess(@NonNull RegisterResponse registerResponse) {
+                    Timber.d("registered anonymous user");
+                    Util.saveUserRegistrationInfo(registerResponse);
+                    Util.registerUserWithFirebase();
+                    setupLivestream();
+                }
+
+                @Override
+                public void onError(@NonNull Throwable e) {
+                    Timber.e("unable to register anonymous user");
+                    Timber.e(e);
+                }
+            };
+            Util.register(observer);
         }
 
         ((SdkApp) SdkApp.getAppContext()).getLivesessionComponent().inject(this);
@@ -238,16 +259,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
         ImageView backBtn = findViewById(R.id.iv_leave_session_btn);
         backBtn.setOnClickListener(view -> finish());
 
-        // setup livestream
-        RecyclerView livestreamRecyclerView = findViewById(R.id.recyclerview_livestream);
-        RecyclerView.LayoutManager livestreamLayoutManager = new LinearLayoutManager(
-                this, LinearLayoutManager.HORIZONTAL, false);
-        livestreamRecyclerView.setLayoutManager(livestreamLayoutManager);
-        livestreamPresenter = new LivestreamPresenterImpl(this);
-        sessionParticipantsAdapter = new SessionParticipantsAdapter(this, this,
-                livestreamPresenter.getLivestreamParticipants());
-        livestreamRecyclerView.setAdapter(sessionParticipantsAdapter);
-
 
         // setup stage
         stageRecyclerView = findViewById(R.id.recyclerview_stage);
@@ -278,6 +289,19 @@ public class LiveSessionActivity extends AppCompatActivity implements
             }
         });
 
+    }
+
+    private void setupLivestream() {
+        // setup livestream
+        RecyclerView livestreamRecyclerView = findViewById(R.id.recyclerview_livestream);
+        RecyclerView.LayoutManager livestreamLayoutManager = new LinearLayoutManager(
+                this, LinearLayoutManager.HORIZONTAL, false);
+        livestreamRecyclerView.setLayoutManager(livestreamLayoutManager);
+        livestreamPresenter = new LivestreamPresenterImpl(this);
+        sessionParticipantsAdapter = new SessionParticipantsAdapter(this, this,
+                livestreamPresenter.getLivestreamParticipants());
+        livestreamRecyclerView.setAdapter(sessionParticipantsAdapter);
+        livestreamPresenter.onStart();
     }
 
 
@@ -543,7 +567,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        livestreamPresenter.onStart();
+        if (livestreamPresenter != null) livestreamPresenter.onStart();
         stagePresenter.onStart();
     }
 
