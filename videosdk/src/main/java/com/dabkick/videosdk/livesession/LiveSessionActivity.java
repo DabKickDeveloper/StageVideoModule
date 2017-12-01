@@ -165,6 +165,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
                     Util.saveUserRegistrationInfo(registerResponse);
                     Util.registerUserWithFirebase();
                     setupLivestream();
+                    setupEmoji();
                 }
 
                 @Override
@@ -188,56 +189,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
         initTwilio();
 
 
-        // Emojis
-        innerContainer = findViewById(R.id.container_layout);
-        container = findViewById(R.id.container);
 
-        emojiLayout = findViewById(R.id.layout_emoji);
-        emojis = findViewById(R.id.emojis);
-
-        emojis.setInnerContainer(innerContainer);
-        emojis.setContainer(container);
-
-
-        EmojiView emojiView = emojiType -> {
-            Drawable drawable;
-            switch (emojiType) {
-                case Constants.SMILE:
-                    drawable = getResources().getDrawable(R.drawable.reactions_default);
-                    break;
-                case Constants.COOL:
-                    drawable = getResources().getDrawable(R.drawable.cool);
-                    break;
-                case Constants.WINK:
-                    drawable = getResources().getDrawable(R.drawable.winky);
-                    break;
-                case Constants.LOVE:
-                    drawable = getResources().getDrawable(R.drawable.love);
-                    break;
-                case Constants.TONGUE:
-                    drawable = getResources().getDrawable(R.drawable.tongue);
-                    break;
-                case Constants.ROFL:
-                    drawable = getResources().getDrawable(R.drawable.rofl);
-                    break;
-                case Constants.CRY:
-                    drawable = getResources().getDrawable(R.drawable.crying);
-                    break;
-                case Constants.ANGRY:
-                    drawable = getResources().getDrawable(R.drawable.angry);
-                    break;
-                case Constants.XEYES:
-                    drawable = getResources().getDrawable(R.drawable.x_eyes);
-                    break;
-                default: // shocked
-                    drawable = getResources().getDrawable(R.drawable.shocked);
-                    break;
-            }
-            AnimationUtils.slideToAbove(drawable, innerContainer,
-                    container,LiveSessionActivity.this);
-        };
-        EmojiPresenter emojiPresenter = new EmojiPresenter(emojiView);
-        emojis.setListener(emojiPresenter);
 
         chatListView = findViewById(R.id.listview_livesession_chat);
         downKarat = findViewById(R.id.close_chat_list);
@@ -302,6 +254,59 @@ public class LiveSessionActivity extends AppCompatActivity implements
                 livestreamPresenter.getLivestreamParticipants());
         livestreamRecyclerView.setAdapter(sessionParticipantsAdapter);
         livestreamPresenter.onStart();
+    }
+
+    private void setupEmoji() {
+        // Emojis
+        innerContainer = findViewById(R.id.container_layout);
+        container = findViewById(R.id.container);
+
+        emojiLayout = findViewById(R.id.layout_emoji);
+        emojis = findViewById(R.id.emojis);
+
+        emojis.setInnerContainer(innerContainer);
+        emojis.setContainer(container);
+
+
+        EmojiView emojiView = emojiType -> {
+            Drawable drawable;
+            switch (emojiType) {
+                case Constants.SMILE:
+                    drawable = getResources().getDrawable(R.drawable.reactions_default);
+                    break;
+                case Constants.COOL:
+                    drawable = getResources().getDrawable(R.drawable.cool);
+                    break;
+                case Constants.WINK:
+                    drawable = getResources().getDrawable(R.drawable.winky);
+                    break;
+                case Constants.LOVE:
+                    drawable = getResources().getDrawable(R.drawable.love);
+                    break;
+                case Constants.TONGUE:
+                    drawable = getResources().getDrawable(R.drawable.tongue);
+                    break;
+                case Constants.ROFL:
+                    drawable = getResources().getDrawable(R.drawable.rofl);
+                    break;
+                case Constants.CRY:
+                    drawable = getResources().getDrawable(R.drawable.crying);
+                    break;
+                case Constants.ANGRY:
+                    drawable = getResources().getDrawable(R.drawable.angry);
+                    break;
+                case Constants.XEYES:
+                    drawable = getResources().getDrawable(R.drawable.x_eyes);
+                    break;
+                default: // shocked
+                    drawable = getResources().getDrawable(R.drawable.shocked);
+                    break;
+            }
+            AnimationUtils.slideToAbove(drawable, innerContainer,
+                    container,LiveSessionActivity.this);
+        };
+        EmojiPresenter emojiPresenter = new EmojiPresenter(emojiView);
+        emojis.setListener(emojiPresenter);
     }
 
 
