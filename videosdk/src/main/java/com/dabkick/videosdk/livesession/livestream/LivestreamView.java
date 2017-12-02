@@ -5,7 +5,7 @@ import com.twilio.video.VideoView;
 
 public interface LivestreamView {
 
-    void myStreamClicked();
+    void clickVideo();
     void otherUserStreamClicked(int index);
     void myVideoViewCreated(VideoView videoView);
     void otherUserVideoViewCreated(VideoView videoView, int index);
@@ -18,4 +18,8 @@ public interface LivestreamView {
     void enterRoomTwilio();
     void startStreaming(VideoView videoView);
     void stopStreaming();
+
+    void clickVoice();
+
+    void clickSwap();
 }

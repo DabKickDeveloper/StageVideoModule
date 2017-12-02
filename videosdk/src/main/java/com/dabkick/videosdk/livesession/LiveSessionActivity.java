@@ -425,7 +425,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void myStreamClicked() {
+    public void clickVideo() {
         if (checkPermissionForCameraAndMicrophone()) {
             livestreamPresenter.toggleMyStream();
         } else {
@@ -767,7 +767,15 @@ public class LiveSessionActivity extends AppCompatActivity implements
 //        localVideoTrack = null;
     }
 
+    @Override
+    public void clickVoice() {
+        // TODO Gopal
+    }
 
+    @Override
+    public void clickSwap() {
+        // TODO Gopal
+    }
 
 
 //    public void removeVideoRenderer(String jid) {

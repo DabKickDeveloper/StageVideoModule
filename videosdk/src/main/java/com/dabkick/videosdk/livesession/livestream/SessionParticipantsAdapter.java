@@ -65,7 +65,9 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
             case MyViewHolder.TYPE: {
                 MyViewHolder myViewHolder = (MyViewHolder) holder;
                 livestreamView.myVideoViewCreated(myViewHolder.videoView);
-                holder.itemView.setOnClickListener(v -> livestreamView.myStreamClicked());
+                myViewHolder.videoTextView.setOnClickListener(v -> livestreamView.clickVideo());
+                myViewHolder.voiceTextView.setOnClickListener(v -> livestreamView.clickVoice());
+                myViewHolder.swapTextView.setOnClickListener(v -> livestreamView.clickSwap());
                 String name = context.getString(R.string.me);
                 myViewHolder.nameView.setText(name);
                 break;
@@ -119,9 +121,13 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
     static class MyViewHolder extends AbstractViewHolder {
 
         static final int TYPE = 0;
+        TextView voiceTextView, videoTextView, swapTextView;
 
         MyViewHolder(View itemView) {
             super(itemView);
+            voiceTextView = itemView.findViewById(R.id.livestream_holder_voice);
+            videoTextView = itemView.findViewById(R.id.livestream_holder_video);
+            swapTextView = itemView.findViewById(R.id.livestream_holder_swap);
         }
     }
 
