@@ -233,7 +233,8 @@ public class LiveSessionActivity extends AppCompatActivity implements
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                if((newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) &&
+                        (stageRecyclerViewAdapter.getItemCount() > 0)) {
                     View centerView = stageSnapHelper.findSnapView(stageLayoutManager);
                     int position = stageLayoutManager.getPosition(centerView);
                     stagePresenter.onUserSwipedStage(position);
