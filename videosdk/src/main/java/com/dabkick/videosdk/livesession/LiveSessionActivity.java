@@ -341,11 +341,13 @@ public class LiveSessionActivity extends AppCompatActivity implements
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         1.0f
                 );
-                param.setMargins((int)AnimationUtils.convertDpToPixel(LiveSessionActivity.this,50),7,(int)AnimationUtils.convertDpToPixel(LiveSessionActivity.this,10),7);
+                param.setMargins(4,7,(int)AnimationUtils.convertDpToPixel(LiveSessionActivity.this,10),7);
                 chatEditText.setLayoutParams(param);
                 emojiLayout.setVisibility(View.GONE);
                 chatToggleButton.setVisibility(View.GONE);
-                toggleChatUi();
+
+                if(chatListView.getVisibility() == View.INVISIBLE)
+                    toggleChatUi();
             } else {
 
                 int px = Math.round(TypedValue.applyDimension(
@@ -355,8 +357,8 @@ public class LiveSessionActivity extends AppCompatActivity implements
                 param.setMargins(4,4,4,4);
                 chatEditText.setLayoutParams(param);
                 emojiLayout.setVisibility(View.VISIBLE);
-                chatToggleButton.setVisibility(View.VISIBLE);
-                toggleChatUi();
+                //chatToggleButton.setVisibility(View.VISIBLE);
+                //toggleChatUi();
             }
         };
     }
@@ -384,13 +386,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
         // toggle chat list and icon
         int visibility = chatListView.getVisibility();
         if (visibility == View.INVISIBLE) {
-
-            if(chatEditText.isFocused()){
-
-                LinearLayout.LayoutParams param = (LinearLayout.LayoutParams)chatEditText.getLayoutParams();
-                param.setMargins((int)AnimationUtils.convertDpToPixel(LiveSessionActivity.this,50),7,(int)AnimationUtils.convertDpToPixel(LiveSessionActivity.this,10),7);
-                chatEditText.setLayoutParams(param);
-            }
 
             chatListView.setVisibility(View.VISIBLE);
             downKarat.setVisibility(View.VISIBLE);
