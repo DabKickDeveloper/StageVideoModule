@@ -127,7 +127,8 @@ public class StageDatabase {
                         if (!changedStageModel.getState().equals(stageModelList.get(index).getState())) {
                             Timber.i("changed state: %s", changedStageModel.getState());
                             stageModelList.get(index).setState(changedStageModel.getState());
-                            if (callback != null) callback.onStageVideoStateChanged(i, changedStageModel.getState());
+                            if (callback != null) callback.onStageVideoAdded();
+                            //if (callback != null) callback.onStageVideoStateChanged(i, changedStageModel.getState());
                         }
 
                         stageModelList.set(i, changedStageModel);

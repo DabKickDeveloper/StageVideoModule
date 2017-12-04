@@ -480,7 +480,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
     protected void onDestroy() {
         va.clear();
         if (isFinishing()) {
-            livestreamPresenter.onFinishing();
+            if (livestreamPresenter != null) livestreamPresenter.onFinishing();
             va.clear();
         }
         super.onDestroy();
@@ -576,7 +576,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
-        livestreamPresenter.onStop();
+        if (livestreamPresenter != null) livestreamPresenter.onStop();
         stagePresenter.onStop();
     }
 

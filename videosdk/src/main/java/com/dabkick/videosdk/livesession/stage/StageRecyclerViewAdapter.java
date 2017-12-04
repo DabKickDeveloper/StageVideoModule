@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dabkick.videosdk.R;
+import com.devbrackets.android.exomedia.core.video.scale.ScaleType;
 import com.devbrackets.android.exomedia.listener.VideoControlsButtonListener;
 import com.devbrackets.android.exomedia.ui.widget.VideoView;
 
@@ -47,9 +48,10 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        StageViewHolder vh = (StageViewHolder) holder;
         StageModel stageModel = items.get(position);
 
+        StageViewHolder vh = (StageViewHolder) holder;
+        vh.videoView.setScaleType(ScaleType.CENTER_CROP);
         vh.videoView.setReleaseOnDetachFromWindow(false);
 
         vh.videoView.setOnErrorListener(e -> {
