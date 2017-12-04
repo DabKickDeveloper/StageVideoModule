@@ -118,12 +118,15 @@ public class StageDatabase {
                         int index = getIndexFromKey(overviewDatabase.getStagedVideoKey());
                         if (changedStageModel.getPlayedMillis() != stageModelList.get(index).getPlayedMillis()) {
                             Timber.i("changed time: %s", changedStageModel.getPlayedMillis());
-                            if (callback != null) callback.onStageVideoTimeChanged(i, changedStageModel.getPlayedMillis());
+                            stageModelList.get(index).setPlayedMillis(changedStageModel.getPlayedMillis());
+                            if (callback != null) callback.onStageVideoAdded();
+                            //if (callback != null) callback.onStageVideoTimeChanged(i, changedStageModel.getPlayedMillis());
                         }
 
                         // do not update play/pause
                         if (!changedStageModel.getState().equals(stageModelList.get(index).getState())) {
                             Timber.i("changed state: %s", changedStageModel.getState());
+                            stageModelList.get(index).setState(changedStageModel.getState());
                             if (callback != null) callback.onStageVideoStateChanged(i, changedStageModel.getState());
                         }
 

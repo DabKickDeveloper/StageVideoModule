@@ -48,21 +48,22 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         StageViewHolder vh = (StageViewHolder) holder;
+        StageModel stageModel = items.get(position);
 
         vh.videoView.setReleaseOnDetachFromWindow(false);
 
         vh.videoView.setOnErrorListener(e -> {
             Timber.e("Issue with VideoView at position %s, type %s", position, e.getClass());
             Timber.e(e);
-            loadVideoWithUrl(items.get(position).getUrl(), vh.videoView);
+            loadVideoWithUrl(stageModel.getUrl(), vh.videoView);
             return false;
         });
 
-        loadVideoWithUrl(items.get(position).getUrl(), vh.videoView);
+        loadVideoWithUrl(stageModel.getUrl(), vh.videoView);
 
-        StageModel stageModel = items.get(position);
 
         vh.videoView.setOnPreparedListener(() -> {
+            vh.videoView.seekTo(stageModel.getPlayedMillis());
             if (stageModel.isPlaying()) vh.videoView.start();
         });
 
@@ -102,19 +103,19 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
         vh.videoView.setOnCompletionListener(() -> {
             vh.videoView.restart();
-            vh.videoView.seekTo(items.get(position).getPlayedMillis());
+            vh.videoView.seekTo(stageModel.getPlayedMillis());
             Runnable r = () ->  {
                 if (vh.videoView.isPlaying()) vh.videoView.pause();
             };
             new Handler().postDelayed(r, 1000);
         });
 
-        vh.videoView.seekTo(stageModel.getPlayedMillis());
 
         // set seek listener, wait until first seek complete
         Runnable r = () ->  {
             vh.videoView.setOnSeekCompletionListener(() -> {
-                videoControlListener.onSeekBarChanged(vh.videoView.getCurrentPosition());
+                // FIXME should be moved somewhere else
+                // videoControlListener.onSeekBarChanged(vh.videoView.getCurrentPosition());
             });
         };
         new Handler().postDelayed(r, 2000);
