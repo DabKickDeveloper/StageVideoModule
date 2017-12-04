@@ -19,8 +19,9 @@ public class StageModel {
         // firebase req'd empty constructor
     }
 
-    public StageModel(String url) {
+    public StageModel(String url, String key) {
         this.url = url;
+        this.key = key;
         this.state = PAUSED;
         this.playedMillis = 0;
     }

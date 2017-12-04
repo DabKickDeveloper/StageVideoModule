@@ -91,8 +91,9 @@ public class StageDatabase {
 
     void addVideo(String url) {
         Timber.i("added video: %s", url);
-        StageModel stageModel = new StageModel(url);
-        databaseReference.push().setValue(stageModel);
+        String key = databaseReference.push().getKey();
+        StageModel stageModel = new StageModel(url, key);
+        databaseReference.child(key).setValue(stageModel);
     }
 
     private ChildEventListener createChildEventListener() {

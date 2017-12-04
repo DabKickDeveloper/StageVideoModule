@@ -54,7 +54,7 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         vh.videoView.setOnErrorListener(e -> {
             Timber.e("Issue with VideoView at position %s, type %s", position, e.getClass());
             Timber.e(e);
-            loadVideoWithUrl("https://www.youtube.com/watch?v=yAOU9Yi40EQ", vh.videoView);
+            loadVideoWithUrl(items.get(position).getUrl(), vh.videoView);
             return false;
         });
 
