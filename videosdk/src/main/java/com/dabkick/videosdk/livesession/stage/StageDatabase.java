@@ -115,7 +115,7 @@ public class StageDatabase {
                     if (changedStageModel.equals(stageModelList.get(i))) {
 
                         // update stage time
-                        int index = getIndexFromKey(overviewDatabase.getStagedVideoKey());
+                        int index = getIndexFromKey(changedStageModel.getKey());
                         if (changedStageModel.getPlayedMillis() != stageModelList.get(index).getPlayedMillis()) {
                             Timber.i("changed time: %s", changedStageModel.getPlayedMillis());
                             stageModelList.get(index).setPlayedMillis(changedStageModel.getPlayedMillis());

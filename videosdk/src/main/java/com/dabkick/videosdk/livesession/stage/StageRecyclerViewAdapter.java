@@ -63,8 +63,15 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
 
         vh.videoView.setOnPreparedListener(() -> {
+            vh.videoView.setOnSeekCompletionListener(null);
             vh.videoView.seekTo(stageModel.getPlayedMillis());
             if (stageModel.isPlaying()) vh.videoView.start();
+
+            Runnable r = () -> vh.videoView.setOnSeekCompletionListener(() -> {
+                videoControlListener.onSeekBarChanged(vh.videoView.getCurrentPosition());
+            });
+            new Handler().postDelayed(r, 1000);
+
         });
 
         if (vh.videoView.getVideoControls() != null) {
@@ -78,47 +85,29 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                     }
                     return false;
                 }
-
-                @Override
-                public boolean onPreviousClicked() {
+                @Override public boolean onPreviousClicked() {
                     return false;
                 }
-
-                @Override
-                public boolean onNextClicked() {
+                @Override public boolean onNextClicked() {
                     return false;
                 }
-
-                @Override
-                public boolean onRewindClicked() {
+                @Override public boolean onRewindClicked() {
                     return false;
                 }
-
-                @Override
-                public boolean onFastForwardClicked() {
+                @Override public boolean onFastForwardClicked() {
                     return false;
                 }
             });
         }
 
-        vh.videoView.setOnCompletionListener(() -> {
+        /* vh.videoView.setOnCompletionListener(() -> {
             vh.videoView.restart();
             vh.videoView.seekTo(stageModel.getPlayedMillis());
             Runnable r = () ->  {
                 if (vh.videoView.isPlaying()) vh.videoView.pause();
             };
             new Handler().postDelayed(r, 1000);
-        });
-
-
-        // set seek listener, wait until first seek complete
-        Runnable r = () ->  {
-            vh.videoView.setOnSeekCompletionListener(() -> {
-                // FIXME should be moved somewhere else
-                // videoControlListener.onSeekBarChanged(vh.videoView.getCurrentPosition());
-            });
-        };
-        new Handler().postDelayed(r, 2000);
+        }); */
 
     }
 
@@ -144,7 +133,7 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List<Object> payloads) {
-        if (!payloads.isEmpty()) {
+        /* if (!payloads.isEmpty()) {
 
             StageViewHolder vh = (StageViewHolder) holder;
             Long seekTime = getSeekTimeFromPayloads(payloads);
@@ -162,7 +151,7 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 if (shouldPause) vh.videoView.pause();
                 else vh.videoView.start();
             }
-        }
+        }*/
         super.onBindViewHolder(holder, position, payloads);
     }
 
