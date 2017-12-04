@@ -20,6 +20,7 @@ public class ParticipantDatabase {
         void onParticipantAdded(Participant participant);
         void onParticipantRemoved(Participant participant);
         void onParticipantAudioVideoEnabled();
+        void onParticipantAudioEnabled();
     }
 
     private DatabaseReference databaseReference;
@@ -79,6 +80,7 @@ public class ParticipantDatabase {
                 Timber.i("onChildAdded: %s", participant.getDabname());
                 callback.onParticipantAdded(participant);
                 handleOnAudioVideoEnabled(participant);
+                handleOnAudioEnabled(participant);
             }
 
             @Override
@@ -86,6 +88,7 @@ public class ParticipantDatabase {
                 Participant participant = dataSnapshot.getValue(Participant.class);
                 Timber.i("onChildChanged: %s", participant.getDabname());
                 handleOnAudioVideoEnabled(participant);
+                handleOnAudioEnabled(participant);
             }
 
             @Override
@@ -102,6 +105,12 @@ public class ParticipantDatabase {
     private void handleOnAudioVideoEnabled(Participant participant) {
         if (participant.getIsVideoEnabled() || participant.getIsAudioEnabled()) {
             callback.onParticipantAudioVideoEnabled();
+        }
+    }
+
+    private void handleOnAudioEnabled(Participant participant) {
+        if (participant.getIsAudioEnabled()) {
+            callback.onParticipantAudioEnabled();
         }
     }
 

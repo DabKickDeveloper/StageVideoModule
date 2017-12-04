@@ -104,6 +104,23 @@ public class LivestreamPresenterImpl implements LivestreamPresenter, Participant
     }
 
     @Override
+    public void onParticipantAudioEnabled() {
+        Timber.i("onParticipantAudioEnabled");
+        // TODO
+        // streamingManager.joinRoom()
+        //enter room and the rest happens via listner
+
+        if (va.room == null || va.room.getState() == RoomState.DISCONNECTED)
+
+        {
+            view.enterRoomTwilio(); //this will also secure new token if expired
+        }
+
+    }
+
+
+
+    @Override
     public List<Participant> getLivestreamParticipants() {
         return participantList;
     }

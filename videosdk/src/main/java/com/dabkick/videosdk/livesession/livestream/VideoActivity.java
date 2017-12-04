@@ -459,11 +459,11 @@ import java.util.concurrent.ConcurrentHashMap;
 //                videoStatusTextView.setText("Connected to " + room.getName());
 //                setTitle(room.getName());
 
-                for (com.twilio.video.Participant participant : room.getParticipants()) {
-                    addParticipant(participant);
-                    participantIdentity.put(participant.getIdentity(), participant);
-//                    break;
-                }
+//                for (com.twilio.video.Participant participant : room.getParticipants()) {
+//                    addParticipant(participant);
+//                    participantIdentity.put(participant.getIdentity(), participant);
+////                    break;
+//                }
             }
 
             @Override
