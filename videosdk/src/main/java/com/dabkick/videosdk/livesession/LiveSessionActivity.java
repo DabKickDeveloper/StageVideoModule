@@ -462,6 +462,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
     @Override
     public void clickVideo() {
+
         if (checkPermissionForCameraAndMicrophone()) {
             livestreamPresenter.toggleMyStream();
         } else {
@@ -695,13 +696,8 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
 
     public void startStreaming(VideoView videoView) {
-//        createAudioVideoTracks();
-//        localVideoTrack.addRenderer(localVideoView);
-//        if (accessToken == null) {
-//            initAccessToken();
-//        } else {
-//            connectToRoom(ROOM_NAME_TODO_DYNAMICALLY_OBTAIN);
-//        }
+
+        //if not in room: enable audio, video booleans in firebase and in local tracks, update UI and enter room
 
         va.localVideoView = videoView;
 
@@ -720,7 +716,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
         if ((ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED)
                 && (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED))
         {
-
             //got permission!
             ////enable local video and audio tracks
 
@@ -736,8 +731,19 @@ public class LiveSessionActivity extends AppCompatActivity implements
             if (va.room == null || va.room.getState() == RoomState.DISCONNECTED)
 
             {
+
+                //enable audio
+                //note: if already in room, audio is not toggled!
+                livestreamPresenter.setAudioEnabled(true);
+                va.localAudioTrack.enable(true);
+                //update UI for microphone enabled
+                //todo Trevor
+
+                //enter room
                 enterRoomTwilio(); //this will also secure new token if expired
             }
+
+            //set up local video
             // Share your camera if connected to room
             if (va.localParticipant != null) {
                 va.localParticipant.addVideoTrack(va.localVideoTrack);
@@ -751,16 +757,12 @@ public class LiveSessionActivity extends AppCompatActivity implements
             videoView.setVisibility(View.VISIBLE);
 
             //enable video track - now listners in other connected devices will do the right thing
-            va.localAudioTrack.enable(true);
-//            va.mAudioManager.setMicrophoneMute(false);
-
+            livestreamPresenter.setVideoEnabled(true);
             va.localVideoTrack.enable(true);
 
             //you are streaming!
             va.isStreaming = true;
 
-            livestreamPresenter.setAudioEnabled(true);
-            livestreamPresenter.setVideoEnabled(true);
 
         }
 
@@ -768,16 +770,28 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
 
     public void stopStreaming() {
-//        // free native memory resources
         //stop sharing video & audio in room
-        va.localVideoTrack.enable(false);
-        va.localAudioTrack.enable(false);
-        va.setAudioFocus(false);
-        va.localVideoTrack.removeRenderer(va.localVideoView);
-        EventBus.getDefault().post(new NotifyLivestreamAdapterEvent());
-        livestreamPresenter.setAudioEnabled(false);
-        livestreamPresenter.setVideoEnabled(false);
 
+        //set booleans
+        livestreamPresenter.setVideoEnabled(false);
+        va.localVideoTrack.enable(false);
+
+        //if video is clicked, disable only video!
+//        va.localAudioTrack.enable(false);
+//        livestreamPresenter.setAudioEnabled(false);
+
+
+        //as long as you are in the twi room, audiofocus is true
+//        va.setAudioFocus(false);
+
+        //remove local view and replace w static avatar
+        //remove local video
+        va.localVideoTrack.removeRenderer(va.localVideoView);
+        //replace
+        //todo Trevor
+
+        //update UI
+        EventBus.getDefault().post(new NotifyLivestreamAdapterEvent());
 
 
 //        localAudioTrack.release();
@@ -786,14 +800,52 @@ public class LiveSessionActivity extends AppCompatActivity implements
 //        localVideoTrack = null;
     }
 
+
     @Override
     public void clickVoice() {
-        // TODO Gopal
+
+
+        //if in the room: just toggle audio booleans, update UI
+
+        // if not, toggle audio booleans and update the UI, then enter room
+
+            //was it going to mute or unmute?
+            if (va.localAudioTrack.isEnabled())
+            {
+                //if already enabled, that means you are in the room already.
+
+                //just disable it on firebase and local track
+
+                livestreamPresenter.setAudioEnabled(false);
+                va.localAudioTrack.enable(false);
+
+                //update UI
+                //todo: trevor
+            }
+            else
+            {
+                // enable firebase boolean value
+                livestreamPresenter.setAudioEnabled(true);
+
+
+                //enable local audiotrack
+                va.localAudioTrack.enable(true);
+
+                //update UI
+                //todo: trevor
+            }
+
+        //enter room and the rest happens via listner
+        if (va.room == null || va.room.getState() == RoomState.DISCONNECTED)
+        {
+            enterRoomTwilio(); //this will also secure new token if last one had expired
+        }
+
     }
 
     @Override
     public void clickSwap() {
-        // TODO Gopal
+        // TODO Trevor
     }
 
 
@@ -1100,6 +1152,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
                         && isLiveStreamAudioGrant) {
 
                     //gopal
+                    createLocalVideoTrack(true);
                     startStreaming((VideoView) va.localVideoView);
 
 //                    if (va.localAudioTrack == null)
@@ -1124,7 +1177,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
 //                        va.mAudioManager.setMicrophoneMute(true);
 
                     // Share your camera
-                    createLocalVideoTrack(false);
+//                    createLocalVideoTrack(false);
                 }
 
                 return;

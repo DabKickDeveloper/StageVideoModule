@@ -127,11 +127,11 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
         static final int TYPE = 0;
         TextView voiceTextView, videoTextView, swapTextView;
 
-        MyViewHolder(View itemView) {
-            super(itemView);
-            voiceTextView = itemView.findViewById(R.id.livestream_holder_voice);
-            videoTextView = itemView.findViewById(R.id.livestream_holder_video);
-            swapTextView = itemView.findViewById(R.id.livestream_holder_swap);
+            MyViewHolder(View itemView) {
+                super(itemView);
+                voiceTextView = itemView.findViewById(R.id.livestream_holder_voice);
+                videoTextView = itemView.findViewById(R.id.livestream_holder_video);
+                swapTextView = itemView.findViewById(R.id.livestream_holder_swap);
         }
     }
 

@@ -13,6 +13,7 @@ public interface LivestreamView {
     void onEnterTwilio();
     void onStartStreaming(VideoView videoView);
     void onStopStreaming();
+//    void onClickVoice();
 
 
     void enterRoomTwilio();

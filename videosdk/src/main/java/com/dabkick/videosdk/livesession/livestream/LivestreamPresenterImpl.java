@@ -39,6 +39,8 @@ public class LivestreamPresenterImpl implements LivestreamPresenter, Participant
 //            streamingManager.startStreaming(myVideoView);
 //        }
 
+
+
         if (va.isStreaming)
         {
             view.stopStreaming();
@@ -47,6 +49,9 @@ public class LivestreamPresenterImpl implements LivestreamPresenter, Participant
 
         else
         {
+
+            //if not in room: enable audio, video booleans in firebase and in local tracks, update UI and enter room
+
             view.startStreaming(myVideoView);
             va.isStreaming = true;
 
