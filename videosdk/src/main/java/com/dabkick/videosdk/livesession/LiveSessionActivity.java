@@ -361,11 +361,18 @@ public class LiveSessionActivity extends AppCompatActivity implements
                 LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.MATCH_PARENT,
-                        1.0f
+                        0.3f
                 );
-                param.setMargins(4,7,(int)AnimationUtils.convertDpToPixel(LiveSessionActivity.this,10),7);
+                param.setMargins(4,7,4,7);
                 chatEditText.setLayoutParams(param);
-                emojiLayout.setVisibility(View.GONE);
+                param = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        1.3f
+                );
+                emojiLayout.setLayoutParams(param);
+
+
                 chatToggleButton.setVisibility(View.GONE);
 
                 if(chatListView.getVisibility() == View.INVISIBLE)
