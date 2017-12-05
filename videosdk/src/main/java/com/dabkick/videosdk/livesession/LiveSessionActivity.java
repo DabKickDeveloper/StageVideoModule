@@ -57,6 +57,7 @@ import com.dabkick.videosdk.livesession.livestream.LivestreamPresenterImpl;
 import com.dabkick.videosdk.livesession.livestream.LivestreamView;
 import com.dabkick.videosdk.livesession.livestream.NotifyLivestreamAdapterEvent;
 import com.dabkick.videosdk.livesession.livestream.SessionParticipantsAdapter;
+import com.dabkick.videosdk.livesession.livestream.SwapStageEvent;
 import com.dabkick.videosdk.livesession.livestream.VideoActivity;
 import com.dabkick.videosdk.livesession.mediadrawer.MediaDrawerDialogFragment;
 import com.dabkick.videosdk.livesession.overviews.OverviewDatabase;
@@ -64,7 +65,6 @@ import com.dabkick.videosdk.livesession.overviews.OverviewView;
 import com.dabkick.videosdk.livesession.stage.StagePresenter;
 import com.dabkick.videosdk.livesession.stage.StagePresenterImpl;
 import com.dabkick.videosdk.livesession.stage.StageRecyclerViewAdapter;
-import com.dabkick.videosdk.livesession.usersetup.GetUserDetailsFragment;
 import com.dabkick.videosdk.retrofit.RegisterResponse;
 import com.dabkick.videosdk.retrofit.RetrofitCreator;
 import com.dabkick.videosdk.retrofit.TwilioAccessToken;
@@ -139,6 +139,8 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
     ImageView downKarat;
 
+    private FrameLayout mainLayout, miniLayout;
+
 
     //audio recording feature
     public static final int RECORD_AUDIO_PERMISSION = 1;
@@ -152,6 +154,9 @@ public class LiveSessionActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_session);
+
+        mainLayout = findViewById(R.id.layout_main_stage);
+        miniLayout = findViewById(R.id.layout_mini_stage);
 
         // register user with server -> register with Firebase
         if (savedInstanceState == null) {
@@ -187,8 +192,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
         va.mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         initTwilio();
-
-
 
 
         chatListView = findViewById(R.id.listview_livesession_chat);
@@ -233,7 +236,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if((newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) &&
+                if ((newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) &&
                         (stageRecyclerViewAdapter.getItemCount() > 0)) {
                     View centerView = stageSnapHelper.findSnapView(stageLayoutManager);
                     int position = stageLayoutManager.getPosition(centerView);
@@ -242,6 +245,17 @@ public class LiveSessionActivity extends AppCompatActivity implements
             }
         });
 
+
+    }
+
+    private void swapStages() {
+        Timber.i("swap stages");
+        View temp = mainLayout.getChildAt(0);
+        mainLayout.removeViewAt(0);
+        View miniChild = miniLayout.getChildAt(0);
+        miniLayout.removeViewAt(0);
+        mainLayout.addView(miniChild);
+        miniLayout.addView(temp);
     }
 
     private void setupLivestream() {
@@ -545,23 +559,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
     @Override
     public void onStopStreaming() {
         stopStreaming();
-    }
-
-
-    private void showGetUserDetailsFragment() {
-
-        android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
-
-        // remove any currently shown dialog
-        android.app.Fragment prev = getFragmentManager().findFragmentByTag(GetUserDetailsFragment.class.getName());
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
-        // show Fragment
-        GetUserDetailsFragment newGetUserDetailsFragment = new GetUserDetailsFragment();
-        newGetUserDetailsFragment.show(ft, GetUserDetailsFragment.class.getName());
-
     }
 
     @Override
@@ -1280,6 +1277,11 @@ public class LiveSessionActivity extends AppCompatActivity implements
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(NotifyLivestreamAdapterEvent event) {
         sessionParticipantsAdapter.notifyDataSetChanged();
+    };
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(SwapStageEvent event) {
+        swapStages();
     };
 
 

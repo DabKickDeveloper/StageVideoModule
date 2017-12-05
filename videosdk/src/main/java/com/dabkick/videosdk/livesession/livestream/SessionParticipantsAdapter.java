@@ -12,6 +12,8 @@ import com.dabkick.videosdk.R;
 import com.twilio.video.VideoTrack;
 import com.twilio.video.VideoView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 import java.util.Map;
 
@@ -68,6 +70,7 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
                 myViewHolder.videoTextView.setOnClickListener(v -> livestreamView.clickVideo());
                 myViewHolder.voiceTextView.setOnClickListener(v -> livestreamView.clickVoice());
                 myViewHolder.swapTextView.setOnClickListener(v -> livestreamView.clickSwap());
+                myViewHolder.itemView.setOnClickListener(v -> EventBus.getDefault().post(new SwapStageEvent()));
                 String name = context.getString(R.string.me);
                 myViewHolder.nameView.setText(name);
                 break;
@@ -84,6 +87,7 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
                 holder.itemView.setOnClickListener(v -> livestreamView.otherUserStreamClicked(position - 1));
                 String name = participantList.get(position - 1).getDabname();
                 participantViewHolder.nameView.setText(name);
+                participantViewHolder.itemView.setOnClickListener(v -> EventBus.getDefault().post(new SwapStageEvent()));
                 break;
             }
         }

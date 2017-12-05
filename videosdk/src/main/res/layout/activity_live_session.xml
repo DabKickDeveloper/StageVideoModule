@@ -19,13 +19,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerview_stage"
+    <FrameLayout
+        android:id="@+id/layout_main_stage"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_stage"
         android:layout_marginBottom="?android:attr/actionBarSize"
         app:layout_constraintBottom_toTopOf="@+id/layout_chat"
-        app:layout_constraintTop_toBottomOf="@id/iv_leave_session_btn"/>
+        app:layout_constraintTop_toBottomOf="@id/iv_leave_session_btn">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview_stage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
 
     <include
         android:id="@+id/layout_chat"
@@ -33,10 +40,10 @@
         android:layout_width="wrap_content"
         android:layout_height="36dp"
         android:layout_marginBottom="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerview_livestream"/>
+        app:layout_constraintBottom_toTopOf="@+id/layout_mini_stage"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerview_livestream"
+    <FrameLayout
+        android:id="@+id/layout_mini_stage"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/height_livestream_bar"
         android:layout_marginBottom="16dp"
@@ -44,8 +51,21 @@
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/iv_add_friends"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:listitem="@layout/livestream_add_friend_viewholder" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview_livestream"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height_livestream_bar"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="96dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/iv_add_friends"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:listitem="@layout/livestream_add_friend_viewholder" />
+
+    </FrameLayout>
 
     <ImageView
         android:id="@+id/iv_media_drawer"
@@ -53,7 +73,7 @@
         android:layout_width="30dp"
         android:layout_height="@dimen/height_livestream_bar"
         android:background="@drawable/left_corner"
-        app:layout_constraintBottom_toBottomOf="@+id/recyclerview_livestream"
+        app:layout_constraintBottom_toBottomOf="@+id/layout_mini_stage"
         android:src="@drawable/ic_group_add_white_36dp"/>
 
     <ImageView
@@ -62,7 +82,7 @@
         android:layout_width="30dp"
         android:layout_height="@dimen/height_livestream_bar"
         android:background="@drawable/right_corner"
-        app:layout_constraintBottom_toBottomOf="@+id/recyclerview_livestream"
+        app:layout_constraintBottom_toBottomOf="@+id/layout_mini_stage"
         app:layout_constraintRight_toRightOf="parent"
         android:src="@android:drawable/ic_lock_idle_alarm"/>
 
@@ -70,7 +90,7 @@
         android:id="@+id/frag_media_drawer"
         android:layout_width="250dp"
         android:layout_height="180dp"
-        app:layout_constraintBottom_toBottomOf="@+id/recyclerview_livestream"
+        app:layout_constraintBottom_toBottomOf="@+id/layout_mini_stage"
         android:visibility="gone"/>
 
     <RelativeLayout
