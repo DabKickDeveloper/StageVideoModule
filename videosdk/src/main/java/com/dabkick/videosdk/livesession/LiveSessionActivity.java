@@ -772,7 +772,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
     public void stopStreaming() {
         //stop sharing video & audio in room
 
-        //set booleans
+        //reset booleans
         livestreamPresenter.setVideoEnabled(false);
         va.localVideoTrack.enable(false);
 
@@ -1367,7 +1367,10 @@ public class LiveSessionActivity extends AppCompatActivity implements
     //back button enabeled and ends the sesion.
     @Override
     public void onBackPressed() {
+
         va.clear();
+//        va.setAudioFocus(false);
+
         super.onBackPressed();
     }
 

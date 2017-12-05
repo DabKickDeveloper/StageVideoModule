@@ -122,7 +122,6 @@ import java.util.concurrent.ConcurrentHashMap;
             @Override
             public void run() {
 
-
                 //if local video streaming, stop sharing
                 removeLocalVideoTrackOnPause();
 
@@ -246,6 +245,8 @@ import java.util.concurrent.ConcurrentHashMap;
                 localParticipant.removeVideoTrack(localVideoTrack);
             }
 
+            localVideoTrack.enable(false);
+
             localVideoTrack.release();
             localVideoTrack = null;
         }
@@ -259,6 +260,9 @@ import java.util.concurrent.ConcurrentHashMap;
             if (localParticipant != null) {
                 localParticipant.removeAudioTrack(localAudioTrack);
             }
+
+
+            localAudioTrack.enable(false);
 
             localAudioTrack.release();
             localAudioTrack = null;
