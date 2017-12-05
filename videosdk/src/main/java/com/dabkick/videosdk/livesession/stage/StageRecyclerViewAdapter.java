@@ -1,8 +1,6 @@
 package com.dabkick.videosdk.livesession.stage;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
@@ -11,9 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dabkick.videosdk.R;
+import com.dabkick.videosdk.livesession.LiveSessionActivity;
+import com.dabkick.videosdk.livesession.livestream.SwapStageEvent;
 import com.devbrackets.android.exomedia.core.video.scale.ScaleType;
 import com.devbrackets.android.exomedia.listener.VideoControlsButtonListener;
 import com.devbrackets.android.exomedia.ui.widget.VideoView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -26,7 +28,7 @@ import timber.log.Timber;
 public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements StageView {
 
     private List<StageModel> items;
-    private Context context;
+    private LiveSessionActivity context;
     private VideoControlListener videoControlListener;
 
     public interface VideoControlListener {
@@ -35,7 +37,7 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         void onSeekBarChanged(long currentTime);
     }
 
-    public StageRecyclerViewAdapter(Activity activity) {
+    public StageRecyclerViewAdapter(LiveSessionActivity activity) {
         this.context = activity;
     }
 
@@ -45,6 +47,7 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         return new StageViewHolder(view);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
@@ -74,6 +77,14 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             });
             new Handler().postDelayed(r, 1000);
 
+        });
+
+        vh.videoView.setOnTouchListener((v, event) -> {
+            if (!context.isVideoInMainStage()) {
+                EventBus.getDefault().post(new SwapStageEvent());
+                return true;
+            }
+            return false;
         });
 
         if (vh.videoView.getVideoControls() != null) {

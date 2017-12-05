@@ -140,6 +140,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
     ImageView downKarat;
 
     private FrameLayout mainLayout, miniLayout;
+    private boolean videoInMainStage = true;
 
 
     //audio recording feature
@@ -256,6 +257,12 @@ public class LiveSessionActivity extends AppCompatActivity implements
         miniLayout.removeViewAt(0);
         mainLayout.addView(miniChild);
         miniLayout.addView(temp);
+
+        videoInMainStage = !videoInMainStage;
+    }
+
+    public boolean isVideoInMainStage() {
+        return videoInMainStage;
     }
 
     private void setupLivestream() {
