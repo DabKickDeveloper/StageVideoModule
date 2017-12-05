@@ -24,6 +24,7 @@ import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.text.InputFilter;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -161,26 +162,38 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
         // register user with server -> register with Firebase
         if (savedInstanceState == null) {
-            SingleObserver<RegisterResponse> observer = new SingleObserver<RegisterResponse>() {
-                @Override
-                public void onSubscribe(@NonNull Disposable d) {}
 
-                @Override
-                public void onSuccess(@NonNull RegisterResponse registerResponse) {
-                    Timber.d("registered anonymous user");
-                    Util.saveUserRegistrationInfo(registerResponse);
-                    Util.registerUserWithFirebase();
-                    setupLivestream();
-                    setupEmoji();
-                }
+            // register first-time users
+            if (TextUtils.isEmpty(Prefs.getDabname())) {
+                SingleObserver<RegisterResponse> observer = new SingleObserver<RegisterResponse>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {}
 
-                @Override
-                public void onError(@NonNull Throwable e) {
-                    Timber.e("unable to register anonymous user");
-                    Timber.e(e);
-                }
-            };
-            Util.register(observer);
+                    @Override
+                    public void onSuccess(@NonNull RegisterResponse registerResponse) {
+                        Timber.d("registered anonymous user");
+                        Util.saveUserRegistrationInfo(registerResponse);
+                        Util.registerUserWithFirebase();
+                        setupLivestream();
+                        setupEmoji();
+                        initTwilio();
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Timber.e("unable to register anonymous user");
+                        Timber.e(e);
+                    }
+                };
+                Util.register(observer);
+            } else {
+                // setup for returning users
+                Timber.d("returning user - skip register");
+                setupLivestream();
+                setupEmoji();
+                initTwilio();
+            }
+
         }
 
         ((SdkApp) SdkApp.getAppContext()).getLivesessionComponent().inject(this);
@@ -192,7 +205,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
         va.mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
-        initTwilio();
 
 
         chatListView = findViewById(R.id.listview_livesession_chat);
