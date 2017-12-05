@@ -94,6 +94,7 @@ public class StageDatabase {
         String key = databaseReference.push().getKey();
         StageModel stageModel = new StageModel(url, key);
         databaseReference.child(key).setValue(stageModel);
+        overviewDatabase.setStageKey(key);
     }
 
     private ChildEventListener createChildEventListener() {

@@ -58,8 +58,7 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         vh.videoView.setReleaseOnDetachFromWindow(false);
 
         vh.videoView.setOnErrorListener(e -> {
-            Timber.e("Issue with VideoView at position %s, type %s", position, e.getClass());
-            Timber.e(e);
+            Timber.e("Failed to load index: %s, of %s, retrying...", position, stageModel.getKey());
             loadVideoWithUrl(stageModel.getUrl(), vh.videoView);
             return false;
         });
@@ -68,6 +67,7 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
 
         vh.videoView.setOnPreparedListener(() -> {
+            Timber.i("Prepared video at index: %s", position);
             vh.videoView.setOnSeekCompletionListener(null);
             vh.videoView.seekTo(stageModel.getPlayedMillis());
             if (stageModel.isPlaying()) vh.videoView.start();
