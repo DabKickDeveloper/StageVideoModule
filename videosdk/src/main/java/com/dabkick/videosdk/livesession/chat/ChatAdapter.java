@@ -4,6 +4,7 @@ package com.dabkick.videosdk.livesession.chat;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +39,8 @@ public class ChatAdapter extends ArrayAdapter<ChatModel> {
         TextView authorTv = convertView.findViewById(R.id.chat_message_author);
         TextView messageTv = convertView.findViewById(R.id.chat_message_message);
 
-        authorTv.setText(item.getSenderUserId());
+        String author = TextUtils.isEmpty(item.getDabname()) ? item.getSenderUserId() : item.getDabname();
+        authorTv.setText(author);
         messageTv.setText(item.getMessage());
 
         return convertView;

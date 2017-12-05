@@ -1,6 +1,7 @@
 package com.dabkick.videosdk.livesession.chat;
 
 
+import com.dabkick.videosdk.Prefs;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -47,8 +48,8 @@ class ChatDatabase {
         } else {
             Timber.w("User is not logged in");
         }
-
-        ChatModel chatModel = new ChatModel(message, senderUserId);
+        String dabname = Prefs.getDabname();
+        ChatModel chatModel = new ChatModel(message, senderUserId, dabname);
         databaseReference.push().setValue(chatModel);
     }
 
