@@ -384,8 +384,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public ArrayList<DabKickVideoInfo> startDabKickWithVideos() {
-                //Return the list containing all the videos
-                return videoList;
+                ArrayList<DabKickVideoInfo> smallerList = new ArrayList<>();
+                // TODO smallerList.add();
+                return smallerList;
             }
         };
 

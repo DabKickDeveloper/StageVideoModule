@@ -1,5 +1,8 @@
 package com.dabkick.videosdk.livesession.stage;
 
+import com.annimon.stream.Stream;
+import com.dabkick.videosdk.DabKickSession;
+import com.dabkick.videosdk.DabKickVideoInfo;
 import com.dabkick.videosdk.SdkApp;
 import com.dabkick.videosdk.livesession.mediadrawer.MediaItemClickEvent;
 import com.dabkick.videosdk.livesession.overviews.OverviewDatabase;
@@ -9,6 +12,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -32,6 +36,10 @@ public class StagePresenterImpl implements StagePresenter, StageDatabase.StageDa
         stageDatabase.setCallback(this);
         overviewDatabase.setListener(this);
 
+        // add any provided videos to stage
+        DabKickSession.DabKickVideoProvider provider = ((SdkApp) SdkApp.getAppContext()).getDabKickSession().getDabKickVideoProvider();
+        ArrayList<DabKickVideoInfo> videoList = provider.startDabKickWithVideos();
+        Stream.of(videoList).forEach(v -> stageDatabase.addVideo(v.getVideoUrl()));
     }
 
     @Override
