@@ -118,9 +118,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
     public void clear() {
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
 
                 //if local video streaming, stop sharing
                 removeLocalVideoTrackOnPause();
@@ -177,8 +177,8 @@ import java.util.concurrent.ConcurrentHashMap;
                 frFullScreen = false;
 
                 instance = null;
-            }
-        });
+//            }
+//        });
     }
 
 

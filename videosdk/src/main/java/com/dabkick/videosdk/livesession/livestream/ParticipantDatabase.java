@@ -85,16 +85,20 @@ public class ParticipantDatabase {
                 Participant participant = dataSnapshot.getValue(Participant.class);
                 Timber.i("onChildAdded: %s", participant.getDabname());
                 callback.onParticipantAdded(participant);
-                handleOnAudioVideoEnabled(participant);
-                handleOnAudioEnabled(participant);
+                if (participant.getIsAudioEnabled() && participant.getIsVideoEnabled())
+                    handleOnAudioVideoEnabled(participant);
+                else if (participant.getIsAudioEnabled() && !participant.getIsVideoEnabled())
+                    handleOnAudioEnabled(participant);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Participant participant = dataSnapshot.getValue(Participant.class);
                 Timber.i("onChildChanged: %s", participant.getDabname());
-                handleOnAudioVideoEnabled(participant);
-                handleOnAudioEnabled(participant);
+                if (participant.getIsAudioEnabled() && participant.getIsVideoEnabled())
+                    handleOnAudioVideoEnabled(participant);
+                else if (participant.getIsAudioEnabled() && !participant.getIsVideoEnabled())
+                    handleOnAudioEnabled(participant);
             }
 
             @Override

@@ -528,7 +528,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
         va.clear();
         if (isFinishing()) {
             if (livestreamPresenter != null) livestreamPresenter.onFinishing();
-            va.clear();
             livestreamPresenter.onDestroy();
         }
         super.onDestroy();
@@ -714,7 +713,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
                     REQUEST_MICROPHONE_CAMERA_FOR_LIVESTREAM);
         }
 
-
         if ((ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED)
                 && (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED))
         {
@@ -733,13 +731,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
             if (va.room == null || va.room.getState() == RoomState.DISCONNECTED)
 
             {
-
-                //enable audio
-                //note: if already in room, audio is not toggled!
-                livestreamPresenter.setAudioEnabled(true);
-                va.localAudioTrack.enable(true);
-                //update UI for microphone enabled
-                //todo Trevor
 
                 //enter room
                 enterRoomTwilio(); //this will also secure new token if expired
@@ -762,6 +753,13 @@ public class LiveSessionActivity extends AppCompatActivity implements
             livestreamPresenter.setVideoEnabled(true);
             va.localVideoTrack.enable(true);
 
+            //enable audio
+            //note: clicking video enables video and audio
+            livestreamPresenter.setAudioEnabled(true);
+            va.localAudioTrack.enable(true);
+            //update UI for microphone enabled
+            //todo Trevor
+
             //you are streaming!
             va.isStreaming = true;
 
@@ -778,9 +776,9 @@ public class LiveSessionActivity extends AppCompatActivity implements
         livestreamPresenter.setVideoEnabled(false);
         va.localVideoTrack.enable(false);
 
-        //if video is clicked, disable only video!
-//        va.localAudioTrack.enable(false);
-//        livestreamPresenter.setAudioEnabled(false);
+        //if video is clicked, disable audio too; audio can be separately enabled by itself
+        va.localAudioTrack.enable(false);
+        livestreamPresenter.setAudioEnabled(false);
 
 
         //as long as you are in the twi room, audiofocus is true
@@ -1367,14 +1365,14 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
 
     //back button enabeled and ends the sesion.
-    @Override
-    public void onBackPressed() {
-
-        va.clear();
-//        va.setAudioFocus(false);
-
-        super.onBackPressed();
-    }
+//    @Override
+//    public void onBackPressed() {
+//
+//        va.clear();
+////        va.setAudioFocus(false);
+//
+//        super.onBackPressed();
+//    }
 
 
 
