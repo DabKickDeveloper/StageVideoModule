@@ -11,15 +11,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:tabMode="scrollable"
-        android:background="#8B8AF0"
-        app:tabIndicatorColor="#8B8AF0"
-        app:tabIndicatorHeight="0dp"/>
+        android:background="@color/media_drawer_share_bckgrnd"
+        app:tabIndicatorColor="@color/livesession_txt_color"
+        app:tabTextColor="@color/livesession_txt_color"
+        app:tabSelectedTextColor="@color/livesession_txt_color"
+        app:tabIndicatorHeight="3dp"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="0px"
         android:layout_weight="1"
-        android:background="@android:color/white" />
+        android:background="@color/livesession_bckgrd" />
 
 </LinearLayout>

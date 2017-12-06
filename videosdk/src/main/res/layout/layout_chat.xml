@@ -9,7 +9,6 @@
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:background="#80000000"
         android:layout_width="match_parent"
         android:layout_height="40dp">
 
@@ -25,8 +24,8 @@
             android:layout_width="180dp"
             android:background="@drawable/background_enter_chat_message"
             android:hint="@string/chat_message_field_hint"
-            android:textColorHint="@android:color/darker_gray"
-            android:textColor="@android:color/darker_gray"
+            android:textColorHint="@color/livesession_txt_color"
+            android:textColor="@color/livesession_txt_color"
             android:layout_height="match_parent"
             android:layout_marginBottom="4dp"
             android:layout_marginTop="4dp"
@@ -34,7 +33,7 @@
             android:paddingRight="4dp"
             android:layout_gravity="center_vertical"
             android:inputType="textNoSuggestions"
-            android:imeOptions="actionSend"/>
+            android:imeOptions="actionSend" />
 
         <HorizontalScrollView
             android:id="@+id/layout_emoji"

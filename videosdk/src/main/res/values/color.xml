@@ -6,4 +6,7 @@
     <color name="pink">#FF4081</color>
     <color name="white">#FFFFFF</color>
     <color name="blue">#0000FE</color>
+    <color name="livesession_bckgrd">#646e97</color>
+    <color name="media_drawer_share_bckgrnd">#252965</color>
+    <color name="livesession_txt_color">#df1564</color>
 </resources>

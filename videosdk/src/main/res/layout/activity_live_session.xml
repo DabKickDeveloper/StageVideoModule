@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:keepScreenOn="true"
-    android:background="@android:color/holo_orange_light"
+    android:background="@color/livesession_bckgrd"
     android:layout_height="match_parent"
     tools:context="com.dabkick.videosdk.livesession.LiveSessionActivity"
     android:id="@+id/container">
