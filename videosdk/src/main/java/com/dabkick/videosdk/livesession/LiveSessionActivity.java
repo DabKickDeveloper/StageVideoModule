@@ -386,7 +386,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
                 param = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.MATCH_PARENT,
-                        1.3f
+                        0.5f
                 );
                 emojiLayout.setLayoutParams(param);
 
