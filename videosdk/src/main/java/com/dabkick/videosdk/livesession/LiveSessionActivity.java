@@ -139,7 +139,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
     // Overview
     @Inject OverviewDatabase overviewDatabase;
 
-    ImageView downKarat;
+    ImageView downKarat, msgKarat;
 
     private FrameLayout mainLayout, miniLayout;
     private boolean videoInMainStage = true;
@@ -215,6 +215,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
         chatListView = findViewById(R.id.listview_livesession_chat);
         downKarat = findViewById(R.id.close_chat_list);
+        msgKarat = findViewById(R.id.msg_karat);
         chatAdapter = new ChatAdapter(this, new ArrayList<>());
         chatListView.setAdapter(chatAdapter);
 
@@ -222,6 +223,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
         chatToggleButton = findViewById(R.id.chat_toggle);
         chatToggleButton.setOnClickListener(v -> toggleChatUi());
+        msgKarat.setOnClickListener(v->showDownKarat());
 
         chatEditText = findViewById(R.id.message_edit_text);
         chatEditText.setOnEditorActionListener(getChatEditorActionListener());
@@ -389,7 +391,8 @@ public class LiveSessionActivity extends AppCompatActivity implements
                         0.5f
                 );
                 emojiLayout.setLayoutParams(param);
-
+                msgKarat.setVisibility(View.VISIBLE);
+                downKarat.setVisibility(View.GONE);
 
                 chatToggleButton.setVisibility(View.GONE);
 
@@ -403,7 +406,13 @@ public class LiveSessionActivity extends AppCompatActivity implements
                         px,LinearLayout.LayoutParams.MATCH_PARENT);
                 param.setMargins(4,4,4,4);
                 chatEditText.setLayoutParams(param);
+                msgKarat.setVisibility(View.GONE);
                 emojiLayout.setVisibility(View.VISIBLE);
+
+                if(chatListView.getVisibility() == View.VISIBLE)
+                    downKarat.setVisibility(View.VISIBLE);
+
+
                 //chatToggleButton.setVisibility(View.VISIBLE);
                 //toggleChatUi();
             }
@@ -435,7 +444,12 @@ public class LiveSessionActivity extends AppCompatActivity implements
         if (visibility == View.INVISIBLE) {
 
             chatListView.setVisibility(View.VISIBLE);
-            downKarat.setVisibility(View.VISIBLE);
+
+            if(chatEditText.isFocused())
+                downKarat.setVisibility(View.GONE);
+            else
+                downKarat.setVisibility(View.VISIBLE);
+
             Drawable drawable = ContextCompat.getDrawable(
                     this, R.drawable.ic_show_chat);
             chatToggleButton.setImageDrawable(drawable);
@@ -454,6 +468,14 @@ public class LiveSessionActivity extends AppCompatActivity implements
             chatToggleButton.setImageDrawable(drawable);
             chatToggleButton.setVisibility(View.VISIBLE);
         }
+    }
+
+    void showDownKarat(){
+
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(chatEditText.getWindowToken(), 0);
+        chatEditText.clearFocus();
+        msgKarat.setVisibility(View.GONE);
     }
 
     @Override

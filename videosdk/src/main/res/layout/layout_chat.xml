@@ -19,6 +19,14 @@
             android:layout_width="50dp"
             android:layout_height="match_parent" />
 
+        <ImageView
+            android:id="@+id/msg_karat"
+            android:src="@drawable/karat"
+            android:padding="6dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:visibility="gone"/>
+
         <com.dabkick.videosdk.livesession.chat.ClearFocusBackPressedEditText
             android:id="@+id/message_edit_text"
             android:layout_width="180dp"
