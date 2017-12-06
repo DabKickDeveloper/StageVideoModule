@@ -26,6 +26,7 @@ public class LivestreamPresenterImpl implements LivestreamPresenter, Participant
 //        streamingManager = new StreamingManager(this);
         participantDatabase = new ParticipantDatabase(this);
         participantList = new ArrayList<>();
+        participantDatabase.addChildEventListener();
     }
 
     @Override
@@ -131,12 +132,13 @@ public class LivestreamPresenterImpl implements LivestreamPresenter, Participant
     }
 
     @Override
-    public void onStart() {
-        participantDatabase.addChildEventListener();
-    }
+    public void onStart() {}
 
     @Override
-    public void onStop() {
+    public void onStop() {}
+
+    @Override
+    public void onDestroy() {
         participantDatabase.removeChildEventListener();
     }
 }

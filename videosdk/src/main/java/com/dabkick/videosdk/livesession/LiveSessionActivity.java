@@ -92,6 +92,7 @@ import javax.inject.Inject;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
@@ -143,6 +144,8 @@ public class LiveSessionActivity extends AppCompatActivity implements
     private FrameLayout mainLayout, miniLayout;
     private boolean videoInMainStage = true;
 
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+
 
     //audio recording feature
     public static final int RECORD_AUDIO_PERMISSION = 1;
@@ -167,7 +170,9 @@ public class LiveSessionActivity extends AppCompatActivity implements
             if (TextUtils.isEmpty(Prefs.getDabname())) {
                 SingleObserver<RegisterResponse> observer = new SingleObserver<RegisterResponse>() {
                     @Override
-                    public void onSubscribe(@NonNull Disposable d) {}
+                    public void onSubscribe(@NonNull Disposable d) {
+                        compositeDisposable.add(d);
+                    }
 
                     @Override
                     public void onSuccess(@NonNull RegisterResponse registerResponse) {
@@ -186,6 +191,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
                     }
                 };
                 Util.register(observer);
+
             } else {
                 // setup for returning users
                 Timber.d("returning user - skip register");
@@ -523,6 +529,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
         if (isFinishing()) {
             if (livestreamPresenter != null) livestreamPresenter.onFinishing();
             va.clear();
+            livestreamPresenter.onDestroy();
         }
         super.onDestroy();
     }
@@ -569,10 +576,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
         sessionParticipantsAdapter.notifyDataSetChanged();
     }
 
-    //    void onEnterTwilio();
-//    void onStartStreaming(VideoView videoView);
-//    void onStopStreaming();
-
     @Override
     public void onEnterTwilio() {
         enterRoomTwilio();
@@ -592,7 +595,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        if (livestreamPresenter != null) livestreamPresenter.onStart();
         stagePresenter.onStart();
     }
 
@@ -600,8 +602,8 @@ public class LiveSessionActivity extends AppCompatActivity implements
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
-        if (livestreamPresenter != null) livestreamPresenter.onStop();
         stagePresenter.onStop();
+        compositeDisposable.clear();
     }
 
     @Override
@@ -1373,6 +1375,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
         super.onBackPressed();
     }
+
 
 
 

@@ -62,14 +62,20 @@ public class ParticipantDatabase {
 
     void addChildEventListener() {
         Timber.d("addChildEventListener");
+        if (childEventListener != null) {
+            Timber.d("ignore participant child listener already created");
+            return;
+        }
         childEventListener = createChildEventListener();
         databaseReference.addChildEventListener(childEventListener);
     }
 
     void removeChildEventListener() {
         Timber.d("removeChildEventListener");
-        databaseReference.removeEventListener(childEventListener);
-        childEventListener = null;
+        if (childEventListener != null) {
+            databaseReference.removeEventListener(childEventListener);
+            childEventListener = null;
+        }
     }
 
     private ChildEventListener createChildEventListener() {

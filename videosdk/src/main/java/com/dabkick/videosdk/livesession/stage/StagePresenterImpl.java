@@ -121,4 +121,7 @@ public class StagePresenterImpl implements StagePresenter, StageDatabase.StageDa
         EventBus.getDefault().unregister(this);
     }
 
+    @Override
+    public void onDestroy() {}
+
 }

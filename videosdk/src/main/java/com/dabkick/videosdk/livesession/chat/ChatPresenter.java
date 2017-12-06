@@ -33,4 +33,9 @@ public class ChatPresenter implements Presenter {
     public void onStop() {
 
     }
+
+    @Override
+    public void onDestroy() {
+
+    }
 }
