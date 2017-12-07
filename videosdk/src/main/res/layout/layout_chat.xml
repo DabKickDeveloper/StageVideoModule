@@ -14,7 +14,7 @@
 
         <ImageView
             android:id="@+id/chat_toggle"
-            android:src="@drawable/ic_show_chat"
+            android:src="@drawable/showchat"
             android:padding="6dp"
             android:layout_width="50dp"
             android:layout_height="match_parent" />
