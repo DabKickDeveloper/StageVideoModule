@@ -89,6 +89,12 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     @Override
+    public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        videoManager.onAdapterDetached();
+    }
+
+    @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List<Object> payloads) {
         /* if (!payloads.isEmpty()) {
 

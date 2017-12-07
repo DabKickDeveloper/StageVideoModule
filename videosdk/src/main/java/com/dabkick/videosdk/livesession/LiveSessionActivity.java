@@ -548,6 +548,9 @@ public class LiveSessionActivity extends AppCompatActivity implements
             if (livestreamPresenter != null) livestreamPresenter.onFinishing();
             livestreamPresenter.onDestroy();
         }
+
+        stageRecyclerView.setAdapter(null);
+
         super.onDestroy();
     }
 
