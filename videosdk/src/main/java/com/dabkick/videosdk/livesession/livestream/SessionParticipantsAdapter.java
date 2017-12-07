@@ -14,6 +14,7 @@ import com.twilio.video.VideoView;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,8 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
     Map<String, VideoTrack> videoTrackList = VideoActivity.getInstance().videoTrackList;
     private LivestreamView livestreamView;
     private List<Participant> participantList;
+
+    private final Map<ParticipantViewHolder, VideoTrack> viewHolderMap = new HashMap<>();
 
     public SessionParticipantsAdapter(Context context, LivestreamView livestreamView, List<Participant> participantList) {
         this.context = context;
@@ -81,9 +84,12 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
                 if ((videoTrackList != null) && !videoTrackList.isEmpty() && videoTrackList.containsKey(userId))
                 {
                     participantViewHolder.videoView.setMirror(true);
-
-//                    videoTrackList.get(userId).removeRenderer(participantViewHolder.videoView);
+                    // Remove renderer from previous video track
+                    if (viewHolderMap.containsKey(holder)) {
+                        viewHolderMap.get(participantViewHolder).removeRenderer(participantViewHolder.videoView);
+                    }
                     videoTrackList.get(userId).addRenderer(participantViewHolder.videoView);
+                    viewHolderMap.put(participantViewHolder, videoTrackList.get(userId));
                     participantViewHolder.videoView.setVisibility(View.VISIBLE);
                 }
                 holder.itemView.setOnClickListener(v -> livestreamView.otherUserStreamClicked(position - 1));
