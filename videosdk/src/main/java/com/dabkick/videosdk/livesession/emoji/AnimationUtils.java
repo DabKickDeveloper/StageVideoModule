@@ -13,6 +13,7 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
@@ -105,13 +106,13 @@ public class AnimationUtils {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                performCustomAnimation(bounceimage, dotsView, circleView, friendImageIcon, container, mActivity);
+                performCustomAnimation(frameLayout,bounceimage, dotsView, circleView, friendImageIcon, container, mActivity);
             }
         }, 500);
 
     }
 
-    private static void performCustomAnimation(ImageView icon, DotsView dotsView, CircleView circleView, CircularImageView friendImage, ConstraintLayout container, Context mActivity) {
+    private static void performCustomAnimation(FrameLayout frameLayout,ImageView icon, DotsView dotsView, CircleView circleView, CircularImageView friendImage, ConstraintLayout container, Context mActivity) {
         int indexForDots = container.indexOfChild(icon);
         for (int i = 0; i < indexForDots; i++) {
             container.bringChildToFront(container.getChildAt(i));
@@ -221,7 +222,7 @@ public class AnimationUtils {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                fadeOut(friendImage);
+                fadeOut(frameLayout, friendImage);
             }
         }, 1000);
 
@@ -235,7 +236,7 @@ public class AnimationUtils {
         return pixel;
     }
 
-    private static void fadeOut(CircularImageView friendImage){
+    private static void fadeOut(FrameLayout frameLayout,CircularImageView friendImage){
 
         ObjectAnimator fadeOut = ObjectAnimator.ofFloat(friendImage, "alpha",  1f, 0f);
         fadeOut.setDuration(2000);
@@ -249,6 +250,8 @@ public class AnimationUtils {
             public void onAnimationEnd(Animator animation) {
 
                 friendImage.setAlpha(0.0f);
+                frameLayout.removeAllViewsInLayout();
+                ((ViewManager)frameLayout.getParent()).removeView(frameLayout);
             }
         });
         mAnimationSet.start();
