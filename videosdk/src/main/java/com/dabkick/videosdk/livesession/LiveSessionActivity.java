@@ -776,10 +776,13 @@ public class LiveSessionActivity extends AppCompatActivity implements
             //make visible
             videoView.setVisibility(View.VISIBLE);
 
+
             //add renderer
             va.localVideoTrack.addRenderer(videoView);
 
             va.localVideoView = videoView;
+
+
 
             //enable video track - now listners in other connected devices will do the right thing
             livestreamPresenter.setVideoEnabled(true);
@@ -1027,12 +1030,12 @@ public class LiveSessionActivity extends AppCompatActivity implements
     {
         String et = JwtUtils.getExpireTime(tat);
         Log.d("gopal", "Expire time = " + et);
-        long ctime = Long.parseLong(et);
+        long etime = Long.parseLong(et);
 
         long ct = System.currentTimeMillis() / 1000; //current time in seconds
 
         Log.d("gopal", "Current time = " + ct);
-        return (ctime >= ct);
+        return (ct >= etime);
 
     }
 
@@ -1052,6 +1055,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
         {
 //        if (!va.isTokenExpired) {
 ////            callback.callback(LiveSessionInfoHandler.LoadProgress.TOKEN_ACQUIRED);
+            va.VIDEO_CLIENT_ID = twilioAccessToken;
             return;
         }
 
@@ -1093,8 +1097,8 @@ public class LiveSessionActivity extends AppCompatActivity implements
                     @Override
                     public void onSuccess(TwilioAccessToken twilioAccessToken) {
                         Timber.i("retrieved Twilio access token");
+
 //                        va.accessToken = twilioAccessToken.getAccessToken();
-//                        Prefs.setTwilioAccessToken(newAccessToken.getAccessToken());
 
                         Prefs.setTwilioAccessToken(twilioAccessToken.getAccessToken());
 

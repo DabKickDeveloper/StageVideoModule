@@ -80,7 +80,9 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
                 String userId = participantList.get(position-1).getUserId();
                 if ((videoTrackList != null) && !videoTrackList.isEmpty() && videoTrackList.containsKey(userId))
                 {
-                    participantViewHolder.videoView.setMirror(false);
+                    participantViewHolder.videoView.setMirror(true);
+
+//                    videoTrackList.get(userId).removeRenderer(participantViewHolder.videoView);
                     videoTrackList.get(userId).addRenderer(participantViewHolder.videoView);
                     participantViewHolder.videoView.setVisibility(View.VISIBLE);
                 }
