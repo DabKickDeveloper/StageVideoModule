@@ -72,7 +72,7 @@ public class LivestreamPresenterImpl implements LivestreamPresenter, Participant
 
     @Override
     public void onParticipantAdded(Participant participant) {
-        if (participant.getDabname().equals(Prefs.getDabname())) {
+        if ((participant.getDabname() != null)  &&  (participant.getDabname().equals(Prefs.getDabname()))) {
             // do not add participant with same dabname
             return;
         }
@@ -95,31 +95,51 @@ public class LivestreamPresenterImpl implements LivestreamPresenter, Participant
     }
 
     @Override
-    public void onParticipantAudioVideoEnabled() {
+    public void onParticipantAudioVideoEnabled(Participant participant) {
         Timber.i("onParticipantAudioVideoEnabled");
-        // TODO
-        // streamingManager.joinRoom()
         //enter room and the rest happens via listner
 
-        if (va.room == null || va.room.getState() == RoomState.DISCONNECTED)
+        //check who triggered it?
+        //it is me: then -
+        //if already in room: I must have toggled the camera icon - already handled via startstreaming
+        //if not already in the room: it's me and so I must have clicked on camera for first time, so ignore it as it is already handled
 
-        {
-            view.enterRoomTwilio(); //this will also secure new token if expired
+
+        //not me: then -
+        //if already in the room: do nothing, as the TW listners will do everything
+        //if not already in the room: enter the room - that's it.
+
+        if ((participant.getDabname() != null)  &&  (!participant.getDabname().equalsIgnoreCase(Prefs.getDabname()))) {
+            if (va.room == null || va.room.getState() == RoomState.DISCONNECTED)
+
+            {
+                view.enterRoomTwilio(); //this will also secure new token if expired
+            }
+
         }
 
     }
 
     @Override
-    public void onParticipantAudioEnabled() {
+    public void onParticipantAudioEnabled(Participant participant) {
         Timber.i("onParticipantAudioEnabled");
-        // TODO
-        // streamingManager.joinRoom()
-        //enter room and the rest happens via listner
 
-        if (va.room == null || va.room.getState() == RoomState.DISCONNECTED)
 
+        //its me:
+        // not in room: Must have clicked on microphone; handled in clickvoice(). Ignore
+        //in room: also handled via clickvoice()
+
+        //not me:
+        //not in room: enter room, since some one wants a phone call
+        //in room: twilio handles it, so ignore it here.
+
+        if ((participant.getDabname() != null)  &&  (!participant.getDabname().equalsIgnoreCase(Prefs.getDabname())))
         {
-            view.enterRoomTwilio(); //this will also secure new token if expired
+            if (va.room == null || va.room.getState() == RoomState.DISCONNECTED)
+
+            {
+                view.enterRoomTwilio(); //this will also secure new token if expired
+            }
         }
 
     }

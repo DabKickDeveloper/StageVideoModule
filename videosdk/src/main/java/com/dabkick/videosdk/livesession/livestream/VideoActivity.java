@@ -53,8 +53,7 @@ import java.util.concurrent.ConcurrentHashMap;
      * A Room represents communication between the client and one or more participants.
      */
     public Room room;
-
-    public String accessToken = null;
+//    public String accessToken = null;
 //    public String CURRENT_TOKEN = null;
     public String VIDEO_CLIENT_ID = null;
 
@@ -102,6 +101,7 @@ import java.util.concurrent.ConcurrentHashMap;
     public Map<String, VideoTrack> videoTrackList = new LinkedHashMap<String, VideoTrack>();
     public Map<String, AudioTrack> audioTrackList = new LinkedHashMap<>();
     public VideoRenderer localVideoView;
+    public VideoView tempVideoView;
     public boolean isFullScreen = false;
     public boolean streamMuted = false;
     public boolean isStreaming = false;
@@ -127,7 +127,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
                 //stop local video, audio
                 if (cameraCapturer != null) {
-                    cameraCapturer.stopCapture();
+//                    cameraCapturer.stopCapture();
                     cameraCapturer = null;
                 }
 
@@ -166,7 +166,15 @@ import java.util.concurrent.ConcurrentHashMap;
                 }
 
                 //disconnect room
-                disconnectRoomonDestroy();
+//                disconnectRoomonDestroy();
+        /*
+         * Always disconnect from the room before leaving the Activity to
+         * ensure any memory allocated to the Room resource is freed.
+         */
+        if (room != null && room.getState() != RoomState.DISCONNECTED) {
+            room.disconnect();
+//            disconnectedFromOnDestroy = true;
+        }
 
 
                 isFullScreen = false;
@@ -175,6 +183,7 @@ import java.util.concurrent.ConcurrentHashMap;
                 meStreaming = false;
                 meFullScreen = false;
                 frFullScreen = false;
+
 
                 instance = null;
 //            }
@@ -794,7 +803,7 @@ import java.util.concurrent.ConcurrentHashMap;
     private static int secondsToGo = 0;
     private static int millisToGo = secondsToGo*1000+minutesToGo*1000*60+hoursToGo*1000*60*60;
 
-    public static void twilioAccessTokenCheckTimer(){
+    public void twilioAccessTokenCheckTimer(){
 
         runOnUIThread(new Runnable() {
             @Override

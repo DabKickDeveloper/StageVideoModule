@@ -66,6 +66,7 @@ import com.dabkick.videosdk.livesession.overviews.OverviewView;
 import com.dabkick.videosdk.livesession.stage.StagePresenter;
 import com.dabkick.videosdk.livesession.stage.StagePresenterImpl;
 import com.dabkick.videosdk.livesession.stage.StageRecyclerViewAdapter;
+import com.dabkick.videosdk.retrofit.JwtUtils;
 import com.dabkick.videosdk.retrofit.RegisterResponse;
 import com.dabkick.videosdk.retrofit.RetrofitCreator;
 import com.dabkick.videosdk.retrofit.TwilioAccessToken;
@@ -96,6 +97,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
+
 
 public class LiveSessionActivity extends AppCompatActivity implements
         ChatView, LivestreamView, OverviewView {
@@ -727,9 +729,9 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
         //if not in room: enable audio, video booleans in firebase and in local tracks, update UI and enter room
 
-        va.localVideoView = videoView;
-
         //check that permissions are in order!
+
+        va.tempVideoView = videoView;
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -769,12 +771,15 @@ public class LiveSessionActivity extends AppCompatActivity implements
                 va.localParticipant.addVideoTrack(va.localVideoTrack);
             }
 
-            //set up view
+//set up view
             videoView.setMirror(true);
-            //add renderer
-            va.localVideoTrack.addRenderer(videoView);
             //make visible
             videoView.setVisibility(View.VISIBLE);
+
+            //add renderer
+            va.localVideoTrack.addRenderer(videoView);
+
+            va.localVideoView = videoView;
 
             //enable video track - now listners in other connected devices will do the right thing
             livestreamPresenter.setVideoEnabled(true);
@@ -794,6 +799,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
         }
 
     }
+
 
 
     public void stopStreaming() {
@@ -826,6 +832,34 @@ public class LiveSessionActivity extends AppCompatActivity implements
 //        localVideoTrack.release();
 //        localVideoTrack = null;
     }
+
+
+//    public void restartStreaming() {
+//        //start sharing video & audio in room
+//
+//        //reset booleans
+//        livestreamPresenter.setVideoEnabled(true);
+//        va.localVideoTrack.enable(true);
+//
+//        //if video is clicked, disable audio too; audio can be separately enabled by itself
+//        va.localAudioTrack.enable(true);
+//        livestreamPresenter.setAudioEnabled(true);
+//
+//
+//        //as long as you are in the twi room, audiofocus is true
+////        va.setAudioFocus(false);
+//
+//        //set up local video view here
+//
+//
+//        //replace UI
+//        //todo Trevor
+//
+//        //update UI
+//        EventBus.getDefault().post(new NotifyLivestreamAdapterEvent());
+//
+//    }
+
 
 
     @Override
@@ -890,6 +924,8 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
     {
         String roomName = com.dabkick.videosdk.livesession.AbstractDatabaseReferences.getSessionId();
+        Log.d("gopal", "Entering room name = " + roomName);
+
 
         if (roomName != null)
 
@@ -915,7 +951,8 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
         va.setAudioFocus(true);
 
-        if ((va != null) && ((va.getInstance().VIDEO_CLIENT_ID == null) || (va.isTokenExpired)))
+//        String twilioAccessToken = Prefs.getTwilioAccessToken();
+
             initTwilio();
 
         final List<LocalAudioTrack> audioTracks = Arrays.asList(va.localAudioTrack);
@@ -949,11 +986,11 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
     public void initTwilio() {
 
-        if (((va != null) && (va.isTokenExpired)) || (va == null))
+//        if (((va != null) && (va.isTokenExpired)) || (va == null))
 
-            createVideoClient();
+            createVideoClient(); //checks if token has expired
 
-        if (((va != null) && (va.localVideoTrack == null)) || (va == null))
+        if ((va != null) && (va.localVideoTrack == null))
 
             createLocalMedia();
     }
@@ -986,6 +1023,19 @@ public class LiveSessionActivity extends AppCompatActivity implements
 //        });
     }
 
+    private boolean isExpired(String tat)
+    {
+        String et = JwtUtils.getExpireTime(tat);
+        Log.d("gopal", "Expire time = " + et);
+        long ctime = Long.parseLong(et);
+
+        long ct = System.currentTimeMillis() / 1000; //current time in seconds
+
+        Log.d("gopal", "Current time = " + ct);
+        return (ctime >= ct);
+
+    }
+
 //    public void retrieveAccessToken(String jid, Live?SessionInfoHandler.InfoCallback callback) {
     public void retrieveAccessToken() {
 
@@ -993,8 +1043,15 @@ public class LiveSessionActivity extends AppCompatActivity implements
         //check if current token is valid
 
         //if valid, return
-        if (!va.isTokenExpired) {
-//            callback.callback(LiveSessionInfoHandler.LoadProgress.TOKEN_ACQUIRED);
+
+        //is token real and has it expired?
+
+        String twilioAccessToken = Prefs.getTwilioAccessToken();
+
+        if ((twilioAccessToken != "") && !isExpired(twilioAccessToken))
+        {
+//        if (!va.isTokenExpired) {
+////            callback.callback(LiveSessionInfoHandler.LoadProgress.TOKEN_ACQUIRED);
             return;
         }
 
@@ -1036,9 +1093,13 @@ public class LiveSessionActivity extends AppCompatActivity implements
                     @Override
                     public void onSuccess(TwilioAccessToken twilioAccessToken) {
                         Timber.i("retrieved Twilio access token");
-                        va.accessToken = twilioAccessToken.getAccessToken();
+//                        va.accessToken = twilioAccessToken.getAccessToken();
+//                        Prefs.setTwilioAccessToken(newAccessToken.getAccessToken());
+
+                        Prefs.setTwilioAccessToken(twilioAccessToken.getAccessToken());
+
                         va.VIDEO_CLIENT_ID = twilioAccessToken.getAccessToken();
-                        va.twilioAccessTokenCheckTimer();
+//                        va.twilioAccessTokenCheckTimer();
 
 //                        connectToRoom(ROOM_NAME_TODO_DYNAMICALLY_OBTAIN);
                     }
@@ -1180,7 +1241,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
                     //gopal
                     createLocalVideoTrack(true);
-                    startStreaming((VideoView) va.localVideoView);
+                    startStreaming(va.tempVideoView);
 
 //                    if (va.localAudioTrack == null)
 //                        // Share your microphone
@@ -1221,7 +1282,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
     public void createLocalMedia() {
 
         if (va.cameraCapturer != null) {
-            va.cameraCapturer.stopCapture();
+//            va.cameraCapturer.stopCapture();
             va.cameraCapturer = null;
         }
 
@@ -1260,9 +1321,16 @@ public class LiveSessionActivity extends AppCompatActivity implements
         // Share your camera
         if (va.localVideoTrack == null && checkPermissionForCameraAndMicrophone()) {
             if (isFrontCameraPresent(this))
+            {
                 va.cameraCapturer = new CameraCapturer(this, CameraCapturer.CameraSource.FRONT_CAMERA);
+                //set mirror to true here
+            }
             else
+            {
                 va.cameraCapturer = new CameraCapturer(this, CameraCapturer.CameraSource.BACK_CAMERA);
+                //set mirror to false here
+
+            }
 
             // Setup video constraints
             VideoConstraints videoConstraints = new VideoConstraints.Builder()
