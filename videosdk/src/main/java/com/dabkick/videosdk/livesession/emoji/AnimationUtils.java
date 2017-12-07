@@ -66,16 +66,16 @@ public class AnimationUtils {
 
         FrameLayout.LayoutParams dotsParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dotsParams.gravity = Gravity.CENTER;
-        dotsParams.bottomMargin = -30;
+        dotsParams.bottomMargin = -50;
         FrameLayout.LayoutParams circleParams = new FrameLayout.LayoutParams(90, 90);
         circleParams.gravity = Gravity.CENTER;
-        circleParams.bottomMargin = -30;
+        circleParams.bottomMargin = -50;
         FrameLayout.LayoutParams iconParams = new FrameLayout.LayoutParams(90, 90);
         iconParams.gravity = Gravity.CENTER;
-        iconParams.bottomMargin = -30;
+        iconParams.bottomMargin = -50;
         FrameLayout.LayoutParams bounceEmojiParams = new FrameLayout.LayoutParams(90, 2500);
         bounceEmojiParams.gravity = Gravity.CENTER;
-        bounceEmojiParams.bottomMargin = -30;
+        bounceEmojiParams.bottomMargin = -50;
 
         dotsView.requestLayout();
         dotsView.setLayoutParams(dotsParams);
@@ -108,31 +108,6 @@ public class AnimationUtils {
                 performCustomAnimation(bounceimage, dotsView, circleView, friendImageIcon, container, mActivity);
             }
         }, 500);
-
-        /*ObjectAnimator objectanimator = ObjectAnimator.ofFloat(friendImageIcon, "translationY", -420);
-        objectanimator.setDuration(1500);
-        objectanimator.start();
-        objectanimator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                friendImageIcon.bringToFront();
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                performCustomAnimation(bounceimage, dotsView, circleView, friendImageIcon, container, mActivity);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });*/
 
     }
 
