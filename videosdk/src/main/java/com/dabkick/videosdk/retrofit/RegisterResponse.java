@@ -29,6 +29,9 @@ public class RegisterResponse {
     @SerializedName("firebase_token")
     @Expose
     private String firebaseToken;
+    @SerializedName("twilio_access_token")
+    @Expose
+    private String twilioaccessToken;
 
     /**
      * No args constructor for use in serialization
@@ -45,8 +48,9 @@ public class RegisterResponse {
      * @param expiresIn
      * @param refreshToken
      * @param userDetails
+     * @param twilioaccessToken
      */
-    public RegisterResponse(String accessToken, int expiresIn, String tokenType, Object scope, String refreshToken, UserDetails userDetails, String firebaseToken) {
+    public RegisterResponse(String accessToken, int expiresIn, String tokenType, Object scope, String refreshToken, UserDetails userDetails, String firebaseToken, String twilioaccessToken) {
         super();
         this.accessToken = accessToken;
         this.expiresIn = expiresIn;
@@ -55,6 +59,7 @@ public class RegisterResponse {
         this.refreshToken = refreshToken;
         this.userDetails = userDetails;
         this.firebaseToken = firebaseToken;
+        this.twilioaccessToken = twilioaccessToken;
     }
 
     public String getAccessToken() {
@@ -108,6 +113,11 @@ public class RegisterResponse {
     public String getFirebaseToken() {
         return firebaseToken;
     }
+
+    public String getTwilioaccessToken() {
+        return twilioaccessToken;
+    }
+
 
     @Override
     public String toString() {

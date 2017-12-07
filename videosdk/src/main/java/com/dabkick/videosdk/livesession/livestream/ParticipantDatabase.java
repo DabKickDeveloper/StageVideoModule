@@ -19,8 +19,8 @@ public class ParticipantDatabase {
     interface ParticipantModelCallback {
         void onParticipantAdded(Participant participant);
         void onParticipantRemoved(Participant participant);
-        void onParticipantAudioVideoEnabled();
-        void onParticipantAudioEnabled();
+        void onParticipantAudioVideoEnabled(Participant participant);
+        void onParticipantAudioEnabled(Participant participant);
     }
 
     private DatabaseReference databaseReference;
@@ -89,6 +89,8 @@ public class ParticipantDatabase {
                     handleOnAudioVideoEnabled(participant);
                 else if (participant.getIsAudioEnabled() && !participant.getIsVideoEnabled())
                     handleOnAudioEnabled(participant);
+                else if (participant.getIsVideoEnabled() && !participant.getIsAudioEnabled())
+                    Timber.i("Error- onChildAdded - only video enabled!: %s", participant.getDabname()); //error!
             }
 
             @Override
@@ -99,6 +101,8 @@ public class ParticipantDatabase {
                     handleOnAudioVideoEnabled(participant);
                 else if (participant.getIsAudioEnabled() && !participant.getIsVideoEnabled())
                     handleOnAudioEnabled(participant);
+                else if (participant.getIsVideoEnabled() && !participant.getIsAudioEnabled())
+                    Timber.i("Error - onChildChanged - only video enabled!: %s", participant.getDabname()); //error!
             }
 
             @Override
@@ -113,15 +117,15 @@ public class ParticipantDatabase {
     }
 
     private void handleOnAudioVideoEnabled(Participant participant) {
-        if (participant.getIsVideoEnabled() || participant.getIsAudioEnabled()) {
-            callback.onParticipantAudioVideoEnabled();
-        }
+//        if (participant.getIsVideoEnabled() && participant.getIsAudioEnabled()) {
+            callback.onParticipantAudioVideoEnabled(participant);
+//        }
     }
 
     private void handleOnAudioEnabled(Participant participant) {
-        if (participant.getIsAudioEnabled()) {
-            callback.onParticipantAudioEnabled();
-        }
+//        if (participant.getIsAudioEnabled()) {
+            callback.onParticipantAudioEnabled(participant);
+//        }
     }
 
     void removeSelfFromDatabase() {

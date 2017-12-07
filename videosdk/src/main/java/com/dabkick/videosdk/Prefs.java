@@ -18,6 +18,7 @@ public class Prefs {
     private static final String PROFILE_PIC_URL = "profile_pic_url";
     private static final String VIDEO_ENABLED = "video_enabled";
     private static final String AUDIO_ENABLED = "audio_enabled";
+    private static final String TWILIO_ACCESS_TOKEN = "twilio_access_token";
 
 
     private final static String filename = "prefs";
@@ -45,6 +46,15 @@ public class Prefs {
     public static void setRefreshToken(String refreshToken) {
         getEditor().putString(REFRESH_TOKEN, refreshToken).apply();
     }
+
+    public static String getTwilioAccessToken() {
+        return getPrefs().getString(TWILIO_ACCESS_TOKEN, "");
+    }
+
+    public static void setTwilioAccessToken(String twilioAccessToken) {
+        getEditor().putString(TWILIO_ACCESS_TOKEN, twilioAccessToken).apply();
+    }
+
 
     public static String getFirebaseToken() {
         return getPrefs().getString(FIREBASE_TOKEN, "");

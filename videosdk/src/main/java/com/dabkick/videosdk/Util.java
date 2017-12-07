@@ -46,6 +46,7 @@ public class Util {
         Prefs.setAccessToken(resp.getAccessToken());
         Prefs.setRefreshToken(resp.getRefreshToken());
         Prefs.setFirebaseToken(resp.getFirebaseToken());
+        Prefs.setTwilioAccessToken(resp.getTwilioaccessToken());
         Prefs.setUserId(Integer.toString(resp.getUserDetails().getUserid()));
         Prefs.setDabname(resp.getUserDetails().getUserDabName());
         Prefs.setProfilePicUrl(resp.getUserDetails().getUserphoto());
