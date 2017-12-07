@@ -220,7 +220,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
         chatToggleButton = findViewById(R.id.chat_toggle);
         chatToggleButton.setOnClickListener(v -> toggleChatUi());
-        msgKarat.setOnClickListener(v->showDownKarat());
+        msgKarat.setOnClickListener(v-> actionOnDownKaratClick());
 
         chatEditText = findViewById(R.id.message_edit_text);
         chatEditText.setOnEditorActionListener(getChatEditorActionListener());
@@ -359,6 +359,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
                 handled = true;
                 clickSendButton(chatEditText.getText().toString());
                 chatEditText.setText("");
+                actionOnDownKaratClick();
             }
 
             return handled;
@@ -466,7 +467,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
         }
     }
 
-    void showDownKarat(){
+    void actionOnDownKaratClick(){
 
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(chatEditText.getWindowToken(), 0);
