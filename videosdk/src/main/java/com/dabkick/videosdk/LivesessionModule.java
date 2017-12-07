@@ -5,6 +5,7 @@ import com.dabkick.videosdk.livesession.emoji.EmojiDatabase;
 import com.dabkick.videosdk.livesession.mediadrawer.MediaDatabase;
 import com.dabkick.videosdk.livesession.overviews.OverviewDatabase;
 import com.dabkick.videosdk.livesession.stage.StageDatabase;
+import com.dabkick.videosdk.livesession.stage.VideoManager;
 
 import javax.inject.Singleton;
 
@@ -17,6 +18,10 @@ public class LivesessionModule {
     public LivesessionModule() {
 
     }
+
+    @Provides
+    @Singleton
+    VideoManager providesVideoManager() { return new VideoManager(); }
 
     @Provides
     @Singleton

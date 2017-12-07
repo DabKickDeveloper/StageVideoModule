@@ -202,9 +202,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
         }
 
-        ((SdkApp) SdkApp.getAppContext()).getLivesessionComponent().inject(this);
-
-
         //init twilio
         //get set w client ID and permissions etc
         //when user clicks on icon, enter room and livestream immediately
@@ -248,7 +245,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
         stageRecyclerViewAdapter = new StageRecyclerViewAdapter(this);
         stagePresenter = new StagePresenterImpl(stageRecyclerViewAdapter, this);
         stageRecyclerViewAdapter.setVideoControlListener(stagePresenter.getVideoControlsListener());
-        stageRecyclerViewAdapter.setItems(stagePresenter.getStageItems());
 
         stageRecyclerView.setAdapter(stageRecyclerViewAdapter);
 

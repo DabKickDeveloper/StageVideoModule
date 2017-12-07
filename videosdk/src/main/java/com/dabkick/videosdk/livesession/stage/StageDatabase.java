@@ -32,6 +32,7 @@ public class StageDatabase {
     private List<StageModel> stageModelList;
 
     @Inject OverviewDatabase overviewDatabase;
+    @Inject VideoManager videoManager;
 
     public StageDatabase() {
 
@@ -105,6 +106,7 @@ public class StageDatabase {
                 sv.setKey(dataSnapshot.getKey());
                 Timber.d("onChildAdded: %s", dataSnapshot.getKey());
                 stageModelList.add(sv);
+                videoManager.addVideo(sv);
                 if (callback != null) callback.onStageVideoAdded();
             }
 

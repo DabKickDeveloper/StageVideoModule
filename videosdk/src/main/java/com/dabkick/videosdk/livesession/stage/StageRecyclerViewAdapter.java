@@ -1,17 +1,15 @@
 package com.dabkick.videosdk.livesession.stage;
 
 import android.annotation.SuppressLint;
-import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.dabkick.videosdk.R;
+import com.dabkick.videosdk.SdkApp;
 import com.dabkick.videosdk.livesession.LiveSessionActivity;
 import com.dabkick.videosdk.livesession.livestream.SwapStageEvent;
-import com.devbrackets.android.exomedia.core.video.scale.ScaleType;
 import com.devbrackets.android.exomedia.listener.VideoControlsButtonListener;
 import com.devbrackets.android.exomedia.ui.widget.VideoView;
 
@@ -19,17 +17,15 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
-import at.huber.youtubeExtractor.VideoMeta;
-import at.huber.youtubeExtractor.YouTubeExtractor;
-import at.huber.youtubeExtractor.YtFile;
-import timber.log.Timber;
+import javax.inject.Inject;
 
 
 public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements StageView {
 
-    private List<StageModel> items;
     private LiveSessionActivity context;
     private VideoControlListener videoControlListener;
+
+    @Inject VideoManager videoManager;
 
     public interface VideoControlListener {
         void onPause(long milliseconds);
@@ -38,6 +34,7 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     public StageRecyclerViewAdapter(LiveSessionActivity activity) {
+        ((SdkApp) SdkApp.getAppContext()).getLivesessionComponent().inject(this);
         this.context = activity;
     }
 
@@ -51,33 +48,9 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        StageModel stageModel = items.get(position);
-
         StageViewHolder vh = (StageViewHolder) holder;
-        vh.videoView.setScaleType(ScaleType.CENTER_CROP);
-        vh.videoView.setReleaseOnDetachFromWindow(false);
 
-        vh.videoView.setOnErrorListener(e -> {
-            Timber.e("Failed to load index: %s, of %s, retrying...", position, stageModel.getKey());
-            loadVideoWithUrl(stageModel.getUrl(), vh.videoView);
-            return false;
-        });
-
-        loadVideoWithUrl(stageModel.getUrl(), vh.videoView);
-
-
-        vh.videoView.setOnPreparedListener(() -> {
-            Timber.i("Prepared video at index: %s", position);
-            vh.videoView.setOnSeekCompletionListener(null);
-            vh.videoView.seekTo(stageModel.getPlayedMillis());
-            if (stageModel.isPlaying()) vh.videoView.start();
-
-            Runnable r = () -> vh.videoView.setOnSeekCompletionListener(() -> {
-                videoControlListener.onSeekBarChanged(vh.videoView.getCurrentPosition());
-            });
-            new Handler().postDelayed(r, 1000);
-
-        });
+        vh.videoView = videoManager.getVideoViewAtIndex(position);
 
         vh.videoView.setOnTouchListener((v, event) -> {
             if (!context.isVideoInMainStage()) {
@@ -112,35 +85,6 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
                 }
             });
         }
-
-        /* vh.videoView.setOnCompletionListener(() -> {
-            vh.videoView.restart();
-            vh.videoView.seekTo(stageModel.getPlayedMillis());
-            Runnable r = () ->  {
-                if (vh.videoView.isPlaying()) vh.videoView.pause();
-            };
-            new Handler().postDelayed(r, 1000);
-        }); */
-
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private void loadVideoWithUrl(String url, VideoView videoView) {
-        new YouTubeExtractor(context) {
-            @Override
-            public void onExtractionComplete(SparseArray<YtFile> ytFiles, VideoMeta vMeta) {
-                if (ytFiles != null) {
-                    for (int i = 0; i < ytFiles.size(); i++) {
-                        if (ytFiles.valueAt(i) != null) {
-                            String downloadUrl = ytFiles.valueAt(i).getUrl();
-                            videoView.setVideoPath(downloadUrl);
-                            break;
-                        }
-                    }
-
-                }
-            }
-        }.extract(url, true, true);
 
     }
 
@@ -186,7 +130,7 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     public int getItemCount() {
 //        test only - to stop spinning forever if video loading is slow return zero
 //        return 0;
-        return items.size();
+        return videoManager.getSize();
     }
 
     @Override
@@ -204,15 +148,9 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         notifyItemChanged(position, shouldPause);
     }
 
-    public void setItems(List<StageModel> items) {
-        this.items = items;
-        notifyDataSetChanged();
-    }
-
     public void setVideoControlListener(VideoControlListener videoControlListener) {
         this.videoControlListener = videoControlListener;
     }
-
 
     private class StageViewHolder extends RecyclerView.ViewHolder {
 
