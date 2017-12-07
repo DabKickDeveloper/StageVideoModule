@@ -69,15 +69,14 @@ public class VideoManager {
 
             videoView.setOnErrorListener(e -> {
                 Timber.e("Failed to load video %s retrying...", stageModel.getKey());
-                //loadVideoWithUrl();
-                videoView.setVideoPath("https://www.dabkick.com/Assets/Promo%20Video.mp4");
+                loadVideoWithUrl();
                 return true;
             });
 
             videoView.setOnPreparedListener(() -> {
                 Timber.i("Prepared video: %s", stageModel.getKey());
                 videoView.setOnSeekCompletionListener(null);
-                videoView.seekTo(stageModel.getPlayedMillis());
+                videoView.seekTo(stageModel.getPlayedMillis() + 1);
                 if (stageModel.isPlaying()) videoView.start();
 
                 Runnable r = () -> videoView.setOnSeekCompletionListener(() -> {
@@ -88,7 +87,7 @@ public class VideoManager {
             });
 
 
-            //loadVideoWithUrl();
+            loadVideoWithUrl();
         }
         
         @SuppressLint("StaticFieldLeak")

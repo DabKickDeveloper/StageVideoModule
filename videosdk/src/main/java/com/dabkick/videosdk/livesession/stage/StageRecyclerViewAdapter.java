@@ -53,7 +53,6 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
         VideoView toAddView = videoManager.getVideoViewAtIndex(position);
         vh.layout.addView(toAddView);
-        toAddView.setVideoPath("https://www.dabkick.com/Assets/Promo%20Video.mp4");
 
 
 //        vh.layout.setOnTouchListener((v, event) -> {
