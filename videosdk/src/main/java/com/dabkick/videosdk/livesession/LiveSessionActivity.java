@@ -822,7 +822,10 @@ public class LiveSessionActivity extends AppCompatActivity implements
         //remove local view and replace w static avatar
         //remove local video
         va.localVideoTrack.removeRenderer(va.localVideoView);
-        //replace
+//        if (va.videoTrackList.containsKey(Prefs.getUserId()))
+//            va.videoTrackList.remove(Prefs.getUserId());
+
+        //replace UI
         //todo Trevor
 
         //update UI
