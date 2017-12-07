@@ -15,8 +15,17 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:padding="4dp"
-        android:src="@drawable/ic_exit"
+        android:src="@drawable/exit"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/expand_btn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="4dp"
+        android:src="@drawable/max"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
@@ -80,7 +89,7 @@
         android:layout_height="@dimen/height_livestream_bar"
         android:background="@drawable/left_corner"
         app:layout_constraintBottom_toBottomOf="@+id/layout_mini_stage"
-        android:src="@drawable/ic_group_add_white_36dp"/>
+        android:src="@drawable/image"/>
 
     <ImageView
         android:id="@+id/iv_add_friends"
@@ -90,7 +99,7 @@
         android:background="@drawable/right_corner"
         app:layout_constraintBottom_toBottomOf="@+id/layout_mini_stage"
         app:layout_constraintRight_toRightOf="parent"
-        android:src="@android:drawable/ic_lock_idle_alarm"/>
+        android:src="@drawable/invite"/>
 
     <FrameLayout
         android:id="@+id/frag_media_drawer"
