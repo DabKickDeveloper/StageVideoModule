@@ -475,6 +475,10 @@ public class LiveSessionActivity extends AppCompatActivity implements
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(chatEditText.getWindowToken(), 0);
         chatEditText.clearFocus();
+
+        if(chatListView.getVisibility() == View.VISIBLE)
+            toggleChatUi();
+
         msgKarat.setVisibility(View.GONE);
     }
 
