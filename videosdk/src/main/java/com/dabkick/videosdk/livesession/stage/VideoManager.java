@@ -4,15 +4,21 @@ package com.dabkick.videosdk.livesession.stage;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
+import android.util.SparseArray;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.annimon.stream.Stream;
+import com.dabkick.videosdk.R;
 import com.dabkick.videosdk.SdkApp;
-import com.devbrackets.android.exomedia.core.video.scale.ScaleType;
 import com.devbrackets.android.exomedia.ui.widget.VideoView;
 
 import java.util.ArrayList;
 
+import at.huber.youtubeExtractor.VideoMeta;
+import at.huber.youtubeExtractor.YouTubeExtractor;
+import at.huber.youtubeExtractor.YtFile;
 import timber.log.Timber;
 
 // Manages all VideoViews for the stage
@@ -54,16 +60,17 @@ public class VideoManager {
         VideoItem(StageModel stageModel) {
             this.stageModel = stageModel;
 
-            videoView = new VideoView(appCtx);
+            videoView = (VideoView) LayoutInflater.from(appCtx).inflate(R.layout.item_videoview, null);
             videoView.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT
             ));
-            videoView.setScaleType(ScaleType.CENTER_CROP);
+            //videoView.setScaleType(ScaleType.CENTER_CROP);
 
             videoView.setOnErrorListener(e -> {
                 Timber.e("Failed to load video %s retrying...", stageModel.getKey());
-                loadVideoWithUrl();
+                //loadVideoWithUrl();
+                videoView.setVideoPath("https://www.dabkick.com/Assets/Promo%20Video.mp4");
                 return true;
             });
 
@@ -76,32 +83,37 @@ public class VideoManager {
                 Runnable r = () -> videoView.setOnSeekCompletionListener(() -> {
                     //videoControlListener.onSeekBarChanged(videoView.getCurrentPosition());
                 });
-                new Handler().postDelayed(r, 1000);
+                //new Handler().postDelayed(r, 1000);
 
             });
 
-            
-            loadVideoWithUrl();
+
+            //loadVideoWithUrl();
         }
         
         @SuppressLint("StaticFieldLeak")
         private void loadVideoWithUrl() {
-            videoView.setVideoPath("http://dabkick.com/Assets/Promo%20Video.mp4");
-//            new YouTubeExtractor(appCtx) {
-//                @Override
-//                public void onExtractionComplete(SparseArray<YtFile> ytFiles, VideoMeta vMeta) {
-//                    if (ytFiles != null) {
-//                        for (int i = 0; i < ytFiles.size(); i++) {
-//                            if (ytFiles.valueAt(i) != null) {
-//                                String downloadUrl = ytFiles.valueAt(i).getUrl();
-//                                videoView.setVideoPath(downloadUrl);
-//                                break;
-//                            }
-//                        }
-//
-//                    }
-//                }
-//            }.extract(stageModel.getUrl(), false, false);
+            new YouTubeExtractor(appCtx) {
+                @Override
+                public void onExtractionComplete(SparseArray<YtFile> ytFiles, VideoMeta vMeta) {
+                    if (Looper.myLooper() == Looper.getMainLooper()) {
+                        Timber.i("main looper");
+                    }
+                    if (ytFiles != null) {
+                        for (int i = 0; i < ytFiles.size(); i++) {
+                            if (ytFiles.valueAt(i) != null) {
+                                int finalI = i;
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    String downloadUrl = ytFiles.valueAt(finalI).getUrl();
+                                    videoView.setVideoPath(downloadUrl);
+                                });
+                                break;
+                            }
+                        }
+
+                    }
+                }
+            }.extract(stageModel.getUrl(), false, false);
 
         }
 

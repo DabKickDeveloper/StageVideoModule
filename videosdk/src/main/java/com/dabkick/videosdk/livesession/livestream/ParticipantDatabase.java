@@ -72,7 +72,6 @@ public class ParticipantDatabase {
 
     void removeChildEventListener() {
         Timber.i("removing child event listener");
-        Timber.i(new Throwable());
         if (childEventListener != null) {
             databaseReference.removeEventListener(childEventListener);
             childEventListener = null;

@@ -5,15 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.dabkick.videosdk.R;
 import com.dabkick.videosdk.SdkApp;
 import com.dabkick.videosdk.livesession.LiveSessionActivity;
-import com.dabkick.videosdk.livesession.livestream.SwapStageEvent;
-import com.devbrackets.android.exomedia.listener.VideoControlsButtonListener;
 import com.devbrackets.android.exomedia.ui.widget.VideoView;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -50,41 +47,49 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
         StageViewHolder vh = (StageViewHolder) holder;
 
-        vh.videoView = videoManager.getVideoViewAtIndex(position);
-
-        vh.videoView.setOnTouchListener((v, event) -> {
-            if (!context.isVideoInMainStage()) {
-                EventBus.getDefault().post(new SwapStageEvent());
-                return true;
-            }
-            return false;
-        });
-
-        if (vh.videoView.getVideoControls() != null) {
-            vh.videoView.getVideoControls().setButtonListener(new VideoControlsButtonListener() {
-                @Override
-                public boolean onPlayPauseClicked() {
-                    if (vh.videoView.isPlaying()) {
-                        videoControlListener.onPause(vh.videoView.getCurrentPosition());
-                    } else {
-                        videoControlListener.onResume(vh.videoView.getCurrentPosition());
-                    }
-                    return false;
-                }
-                @Override public boolean onPreviousClicked() {
-                    return false;
-                }
-                @Override public boolean onNextClicked() {
-                    return false;
-                }
-                @Override public boolean onRewindClicked() {
-                    return false;
-                }
-                @Override public boolean onFastForwardClicked() {
-                    return false;
-                }
-            });
+        if (vh.layout.getChildCount() == 1) {
+            vh.layout.removeViewAt(0);
         }
+
+        VideoView toAddView = videoManager.getVideoViewAtIndex(position);
+        vh.layout.addView(toAddView);
+        toAddView.setVideoPath("https://www.dabkick.com/Assets/Promo%20Video.mp4");
+
+
+//        vh.layout.setOnTouchListener((v, event) -> {
+//            if (!context.isVideoInMainStage()) {
+//                EventBus.getDefault().post(new SwapStageEvent());
+//                return true;
+//            }
+//            return false;
+//        });
+//
+//        if (vh.videoView.getVideoControls() != null) {
+//            vh.videoView.getVideoControls().setButtonListener(new VideoControlsButtonListener() {
+//                @Override
+//                public boolean onPlayPauseClicked() {
+//                    if (vh.videoView.isPlaying()) {
+//                        videoControlListener.onPause(vh.videoView.getCurrentPosition());
+//                    } else {
+//                        videoControlListener.onResume(vh.videoView.getCurrentPosition());
+//                    }
+//                    return false;
+//                }
+//                @Override public boolean onPreviousClicked() {
+//                    return false;
+//                }
+//                @Override public boolean onNextClicked() {
+//                    return false;
+//                }
+//                @Override public boolean onRewindClicked() {
+//                    return false;
+//                }
+//                @Override public boolean onFastForwardClicked() {
+//                    return false;
+//                }
+//            });
+//        }
+
 
     }
 
@@ -160,11 +165,11 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
 
     private class StageViewHolder extends RecyclerView.ViewHolder {
 
-        VideoView videoView;
+        FrameLayout layout;
 
         StageViewHolder(View itemView) {
             super(itemView);
-            videoView = itemView.findViewById(R.id.item_stage_videoview);
+            layout = itemView.findViewById(R.id.item_stage_videoview);
         }
     }
 
