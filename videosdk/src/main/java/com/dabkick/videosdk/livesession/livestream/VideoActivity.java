@@ -60,26 +60,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
     public static Toast toast = null;
     public static AlertDialog alert11;
-    boolean cameraGranted = true, isLiveStreamAudioGrant = false, isLiveStreamCameraGrant = true, isPermissionForLiveStreaming = false;
 
 
     //gopal
     public int previousAudioMode;
     public boolean previousMicrophoneMute;
-    private final boolean mUsePlatformAEC = true;
     public AudioManager mAudioManager;
-
-
-    //audio recording feature
-    public static final int RECORD_AUDIO_PERMISSION = 1;
-    public static final int WRITE_EXTERNAL_STORAGE_PERMISSION = 2;
-    public static final int READ_EXTERNAL_STORAGE_PERMISSION = 3;
-    public static final int WRITE_SETTING = 4;
-    public static final int REQUEST_MICROPHONE_CAMERA_FOR_LIVESTREAM = 5;
-    public static final int REQUEST_MICROPHONE_CAMERA_FOR_TWILIO = 6;
-
-
-
 
     /*
      * A VideoView receives frames from a local or remote video track and renders them
