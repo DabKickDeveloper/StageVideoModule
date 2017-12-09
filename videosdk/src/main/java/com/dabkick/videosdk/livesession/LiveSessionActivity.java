@@ -776,7 +776,10 @@ public class LiveSessionActivity extends AppCompatActivity implements
             }
 
 //set up view
-            videoView.setMirror(true);
+            if (va.cameraCapturer.getCameraSource() == CameraCapturer.CameraSource.BACK_CAMERA)
+            videoView.setMirror(false);
+            else  if (va.cameraCapturer.getCameraSource() == CameraCapturer.CameraSource.FRONT_CAMERA)
+                videoView.setMirror(true);
             //make visible
             videoView.setVisibility(View.VISIBLE);
 
@@ -916,8 +919,39 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
     @Override
     public void clickSwap() {
-        // TODO Trevor
+
+
+        if (va.isStreaming)
+
+        {
+            va.cameraCapturer.switchCamera();
+
+            va.localVideoTrack.removeRenderer(va.localVideoView);
+
+            VideoView vv = (VideoView) va.localVideoView;
+            if (va.cameraCapturer.getCameraSource() == CameraCapturer.CameraSource.BACK_CAMERA)
+                vv.setMirror(true);
+            else  if (va.cameraCapturer.getCameraSource() == CameraCapturer.CameraSource.FRONT_CAMERA)
+                vv.setMirror(false);
+
+            va.localVideoTrack.addRenderer(va.localVideoView);
+            va.localVideoView = vv;
+            EventBus.getDefault().post(new NotifyLivestreamAdapterEvent());
+        }
+//        VideoView vv = (VideoView) va.localVideoView;
+//        if (va.cameraCapturer.getCameraSource() == CameraCapturer.CameraSource.BACK_CAMERA)
+//                vv.setMirror(false);
+//        else    vv.setMirror(true);
+//        va.localVideoView = vv;
+//
+//        //update UI
+//        EventBus.getDefault().post(new NotifyLivestreamAdapterEvent());
+
     }
+
+
+
+
 
 
 //    public void removeVideoRenderer(String jid) {
