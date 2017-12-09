@@ -2,6 +2,7 @@ package com.dabkick.videosdk.livesession.livestream;
 
 
 import android.content.Context;
+import android.hardware.Camera;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,10 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
         this.context = context;
         this.livestreamView = livestreamView;
         this.participantList = participantList;
+    }
+
+    public int getNumOfCamera() {
+        return Camera.getNumberOfCameras();
     }
 
     @Override
@@ -72,7 +77,12 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
                 livestreamView.myVideoViewCreated(myViewHolder.videoView);
                 myViewHolder.videoTextView.setOnClickListener(v -> livestreamView.clickVideo());
                 myViewHolder.voiceTextView.setOnClickListener(v -> livestreamView.clickVoice());
-                myViewHolder.swapTextView.setOnClickListener(v -> livestreamView.clickSwap());
+//                myViewHolder.swapTextView.setOnClickListener(v -> livestreamView.clickSwap());
+
+                if (getNumOfCamera() <=1)
+                    myViewHolder.swapTextView.setVisibility(View.GONE);
+                else myViewHolder.swapTextView.setOnClickListener(v -> livestreamView.clickSwap());
+
                 myViewHolder.itemView.setOnClickListener(v -> EventBus.getDefault().post(new SwapStageEvent()));
                 String name = context.getString(R.string.me);
                 myViewHolder.nameView.setText(name);
@@ -83,7 +93,7 @@ public class SessionParticipantsAdapter extends RecyclerView.Adapter<RecyclerVie
                 String userId = participantList.get(position-1).getUserId();
                 if ((videoTrackList != null) && !videoTrackList.isEmpty() && videoTrackList.containsKey(userId))
                 {
-                    participantViewHolder.videoView.setMirror(true);
+                    participantViewHolder.videoView.setMirror(false);
                     // Remove renderer from previous video track
                     if (viewHolderMap.containsKey(holder)) {
                         viewHolderMap.get(participantViewHolder).removeRenderer(participantViewHolder.videoView);
