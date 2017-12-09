@@ -13,7 +13,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -28,6 +27,7 @@ public class StagePresenterImpl implements StagePresenter, StageDatabase.StageDa
     // models
     @Inject StageDatabase stageDatabase;
     @Inject OverviewDatabase overviewDatabase;
+    @Inject VideoManager videoManager;
 
     public StagePresenterImpl(StageView stageView, OverviewView overviewView) {
         ((SdkApp) SdkApp.getAppContext()).getLivesessionComponent().inject(this);
@@ -45,14 +45,14 @@ public class StagePresenterImpl implements StagePresenter, StageDatabase.StageDa
     @Override
     public void onUserSwipedStage(int newPosition) {
         Timber.i("on user swiped stage", newPosition);
-        String newKey = stageDatabase.getKeyFromIndex(newPosition);
+        String newKey = videoManager.getKeyFromIndex(newPosition);
         overviewDatabase.setStageKey(newKey);
     }
 
     @Override
     public void onStageKeyFromDatabaseChanged(String newKey) {
         Timber.i("database changed stage index :%s", newKey);
-        int newIndex = stageDatabase.getIndexFromKey(newKey);
+        int newIndex = videoManager.getIndexFromKey(newKey);
 
         if (newIndex == -1) Timber.w("key is not present in stage video list: %s", newKey);
         else overviewView.setStageIndexByKey(newIndex);
@@ -72,24 +72,19 @@ public class StagePresenterImpl implements StagePresenter, StageDatabase.StageDa
 
     @Override
     public void onStageVideoStateChanged(int i, String newState) {
-        // if video is playing and server state changes to paused
-        int index = stageDatabase.getIndexFromKey(overviewDatabase.getStagedVideoKey());
-
-        if (stageDatabase.getStageModelList().get(index).isPlaying() &&
-                newState.equals("paused")) {
-            Timber.i("newState: %s, pausing video...", newState);
-            stageView.onStageVideoStateChanged(i, true);
-        // if video is paused and server state changes to playing
-        } else if (!stageDatabase.getStageModelList().get(index).isPlaying() &&
-                newState.equals("playing")) {
-            Timber.i("newState: %s, playing video...", newState);
-            stageView.onStageVideoStateChanged(i, false);
-        }
-    }
-
-    @Override
-    public List<StageModel> getStageItems() {
-        return stageDatabase.getStageModelList();
+//        // if video is playing and server state changes to paused
+//        int index = videoManager.getIndexFromKey(overviewDatabase.getStagedVideoKey());
+//
+//        if (videoManager.getStageModelList().get(index).isPlaying() &&
+//                newState.equals("paused")) {
+//            Timber.i("newState: %s, pausing video...", newState);
+//            stageView.onStageVideoStateChanged(i, true);
+//        // if video is paused and server state changes to playing
+//        } else if (!videoManager.getStageModelList().get(index).isPlaying() &&
+//                newState.equals("playing")) {
+//            Timber.i("newState: %s, playing video...", newState);
+//            stageView.onStageVideoStateChanged(i, false);
+//        }
     }
 
     @Override

@@ -27,7 +27,7 @@ public class VideoManager {
 
     private ArrayList<VideoItem> items;
     private Context appCtx;
-    private             Handler handler = new Handler(Looper.getMainLooper());
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     public VideoManager() {
         ((SdkApp) SdkApp.getAppContext()).getLivesessionComponent().inject(this);
@@ -35,7 +35,7 @@ public class VideoManager {
         items = new ArrayList<>();
     }
 
-    public void addVideo(StageModel stageModel) {
+    public void add(StageModel stageModel) {
         VideoItem newItem = new VideoItem(stageModel);
         items.add(newItem);
     }
@@ -52,6 +52,45 @@ public class VideoManager {
     public void onAdapterDetached() {
         Timber.i("adapter detached");
         Stream.of(items).forEach(item -> item.videoView.release());
+    }
+    
+    public void clear() {
+        items.clear();
+    }
+
+    // return a video's index in items from given key
+    public int getIndexFromKey(String key) {
+        for (int i = 0; i < items.size(); i++) {
+            StageModel sm = items.get(i).stageModel;
+            if (sm.getKey().equals(key)) {
+                return i;
+            }
+        }
+        Timber.w("unable to find index for %s", key);
+        return 0;
+    }
+
+    // return a video's key in items from given index
+    public String getKeyFromIndex(int index) {
+        try {
+            return items.get(index).stageModel.getKey();
+        } catch (IndexOutOfBoundsException e) {
+            Timber.e("unable to find key for index %s", index);
+            return "";
+        }
+
+    }
+
+    public void updateStageModel(StageModel newModel) {
+
+        for (VideoItem i : items) {
+            if (i.stageModel.equals(newModel)) {
+                i.stageModel = newModel;
+                // TODO notify UI
+                break;
+            }
+        }
+
     }
 
 
