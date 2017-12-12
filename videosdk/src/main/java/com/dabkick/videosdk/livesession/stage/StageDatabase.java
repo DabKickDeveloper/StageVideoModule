@@ -46,7 +46,7 @@ public class StageDatabase {
 
             @Override
             public void onStageVideoTimeChanged(String key, long playedMillis) {
-                seekTo(key, playedMillis);
+                updateSeekTime(key, playedMillis);
             }
 
             @Override
@@ -89,8 +89,8 @@ public class StageDatabase {
 //                .getKey()).setValue(stageModelList.get(index));
     }
 
-    void seekTo(String key, long millis) {
-        Timber.d("seekTo: %s, key: %s", millis, key);
+    void updateSeekTime(String key, long millis) {
+        Timber.d("update seek time to: %s, key: %s", millis, key);
         databaseReference.child(key).child(StageDatabaseReferences.PLAYED_MILLIS).setValue(millis);
     }
 

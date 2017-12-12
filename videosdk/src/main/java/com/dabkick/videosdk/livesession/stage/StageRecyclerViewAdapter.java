@@ -114,7 +114,7 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             // updated seekTime
             if (seekTime != null) {
                 Timber.i("update video to time: %s", seekTime);
-                vh.videoView.seekTo(seekTime);
+                vh.videoView.updateSeekTime(seekTime);
             }
 
             // updated play/pause state

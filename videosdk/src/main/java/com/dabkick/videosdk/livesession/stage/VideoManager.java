@@ -135,8 +135,6 @@ public class VideoManager {
                 return true;
             });
 
-            videoView.setOnSeekCompletionListener(onSeekCompletionListener);
-
             videoView.setOnPreparedListener(() -> {
                 Timber.i("Prepared video: %s", stageModel.getKey());
                 // need "+ 1" to fix issue of player UI in "loading" state when actually prepared
@@ -192,7 +190,7 @@ public class VideoManager {
         void seekLocal(long millis) {
             videoView.setOnSeekCompletionListener(null);
             videoView.seekTo(millis);
-            videoView.setOnSeekCompletionListener(onSeekCompletionListener);
+            handler.postDelayed(() -> videoView.setOnSeekCompletionListener(onSeekCompletionListener), 1000);
         }
 
 
