@@ -10,7 +10,7 @@ import android.widget.FrameLayout;
 import com.dabkick.videosdk.R;
 import com.dabkick.videosdk.SdkApp;
 import com.dabkick.videosdk.livesession.LiveSessionActivity;
-import com.dabkick.videosdk.livesession.livestream.NotifyStageAdapterEvent;
+import com.dabkick.videosdk.livesession.livestream.NotifyStageItemAddedEvent;
 import com.devbrackets.android.exomedia.ui.widget.VideoView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -174,8 +174,8 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(NotifyStageAdapterEvent event) {
-        notifyDataSetChanged();
+    public void onMessageEvent(NotifyStageItemAddedEvent event) {
+        notifyItemInserted(event.index);
     }
 
 }

@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import com.annimon.stream.Stream;
 import com.dabkick.videosdk.R;
 import com.dabkick.videosdk.SdkApp;
-import com.dabkick.videosdk.livesession.livestream.NotifyStageAdapterEvent;
+import com.dabkick.videosdk.livesession.livestream.NotifyStageItemAddedEvent;
 import com.devbrackets.android.exomedia.core.video.scale.ScaleType;
 import com.devbrackets.android.exomedia.listener.OnSeekCompletionListener;
 import com.devbrackets.android.exomedia.listener.VideoControlsButtonListener;
@@ -44,7 +44,7 @@ public class VideoManager {
     public void add(StageModel stageModel) {
         VideoItem newItem = new VideoItem(stageModel);
         items.add(newItem);
-        EventBus.getDefault().post(new NotifyStageAdapterEvent());
+        EventBus.getDefault().post(new NotifyStageItemAddedEvent(items.size() - 1));
     }
 
     public int getSize() {
