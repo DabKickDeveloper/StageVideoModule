@@ -46,6 +46,7 @@ public class StagePresenterImpl implements StagePresenter,
     public void onUserSwipedStage(int newPosition) {
         String newKey = videoManager.getKeyFromIndex(newPosition);
         overviewDatabase.setStageKey(newKey);
+        videoManager.setPlayPausedStates(newKey);
     }
 
     @Override

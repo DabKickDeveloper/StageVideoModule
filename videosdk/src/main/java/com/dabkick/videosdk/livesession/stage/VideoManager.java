@@ -131,6 +131,21 @@ public class VideoManager {
         items.get(newIndex).seekLocal(millis);
     }
 
+    // locally pauses all videos except newKey. newKey changed to reflect state
+    public void setPlayPausedStates(String newKey) {
+        Stream.of(items).forEach(item -> {
+            // pauses all items except newKey
+            if (!item.stageModel.getKey().equals(newKey)) {
+                item.pauseLocal();
+            // play newKey if in 'playing' state
+            } else {
+                item.seekLocal(item.stageModel.getPlayedMillis());
+                if (item.stageModel.isPlaying()) item.videoView.start();
+            }
+        });
+
+    }
+
     public class VideoItem {
 
         VideoView videoView;
@@ -224,8 +239,6 @@ public class VideoManager {
             videoView.pause();
             handler.postDelayed(this::setVideoControListener, 1000);
         }
-
-
 
         private OnSeekCompletionListener onSeekCompletionListener = () -> {
             stageModel.setPlayedMillis(videoView.getCurrentPosition());

@@ -79,7 +79,7 @@ public class StageDatabase {
 
     }
 
-    private void updateSeekTime(String key, long millis) {
+    public void updateSeekTime(String key, long millis) {
         Timber.d("update seek time to: %s, key: %s", millis, key);
         databaseReference.child(key).child(StageDatabaseReferences.PLAYED_MILLIS).setValue(millis);
     }
