@@ -51,22 +51,22 @@ public class VideoManager {
         return items.size();
     }
 
-    public VideoView getVideoViewAtIndex(int index) {
+    VideoView getVideoViewAtIndex(int index) {
         return items.get(index).videoView;
     }
 
     // release all VideoViews
-    public void onAdapterDetached() {
+    void onAdapterDetached() {
         Timber.i("adapter detached");
         Stream.of(items).forEach(item -> item.videoView.release());
     }
     
-    public void clear() {
+    void clear() {
         items.clear();
     }
 
     // return a video's index in items from given key
-    public int getIndexFromKey(String key) {
+    int getIndexFromKey(String key) {
         for (int i = 0; i < items.size(); i++) {
             StageModel sm = items.get(i).stageModel;
             if (sm.getKey().equals(key)) {
@@ -78,7 +78,7 @@ public class VideoManager {
     }
 
     // return a video's key in items from given index
-    public String getKeyFromIndex(int index) {
+    String getKeyFromIndex(int index) {
         try {
             return items.get(index).stageModel.getKey();
         } catch (IndexOutOfBoundsException e) {
@@ -88,7 +88,7 @@ public class VideoManager {
 
     }
 
-    public void updateStageModel(StageModel newModel) {
+    void updateStageModel(StageModel newModel) {
         for (VideoItem i : items) {
             if (i.stageModel.equals(newModel)) {
 
@@ -109,7 +109,7 @@ public class VideoManager {
 
     }
 
-    public void setDatabaseListener(StageDatabase.StageDatabaseCallback databaseCallback) {
+    void setDatabaseListener(StageDatabase.StageDatabaseCallback databaseCallback) {
         this.databaseCallback = databaseCallback;
     }
 
@@ -139,16 +139,9 @@ public class VideoManager {
 
             videoView.setOnPreparedListener(() -> {
                 Timber.i("Prepared video: %s", stageModel.getKey());
-//                videoView.setOnSeekCompletionListener(null);
                 // need "+ 1" to fix issue of player UI in "loading" state when actually prepared
-                videoView.seekTo(stageModel.getPlayedMillis() + 1);
+                seekLocal(stageModel.getPlayedMillis() + 1);
                 if (stageModel.isPlaying()) videoView.start();
-
-                Runnable r = () -> videoView.setOnSeekCompletionListener(() -> {
-                    //videoControlListener.onSeekBarChanged(videoView.getCurrentPosition());
-                });
-                //new Handler().postDelayed(r, 1000);
-
             });
 
 
