@@ -82,10 +82,21 @@ public class VideoManager {
     }
 
     public void updateStageModel(StageModel newModel) {
-
         for (VideoItem i : items) {
             if (i.stageModel.equals(newModel)) {
-                i.stageModel = newModel;
+
+                // update seek time
+                if (i.stageModel.getPlayedMillis() != newModel.getPlayedMillis()) {
+                    i.videoView.seekTo(newModel.getPlayedMillis());
+                    i.stageModel.setPlayedMillis(newModel.getPlayedMillis());
+                }
+
+                // update state
+                if (!i.stageModel.getState().equals(newModel.getState())) {
+                    // TODO
+                }
+
+
                 // TODO notify UI
                 break;
             }
