@@ -66,6 +66,7 @@ import com.dabkick.videosdk.livesession.overviews.OverviewView;
 import com.dabkick.videosdk.livesession.stage.StagePresenter;
 import com.dabkick.videosdk.livesession.stage.StagePresenterImpl;
 import com.dabkick.videosdk.livesession.stage.StageRecyclerViewAdapter;
+import com.dabkick.videosdk.livesession.stage.VideoManager;
 import com.dabkick.videosdk.retrofit.JwtUtils;
 import com.dabkick.videosdk.retrofit.RegisterResponse;
 import com.dabkick.videosdk.retrofit.RetrofitCreator;
@@ -140,6 +141,8 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
     // Overview
     @Inject OverviewDatabase overviewDatabase;
+
+    @Inject VideoManager videoManager;
 
     ImageView downKarat, msgKarat;
 
@@ -246,7 +249,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
         stageRecyclerViewAdapter = new StageRecyclerViewAdapter(this);
         stagePresenter = new StagePresenterImpl(stageRecyclerViewAdapter, this);
-        stageRecyclerViewAdapter.setVideoControlListener(stagePresenter.getVideoControlsListener());
 
         stageRecyclerView.setAdapter(stageRecyclerViewAdapter);
 
@@ -258,8 +260,11 @@ public class LiveSessionActivity extends AppCompatActivity implements
                 if ((newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) &&
                         (stageRecyclerViewAdapter.getItemCount() > 0)) {
                     View centerView = stageSnapHelper.findSnapView(stageLayoutManager);
-                    int position = stageLayoutManager.getPosition(centerView);
-                    stagePresenter.onUserSwipedStage(position);
+                    if (centerView != null) {
+                        // centerView is null when no videos are loaded
+                        int position = stageLayoutManager.getPosition(centerView);
+                        stagePresenter.onUserSwipedStage(position);
+                    }
                 }
             }
         });

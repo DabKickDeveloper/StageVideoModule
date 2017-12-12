@@ -18,7 +18,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-public class StagePresenterImpl implements StagePresenter, StageDatabase.StageDatabaseCallback,
+public class StagePresenterImpl implements StagePresenter,
         OverviewDatabase.OverviewListener{
 
     private StageView stageView;
@@ -33,7 +33,6 @@ public class StagePresenterImpl implements StagePresenter, StageDatabase.StageDa
         ((SdkApp) SdkApp.getAppContext()).getLivesessionComponent().inject(this);
         this.stageView = stageView;
         this.overviewView = overviewView;
-        stageDatabase.setCallback(this);
         overviewDatabase.setListener(this);
 
         // add any provided videos to stage
@@ -57,54 +56,6 @@ public class StagePresenterImpl implements StagePresenter, StageDatabase.StageDa
         if (newIndex == -1) Timber.w("key is not present in stage video list: %s", newKey);
         else overviewView.setStageIndexByKey(newIndex);
 
-    }
-
-
-    @Override
-    public void onStageVideoAdded() {
-        stageView.onStageDataUpdated();
-    }
-
-    @Override
-    public void onStageVideoTimeChanged(int position, long playedMillis) {
-        stageView.onStageVideoTimeChanged(position, playedMillis);
-    }
-
-    @Override
-    public void onStageVideoStateChanged(int i, String newState) {
-//        // if video is playing and server state changes to paused
-//        int index = videoManager.getIndexFromKey(overviewDatabase.getStagedVideoKey());
-//
-//        if (videoManager.getStageModelList().get(index).isPlaying() &&
-//                newState.equals("paused")) {
-//            Timber.i("newState: %s, pausing video...", newState);
-//            stageView.onStageVideoStateChanged(i, true);
-//        // if video is paused and server state changes to playing
-//        } else if (!videoManager.getStageModelList().get(index).isPlaying() &&
-//                newState.equals("playing")) {
-//            Timber.i("newState: %s, playing video...", newState);
-//            stageView.onStageVideoStateChanged(i, false);
-//        }
-    }
-
-    @Override
-    public StageRecyclerViewAdapter.VideoControlListener getVideoControlsListener() {
-        return new StageRecyclerViewAdapter.VideoControlListener() {
-            @Override
-            public void onPause(long milliseconds) {
-                stageDatabase.pauseVideo(milliseconds);
-            }
-
-            @Override
-            public void onResume(long milliseconds) {
-                stageDatabase.resumeVideo(milliseconds);
-            }
-
-            @Override
-            public void onSeekBarChanged(long currentTime) {
-                stageDatabase.seekTo(currentTime);
-            }
-        };
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

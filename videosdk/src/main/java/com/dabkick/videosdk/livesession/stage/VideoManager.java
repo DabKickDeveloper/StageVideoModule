@@ -12,8 +12,13 @@ import android.view.ViewGroup;
 import com.annimon.stream.Stream;
 import com.dabkick.videosdk.R;
 import com.dabkick.videosdk.SdkApp;
+import com.dabkick.videosdk.livesession.livestream.NotifyStageAdapterEvent;
 import com.devbrackets.android.exomedia.core.video.scale.ScaleType;
+import com.devbrackets.android.exomedia.listener.OnSeekCompletionListener;
+import com.devbrackets.android.exomedia.listener.VideoControlsButtonListener;
 import com.devbrackets.android.exomedia.ui.widget.VideoView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -28,6 +33,7 @@ public class VideoManager {
     private ArrayList<VideoItem> items;
     private Context appCtx;
     private Handler handler = new Handler(Looper.getMainLooper());
+    private StageDatabase.StageDatabaseCallback databaseCallback;
 
     public VideoManager() {
         ((SdkApp) SdkApp.getAppContext()).getLivesessionComponent().inject(this);
@@ -38,6 +44,7 @@ public class VideoManager {
     public void add(StageModel stageModel) {
         VideoItem newItem = new VideoItem(stageModel);
         items.add(newItem);
+        EventBus.getDefault().post(new NotifyStageAdapterEvent());
     }
 
     public int getSize() {
@@ -96,14 +103,15 @@ public class VideoManager {
                     // TODO
                 }
 
-
-                // TODO notify UI
                 break;
             }
         }
 
     }
 
+    public void setDatabaseListener(StageDatabase.StageDatabaseCallback databaseCallback) {
+        this.databaseCallback = databaseCallback;
+    }
 
     public class VideoItem {
 
@@ -127,9 +135,11 @@ public class VideoManager {
                 return true;
             });
 
+            videoView.setOnSeekCompletionListener(onSeekCompletionListener);
+
             videoView.setOnPreparedListener(() -> {
                 Timber.i("Prepared video: %s", stageModel.getKey());
-                videoView.setOnSeekCompletionListener(null);
+//                videoView.setOnSeekCompletionListener(null);
                 // need "+ 1" to fix issue of player UI in "loading" state when actually prepared
                 videoView.seekTo(stageModel.getPlayedMillis() + 1);
                 if (stageModel.isPlaying()) videoView.start();
@@ -140,6 +150,25 @@ public class VideoManager {
                 //new Handler().postDelayed(r, 1000);
 
             });
+
+
+            if (videoView.getVideoControls() != null) {
+                videoView.getVideoControls().setButtonListener(new VideoControlsButtonListener() {
+                    @Override
+                    public boolean onPlayPauseClicked() {
+                        if (videoView.isPlaying()) {
+                            //videoControlListener.onPause(vh.videoView.getCurrentPosition());
+                        } else {
+                            //videoControlListener.onResume(vh.videoView.getCurrentPosition());
+                        }
+                        return false;
+                    }
+                    @Override public boolean onPreviousClicked() {return false;}
+                    @Override public boolean onNextClicked() {return false;}
+                    @Override public boolean onRewindClicked() {return false;}
+                    @Override public boolean onFastForwardClicked() {return false;}
+                });
+            }
 
             loadVideoWithUrl(handler);
         }
@@ -166,6 +195,18 @@ public class VideoManager {
             }.extract(stageModel.getUrl(), false, false);
 
         }
+
+        void seekLocal(long millis) {
+            videoView.setOnSeekCompletionListener(null);
+            videoView.seekTo(millis);
+            videoView.setOnSeekCompletionListener(onSeekCompletionListener);
+        }
+
+
+        private OnSeekCompletionListener onSeekCompletionListener = () -> {
+            stageModel.setPlayedMillis(videoView.getCurrentPosition());
+            databaseCallback.onStageVideoTimeChanged(stageModel.getKey(), stageModel.getPlayedMillis());
+        };
 
     }
 

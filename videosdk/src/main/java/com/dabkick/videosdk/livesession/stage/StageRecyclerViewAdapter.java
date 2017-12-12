@@ -10,7 +10,12 @@ import android.widget.FrameLayout;
 import com.dabkick.videosdk.R;
 import com.dabkick.videosdk.SdkApp;
 import com.dabkick.videosdk.livesession.LiveSessionActivity;
+import com.dabkick.videosdk.livesession.livestream.NotifyStageAdapterEvent;
 import com.devbrackets.android.exomedia.ui.widget.VideoView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -20,7 +25,6 @@ import javax.inject.Inject;
 public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements StageView {
 
     private LiveSessionActivity context;
-    private VideoControlListener videoControlListener;
 
     @Inject VideoManager videoManager;
 
@@ -33,6 +37,7 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
     public StageRecyclerViewAdapter(LiveSessionActivity activity) {
         ((SdkApp) SdkApp.getAppContext()).getLivesessionComponent().inject(this);
         this.context = activity;
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -158,10 +163,6 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         notifyItemChanged(position, shouldPause);
     }
 
-    public void setVideoControlListener(VideoControlListener videoControlListener) {
-        this.videoControlListener = videoControlListener;
-    }
-
     private class StageViewHolder extends RecyclerView.ViewHolder {
 
         FrameLayout layout;
@@ -170,6 +171,11 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             super(itemView);
             layout = itemView.findViewById(R.id.item_stage_videoview);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(NotifyStageAdapterEvent event) {
+        notifyDataSetChanged();
     }
 
 }

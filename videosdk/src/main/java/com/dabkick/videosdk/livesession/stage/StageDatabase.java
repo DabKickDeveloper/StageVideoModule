@@ -18,7 +18,7 @@ public class StageDatabase {
 
     interface StageDatabaseCallback {
         void onStageVideoAdded();
-        void onStageVideoTimeChanged(int position, long playedMillis);
+        void onStageVideoTimeChanged(String key, long playedMillis);
         void onStageVideoStateChanged(int i, String newState);
     }
 
@@ -37,6 +37,23 @@ public class StageDatabase {
 
         String stagePath = StageDatabaseReferences.getStageReference(AbstractDatabaseReferences.getSessionId());
         databaseReference = firebaseDatabase.getReference(stagePath);
+
+        videoManager.setDatabaseListener(new StageDatabaseCallback() {
+            @Override
+            public void onStageVideoAdded() {
+
+            }
+
+            @Override
+            public void onStageVideoTimeChanged(String key, long playedMillis) {
+                seekTo(key, playedMillis);
+            }
+
+            @Override
+            public void onStageVideoStateChanged(int i, String newState) {
+
+            }
+        });
 
     }
 
@@ -72,11 +89,9 @@ public class StageDatabase {
 //                .getKey()).setValue(stageModelList.get(index));
     }
 
-    void seekTo(long secs) {
-//        Timber.i("seekTo: %s", secs);
-//        int index = getIndexFromKey(overviewDatabase.getStagedVideoKey());
-//        databaseReference.child(stageModelList.get(index)
-//                .getKey()).child(StageDatabaseReferences.PLAYED_MILLIS).setValue(secs);
+    void seekTo(String key, long millis) {
+        Timber.d("seekTo: %s, key: %s", millis, key);
+        databaseReference.child(key).child(StageDatabaseReferences.PLAYED_MILLIS).setValue(millis);
     }
 
     void addVideo(String url) {
