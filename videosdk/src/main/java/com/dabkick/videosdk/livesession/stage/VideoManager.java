@@ -100,7 +100,12 @@ public class VideoManager {
 
                 // update state
                 if (!i.stageModel.getState().equals(newModel.getState())) {
-                    // TODO
+                    if (newModel.getState().equals(StageModel.PLAYING)) {
+                        i.videoView.start();
+                    } else {
+                        i.videoView.pause();
+                    }
+                    i.stageModel.setState(newModel.getState());
                 }
 
                 break;
