@@ -10,6 +10,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import timber.log.Timber;
@@ -17,9 +20,8 @@ import timber.log.Timber;
 public class StageDatabase {
 
     interface StageDatabaseCallback {
-        void onStageVideoAdded();
         void onStageVideoTimeChanged(String key, long playedMillis);
-        void onStageVideoStateChanged(int i, String newState);
+        void onStageVideoStateChanged(String key, String newState, long playedMillis);
     }
 
     private StageDatabaseCallback callback;
@@ -39,10 +41,6 @@ public class StageDatabase {
         databaseReference = firebaseDatabase.getReference(stagePath);
 
         videoManager.setDatabaseListener(new StageDatabaseCallback() {
-            @Override
-            public void onStageVideoAdded() {
-
-            }
 
             @Override
             public void onStageVideoTimeChanged(String key, long playedMillis) {
@@ -50,9 +48,10 @@ public class StageDatabase {
             }
 
             @Override
-            public void onStageVideoStateChanged(int i, String newState) {
-
+            public void onStageVideoStateChanged(String key, String newState, long playedMillis) {
+                updateState(key, newState, playedMillis);
             }
+
         });
 
     }
@@ -70,26 +69,16 @@ public class StageDatabase {
         childEventListener = null;
     }
 
-    void pauseVideo(long milliseconds) {
-//        Timber.i("pauseVideo: %s", milliseconds);
-//        int index = getIndexFromKey(overviewDatabase.getStagedVideoKey());
-//        stageModelList.get(index).setPlayedMillis(milliseconds);
-//        stageModelList.get(index).setState(StageModel.PAUSED);
-//        databaseReference.child(stageModelList.get(
-//                index).getKey()).setValue(
-//                        stageModelList.get(index));
+    private void updateState(String key, String newState, long playedMillis) {
+        Timber.i("update video state. key: %s, newState: %s, playedMillis: %s", key, newState, playedMillis);
+        Map<String, Object> updateMap = new HashMap<>();
+        updateMap.put("state", newState);
+        updateMap.put("playedMillis", playedMillis);
+        databaseReference.child(key).updateChildren(updateMap);
+
     }
 
-    void resumeVideo(long milliseconds) {
-//        Timber.i("resumeVideo: %s", milliseconds);
-//        int index = getIndexFromKey(overviewDatabase.getStagedVideoKey());
-//        stageModelList.get(index).setPlayedMillis(milliseconds);
-//        stageModelList.get(index).setState(StageModel.PLAYING);
-//        databaseReference.child(stageModelList.get(index)
-//                .getKey()).setValue(stageModelList.get(index));
-    }
-
-    void updateSeekTime(String key, long millis) {
+    private void updateSeekTime(String key, long millis) {
         Timber.d("update seek time to: %s, key: %s", millis, key);
         databaseReference.child(key).child(StageDatabaseReferences.PLAYED_MILLIS).setValue(millis);
     }
@@ -110,7 +99,6 @@ public class StageDatabase {
                 sv.setKey(dataSnapshot.getKey());
                 Timber.d("onChildAdded: %s", dataSnapshot.getKey());
                 videoManager.add(sv);
-                if (callback != null) callback.onStageVideoAdded();
             }
 
             @Override
@@ -118,40 +106,12 @@ public class StageDatabase {
                 StageModel changedStageModel = dataSnapshot.getValue(StageModel.class);
                 Timber.d("updateStageModel: %s", dataSnapshot.getKey());
                 videoManager.updateStageModel(changedStageModel);
-//                for (int i = 0; i < stageModelList.size(); i++) {
-//                    if (changedStageModel.equals(stageModelList.get(i))) {
-//
-//                        // update stage time
-//                        int index = getIndexFromKey(changedStageModel.getKey());
-//                        if (changedStageModel.getPlayedMillis() != stageModelList.get(index).getPlayedMillis()) {
-//                            Timber.i("changed time: %s", changedStageModel.getPlayedMillis());
-//                            stageModelList.get(index).setPlayedMillis(changedStageModel.getPlayedMillis());
-//                            if (callback != null) callback.onStageVideoAdded();
-//                            //if (callback != null) callback.onStageVideoTimeChanged(i, changedStageModel.getPlayedMillis());
-//                        }
-//
-//                        // do not update play/pause
-//                        if (!changedStageModel.getState().equals(stageModelList.get(index).getState())) {
-//                            Timber.i("changed state: %s", changedStageModel.getState());
-//                            stageModelList.get(index).setState(changedStageModel.getState());
-//                            if (callback != null) callback.onStageVideoAdded();
-//                            //if (callback != null) callback.onStageVideoStateChanged(i, changedStageModel.getState());
-//                        }
-//
-//                        stageModelList.set(i, changedStageModel);
-//                        break;
-//                    }
-//                }
             }
 
             @Override public void onChildRemoved(DataSnapshot dataSnapshot) {}
             @Override public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
             @Override public void onCancelled(DatabaseError databaseError) {}
         };
-    }
-
-    void setCallback(StageDatabaseCallback callback) {
-        this.callback = callback;
     }
 
 }

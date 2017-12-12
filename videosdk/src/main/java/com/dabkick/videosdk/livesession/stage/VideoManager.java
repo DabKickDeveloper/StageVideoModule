@@ -125,7 +125,7 @@ public class VideoManager {
             // ignore calls to this method before we have a video
             return;
         }
-        Timber.i("prepare: %s", newIndex);
+        Timber.d("prepare: %s", newIndex);
         long millis = items.get(newIndex).stageModel.getPlayedMillis();
         items.get(newIndex).seekLocal(millis);
     }
@@ -163,11 +163,9 @@ public class VideoManager {
                 videoView.getVideoControls().setButtonListener(new VideoControlsButtonListener() {
                     @Override
                     public boolean onPlayPauseClicked() {
-                        if (videoView.isPlaying()) {
-                            //videoControlListener.onPause(vh.videoView.getCurrentPosition());
-                        } else {
-                            //videoControlListener.onResume(vh.videoView.getCurrentPosition());
-                        }
+                        String newState = (videoView.isPlaying()) ? StageModel.PAUSED : StageModel.PLAYING;
+                        databaseCallback.onStageVideoStateChanged(
+                                stageModel.getKey(), newState, videoView.getCurrentPosition());
                         return false;
                     }
                     @Override public boolean onPreviousClicked() {return false;}
@@ -206,7 +204,7 @@ public class VideoManager {
         // seeks and does not respond to seek completed callback
         void seekLocal(long millis) {
             // need "+ 1" to fix issue of player UI in "loading" state when actually prepared
-            if (millis == 0) millis++; //
+            millis++; //
             videoView.setOnSeekCompletionListener(null);
             videoView.seekTo(millis);
             handler.postDelayed(() -> videoView.setOnSeekCompletionListener(onSeekCompletionListener), 1000);
