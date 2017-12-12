@@ -113,6 +113,18 @@ public class VideoManager {
         this.databaseCallback = databaseCallback;
     }
 
+    // forces a video to seek so it ends in a prepared state
+    // fixes issue where a scrolled to video will play for several seconds without new video frames
+    public void prepare(int newIndex) {
+        if (newIndex >= items.size()) {
+            // ignore calls to this method before we have a video
+            return;
+        }
+        Timber.i("prepare: %s", newIndex);
+        long millis = items.get(newIndex).stageModel.getPlayedMillis();
+        items.get(newIndex).seekLocal(millis);
+    }
+
     public class VideoItem {
 
         VideoView videoView;
@@ -137,8 +149,7 @@ public class VideoManager {
 
             videoView.setOnPreparedListener(() -> {
                 Timber.i("Prepared video: %s", stageModel.getKey());
-                // need "+ 1" to fix issue of player UI in "loading" state when actually prepared
-                seekLocal(stageModel.getPlayedMillis() + 1);
+                seekLocal(stageModel.getPlayedMillis());
                 if (stageModel.isPlaying()) videoView.start();
             });
 
@@ -189,6 +200,8 @@ public class VideoManager {
 
         // seeks and does not respond to seek completed callback
         void seekLocal(long millis) {
+            // need "+ 1" to fix issue of player UI in "loading" state when actually prepared
+            if (millis == 0) millis++; //
             videoView.setOnSeekCompletionListener(null);
             videoView.seekTo(millis);
             handler.postDelayed(() -> videoView.setOnSeekCompletionListener(onSeekCompletionListener), 1000);

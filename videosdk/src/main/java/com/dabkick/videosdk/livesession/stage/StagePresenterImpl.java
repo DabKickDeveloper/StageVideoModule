@@ -51,8 +51,12 @@ public class StagePresenterImpl implements StagePresenter,
     public void onStageKeyFromDatabaseChanged(String newKey) {
         int newIndex = videoManager.getIndexFromKey(newKey);
 
-        if (newIndex == -1) Timber.w("key is not present in stage video list: %s", newKey);
-        else overviewView.setStageIndexByKey(newIndex);
+        if (newIndex == -1) {
+            Timber.w("key is not present in stage video list: %s", newKey);
+        } else {
+            overviewView.setStageIndexByKey(newIndex);
+            videoManager.prepare(newIndex);
+        }
 
     }
 
