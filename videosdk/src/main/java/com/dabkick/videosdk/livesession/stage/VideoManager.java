@@ -94,7 +94,7 @@ public class VideoManager {
 
                 // update seek time
                 if (i.stageModel.getPlayedMillis() != newModel.getPlayedMillis()) {
-                    i.videoView.seekTo(newModel.getPlayedMillis());
+                    i.seekLocal(newModel.getPlayedMillis());
                     i.stageModel.setPlayedMillis(newModel.getPlayedMillis());
                 }
 
@@ -187,6 +187,7 @@ public class VideoManager {
 
         }
 
+        // seeks and does not respond to seek completed callback
         void seekLocal(long millis) {
             videoView.setOnSeekCompletionListener(null);
             videoView.seekTo(millis);
