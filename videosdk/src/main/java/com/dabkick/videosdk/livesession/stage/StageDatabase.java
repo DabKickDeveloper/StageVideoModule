@@ -28,6 +28,7 @@ public class StageDatabase {
     private DatabaseReference databaseReference;
     private FirebaseDatabase firebaseDatabase;
     private ChildEventListener childEventListener;
+    private StagePresenter presenter;
 
     @Inject OverviewDatabase overviewDatabase;
     @Inject VideoManager videoManager;
@@ -91,6 +92,10 @@ public class StageDatabase {
         overviewDatabase.setStageKey(key);
     }
 
+    void setPresenter(StagePresenterImpl presenter) {
+        this.presenter = presenter;
+    }
+
     private ChildEventListener createChildEventListener() {
         return new ChildEventListener() {
             @Override
@@ -99,6 +104,7 @@ public class StageDatabase {
                 sv.setKey(dataSnapshot.getKey());
                 Timber.d("onChildAdded: %s", dataSnapshot.getKey());
                 videoManager.add(sv);
+                presenter.updateStagePosition(dataSnapshot.getKey());
             }
 
             @Override

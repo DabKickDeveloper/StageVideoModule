@@ -7,4 +7,5 @@ public interface StagePresenter extends Presenter {
 
     void onUserSwipedStage(int newPosition);
 
+    void updateStagePosition(String key);
 }

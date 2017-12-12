@@ -34,6 +34,7 @@ public class StagePresenterImpl implements StagePresenter,
         this.stageView = stageView;
         this.overviewView = overviewView;
         overviewDatabase.setListener(this);
+        stageDatabase.setPresenter(this);
 
         // add any provided videos to stage
         DabKickSession.DabKickVideoProvider provider = ((SdkApp) SdkApp.getAppContext()).getDabKickSession().getDabKickVideoProvider();
@@ -48,7 +49,7 @@ public class StagePresenterImpl implements StagePresenter,
     }
 
     @Override
-    public void onStageKeyFromDatabaseChanged(String newKey) {
+    public void updateStagePosition(String newKey) {
         int newIndex = videoManager.getIndexFromKey(newKey);
 
         if (newIndex == -1) {
@@ -57,7 +58,11 @@ public class StagePresenterImpl implements StagePresenter,
             overviewView.setStageIndexByKey(newIndex);
             videoManager.prepare(newIndex);
         }
+    }
 
+    @Override
+    public void onStageKeyFromDatabaseChanged(String newKey) {
+        updateStagePosition(newKey);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
