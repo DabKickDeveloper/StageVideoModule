@@ -62,11 +62,12 @@ public class VideoManager {
     }
     
     void clear() {
+        Stream.of(items).forEach(VideoItem::pauseLocal);
         items.clear();
     }
 
     // return a video's index in items from given key
-    int getIndexFromKey(String key) {
+    Integer getIndexFromKey(String key) {
         for (int i = 0; i < items.size(); i++) {
             StageModel sm = items.get(i).stageModel;
             if (sm.getKey().equals(key)) {
@@ -74,7 +75,7 @@ public class VideoManager {
             }
         }
         Timber.w("unable to find index for %s", key);
-        return 0;
+        return null;
     }
 
     // return a video's key in items from given index
@@ -159,6 +160,12 @@ public class VideoManager {
             });
 
 
+            setVideoControListener();
+
+            loadVideoWithUrl(handler);
+        }
+
+        private void setVideoControListener() {
             if (videoView.getVideoControls() != null) {
                 videoView.getVideoControls().setButtonListener(new VideoControlsButtonListener() {
                     @Override
@@ -171,11 +178,10 @@ public class VideoManager {
                     @Override public boolean onPreviousClicked() {return false;}
                     @Override public boolean onNextClicked() {return false;}
                     @Override public boolean onRewindClicked() {return false;}
-                    @Override public boolean onFastForwardClicked() {return false;}
+                    @Override public boolean onFastForwardClicked() {return false;
+                    }
                 });
             }
-
-            loadVideoWithUrl(handler);
         }
         
         @SuppressLint("StaticFieldLeak")
@@ -209,6 +215,16 @@ public class VideoManager {
             videoView.seekTo(millis);
             handler.postDelayed(() -> videoView.setOnSeekCompletionListener(onSeekCompletionListener), 1000);
         }
+
+        // seeks and does not respond to seek completed callback
+        void pauseLocal() {
+            if (videoView.getVideoControls() != null) {
+                videoView.getVideoControls().setButtonListener(null);
+            }
+            videoView.pause();
+            handler.postDelayed(this::setVideoControListener, 1000);
+        }
+
 
 
         private OnSeekCompletionListener onSeekCompletionListener = () -> {

@@ -50,13 +50,23 @@ public class StagePresenterImpl implements StagePresenter,
 
     @Override
     public void updateStagePosition(String newKey) {
-        int newIndex = videoManager.getIndexFromKey(newKey);
+        Integer newIndex = videoManager.getIndexFromKey(newKey);
 
-        if (newIndex == -1) {
+        if (newIndex == null) {
             Timber.w("key is not present in stage video list: %s", newKey);
         } else {
             overviewView.setStageIndexByKey(newIndex);
             videoManager.prepare(newIndex);
+        }
+    }
+
+    @Override
+    public void updatePositionOnVideoAdded() {
+        String overviewKey = overviewDatabase.getStagedVideoKey();
+        Integer stagePosition = videoManager.getIndexFromKey(overviewKey);
+
+        if (stagePosition != null) {
+            updateStagePosition(overviewKey);
         }
     }
 

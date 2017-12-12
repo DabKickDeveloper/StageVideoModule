@@ -104,7 +104,7 @@ public class StageDatabase {
                 sv.setKey(dataSnapshot.getKey());
                 Timber.d("onChildAdded: %s", dataSnapshot.getKey());
                 videoManager.add(sv);
-                presenter.updateStagePosition(dataSnapshot.getKey());
+                presenter.updatePositionOnVideoAdded();
             }
 
             @Override
