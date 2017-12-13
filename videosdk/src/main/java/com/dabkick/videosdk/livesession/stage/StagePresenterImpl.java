@@ -90,6 +90,7 @@ public class StagePresenterImpl implements StagePresenter,
     @Override
     public void onStop() {
         stageDatabase.removeChildEventListener();
+        videoManager.clear();
         EventBus.getDefault().unregister(this);
     }
 
