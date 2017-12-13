@@ -22,6 +22,7 @@ public class StageDatabase {
     interface StageDatabaseCallback {
         void onStageVideoTimeChanged(String key, long playedMillis);
         void onStageVideoStateChanged(String key, String newState, long playedMillis);
+        void onVideoComplete(String key);
     }
 
     private StageDatabaseCallback callback;
@@ -51,6 +52,11 @@ public class StageDatabase {
             @Override
             public void onStageVideoStateChanged(String key, String newState, long playedMillis) {
                 updateState(key, newState, playedMillis);
+            }
+
+            @Override
+            public void onVideoComplete(String key) {
+                updateState(key, "paused", 1);
             }
 
         });

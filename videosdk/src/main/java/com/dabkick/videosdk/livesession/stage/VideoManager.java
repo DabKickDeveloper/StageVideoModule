@@ -74,7 +74,7 @@ public class VideoManager {
                 return i;
             }
         }
-        Timber.w("unable to find index for %s", key);
+        Timber.d("unable to find index for %s", key);
         return null;
     }
 
@@ -83,7 +83,7 @@ public class VideoManager {
         try {
             return items.get(index).stageModel.getKey();
         } catch (IndexOutOfBoundsException e) {
-            Timber.e("unable to find key for index %s", index);
+            Timber.d("unable to find key for index %s", index);
             return "";
         }
 
@@ -172,6 +172,12 @@ public class VideoManager {
                 Timber.i("Prepared video: %s", stageModel.getKey());
                 seekLocal(stageModel.getPlayedMillis());
                 if (stageModel.isPlaying()) videoView.start();
+            });
+
+            videoView.setOnCompletionListener(() -> {
+                videoView.reset();
+                loadVideoWithUrl(handler);
+                databaseCallback.onVideoComplete(stageModel.getKey());
             });
 
 
