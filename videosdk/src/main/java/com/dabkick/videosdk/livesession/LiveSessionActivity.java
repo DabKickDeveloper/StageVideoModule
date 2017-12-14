@@ -247,7 +247,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
         SnapHelper stageSnapHelper = new PagerSnapHelper();
         stageSnapHelper.attachToRecyclerView(stageRecyclerView);
 
-        stageRecyclerViewAdapter = new StageRecyclerViewAdapter(this);
+        stageRecyclerViewAdapter = new StageRecyclerViewAdapter();
         stagePresenter = new StagePresenterImpl(stageRecyclerViewAdapter, this);
 
         stageRecyclerView.setAdapter(stageRecyclerViewAdapter);
