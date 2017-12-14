@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.annimon.stream.Stream;
@@ -162,27 +163,36 @@ public class VideoManager {
             videoView.setScaleType(ScaleType.CENTER_CROP);
             videoView.setReleaseOnDetachFromWindow(false);
 
+            // continuously retry on any video error
             videoView.setOnErrorListener(e -> {
                 Timber.e("Failed to load video %s retrying...", stageModel.getKey());
                 loadVideoWithUrl(handler);
                 return true;
             });
 
+            // when prepared, seek to position then play if in playing mode
             videoView.setOnPreparedListener(() -> {
                 Timber.i("Prepared video: %s", stageModel.getKey());
                 seekLocal(stageModel.getPlayedMillis());
                 if (stageModel.isPlaying()) videoView.start();
             });
 
+            // on video complete, reset view state and update db
             videoView.setOnCompletionListener(() -> {
                 videoView.reset();
                 loadVideoWithUrl(handler);
                 databaseCallback.onVideoComplete(stageModel.getKey());
             });
 
+            // updates db when View is scrolled off screen
+            videoView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+                @Override public void onViewAttachedToWindow(View v) {}
+                @Override public void onViewDetachedFromWindow(View v) {
+                    databaseCallback.onStageVideoTimeChanged(stageModel.getKey(), videoView.getCurrentPosition());
+                }
+            });
 
             setVideoControListener();
-
             loadVideoWithUrl(handler);
         }
 
