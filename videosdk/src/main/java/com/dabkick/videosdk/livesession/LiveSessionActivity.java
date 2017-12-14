@@ -553,6 +553,13 @@ public class LiveSessionActivity extends AppCompatActivity implements
 //        }
 //    }
 
+    private boolean checkPermissionForMicrophone(){
+//        int resultCamera = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+        int resultMic = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
+        return resultMic == PackageManager.PERMISSION_GRANTED;
+    }
+
+
     @Override
     protected void onDestroy() {
         va.clear();
@@ -718,12 +725,28 @@ public class LiveSessionActivity extends AppCompatActivity implements
                 ActivityCompat.shouldShowRequestPermissionRationale(this,
                         Manifest.permission.RECORD_AUDIO)) {
             Toast.makeText(this,
-                    "Camera and Microphone permissions needed. Please allow in App Settings for additional functionality.",
+                    "Camera and Microphone permissions needed. Please allow in App Settings for audio and video functionality.",
                     Toast.LENGTH_LONG).show();
         } else {
             ActivityCompat.requestPermissions(
                     this,
                     new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO},
+                    REQUEST_MICROPHONE_CAMERA_FOR_LIVESTREAM);
+        }
+    }
+
+
+    public void requestPermissionForMicrophone() {
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        Manifest.permission.RECORD_AUDIO)) {
+            Toast.makeText(this,
+                    "Microphone permission needed. Please allow in App Settings for audio functionality.",
+                    Toast.LENGTH_LONG).show();
+        } else {
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.RECORD_AUDIO},
                     REQUEST_MICROPHONE_CAMERA_FOR_LIVESTREAM);
         }
     }
@@ -735,19 +758,24 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
         //check that permissions are in order!
 
+        isPermissionForLiveStreaming = true;
+
+
         va.tempVideoView = videoView;
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+        if (!checkPermissionForCameraAndMicrophone()) {
 
-            isPermissionForLiveStreaming = true;
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA},
-                    REQUEST_MICROPHONE_CAMERA_FOR_LIVESTREAM);
+//            isPermissionForLiveStreaming = true;
+//            ActivityCompat.requestPermissions(this,
+//                    new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA},
+//                    REQUEST_MICROPHONE_CAMERA_FOR_LIVESTREAM);
+
+            requestPermissionForCameraAndMicrophone();
         }
 
-        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED)
-                && (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED))
+        else
+//            if ((ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED)
+//                && (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED))
         {
             //got permission!
             ////enable local video and audio tracks
@@ -814,6 +842,8 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
     public void stopStreaming() {
         //stop sharing video & audio in room
+
+        isPermissionForLiveStreaming = false;
 
         //reset booleans
         livestreamPresenter.setVideoEnabled(false);
@@ -884,6 +914,9 @@ public class LiveSessionActivity extends AppCompatActivity implements
         // if not, toggle audio booleans and update the UI, then enter room
 
             //was it going to mute or unmute?
+
+        if (checkPermissionForMicrophone()) {
+
             if (va.localAudioTrack.isEnabled())
             {
                 //if already enabled, that means you are in the room already.
@@ -909,10 +942,16 @@ public class LiveSessionActivity extends AppCompatActivity implements
                 //todo: trevor
             }
 
-        //enter room and the rest happens via listner
-        if (va.room == null || va.room.getState() == RoomState.DISCONNECTED)
+            //enter room and the rest happens via listner
+            if (va.room == null || va.room.getState() == RoomState.DISCONNECTED)
+            {
+                enterRoomTwilio(); //this will also secure new token if last one had expired
+            }
+
+        } else //no permission yet!
+
         {
-            enterRoomTwilio(); //this will also secure new token if last one had expired
+            requestPermissionForMicrophone();
         }
 
     }
@@ -1288,16 +1327,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
                     createLocalVideoTrack(true);
                     startStreaming(va.tempVideoView);
 
-//                    if (va.localAudioTrack == null)
-//                        // Share your microphone
-//                        va.localAudioTrack = LocalAudioTrack.create(SdkApp.getAppContext(), true);
-//                    AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-//                    audioManager.setMicrophoneMute(false);
-//
-//                    // Share your camera
-//                    createLocalVideoTrack(true);
-
-
 
                 } else if ((!isPermissionForLiveStreaming) && (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
                         && isLiveStreamAudioGrant) {
@@ -1332,19 +1361,21 @@ public class LiveSessionActivity extends AppCompatActivity implements
         }
 
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
+//                || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+//
+//            isPermissionForLiveStreaming = false;
+//            ActivityCompat.requestPermissions(this,
+//                    new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA},
+//                    REQUEST_MICROPHONE_CAMERA_FOR_LIVESTREAM);
+//        }
 
 
-            isPermissionForLiveStreaming = false;
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA},
-                    REQUEST_MICROPHONE_CAMERA_FOR_LIVESTREAM);
-        }
+//        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED)
+//                && (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)) {
 
-
-        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED)
-                && (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)) {
+        if (checkPermissionForCameraAndMicrophone())
+    {
             if (va.localAudioTrack == null)
                 // Share your microphone
                 va.localAudioTrack = LocalAudioTrack.create(this, false);
@@ -1353,6 +1384,9 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
             // Share your camera
             createLocalVideoTrack(false);
+
+//            isPermissionForLiveStreaming = true;
+
         }
 
     }
@@ -1364,7 +1398,8 @@ public class LiveSessionActivity extends AppCompatActivity implements
 
     public void createLocalVideoTrack(boolean enable) {
         // Share your camera
-        if (va.localVideoTrack == null && checkPermissionForCameraAndMicrophone()) {
+//        if (va.localVideoTrack == null && checkPermissionForCameraAndMicrophone()) {
+        if (va.localVideoTrack == null) {
             if (isFrontCameraPresent(this))
             {
                 va.cameraCapturer = new CameraCapturer(this, CameraCapturer.CameraSource.FRONT_CAMERA);
