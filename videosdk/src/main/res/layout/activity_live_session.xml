@@ -12,9 +12,9 @@
 
     <ImageView
         android:id="@+id/iv_leave_session_btn"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:padding="4dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:padding="10dp"
         android:src="@drawable/exit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -80,7 +80,9 @@
         android:layout_height="@dimen/height_livestream_bar"
         android:background="@drawable/left_corner"
         app:layout_constraintBottom_toBottomOf="@+id/layout_mini_stage"
-        android:src="@drawable/image"/>
+        android:src="@drawable/image"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"/>
 
     <ImageView
         android:id="@+id/iv_add_friends"
@@ -90,7 +92,9 @@
         android:background="@drawable/right_corner"
         app:layout_constraintBottom_toBottomOf="@+id/layout_mini_stage"
         app:layout_constraintRight_toRightOf="parent"
-        android:src="@drawable/invite"/>
+        android:src="@drawable/invite"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"/>
 
     <FrameLayout
         android:id="@+id/frag_media_drawer"
