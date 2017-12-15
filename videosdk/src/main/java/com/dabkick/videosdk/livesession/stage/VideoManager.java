@@ -198,6 +198,11 @@ public class VideoManager {
 
         private void setVideoControListener() {
             if (videoView.getVideoControls() != null) {
+                videoView.getVideoControls().setPreviousButtonEnabled(true);
+                videoView.getVideoControls().setPreviousButtonRemoved(false);
+                videoView.getVideoControls().setNextButtonEnabled(true);
+                videoView.getVideoControls().setNextButtonRemoved(false);
+
                 videoView.getVideoControls().setButtonListener(new VideoControlsButtonListener() {
                     @Override
                     public boolean onPlayPauseClicked() {
