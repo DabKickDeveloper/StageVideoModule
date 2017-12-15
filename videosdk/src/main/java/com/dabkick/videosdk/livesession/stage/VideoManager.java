@@ -149,13 +149,13 @@ public class VideoManager {
 
     public class VideoItem {
 
-        VideoView videoView;
+        com.devbrackets.android.exomedia.ui.widget.VideoView videoView;
         StageModel stageModel;
 
         VideoItem(StageModel stageModel) {
             this.stageModel = stageModel;
 
-            videoView = (VideoView) LayoutInflater.from(appCtx).inflate(R.layout.item_videoview, null);
+            videoView = (com.devbrackets.android.exomedia.ui.widget.VideoView) LayoutInflater.from(appCtx).inflate(R.layout.item_videoview, null);
             videoView.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT

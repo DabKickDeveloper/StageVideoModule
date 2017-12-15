@@ -1,0 +1,51 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven'
+//apply plugin: 'com.novoda.bintray-release'
+
+def versionMajor = 4
+def versionMinor = 1
+def versionPatch = 0
+
+def libraryGroupId = 'com.devbrackets.android'
+def libraryBaseName = 'exomedia'
+def libraryVersion = "${versionMajor}.${versionMinor}.${versionPatch}"
+
+ext {
+    exoPlayerVersion = "2.6.0"
+    supportLibVersion = "27.0.2"
+}
+
+dependencies {
+    compile "com.android.support:support-media-compat:$supportLibVersion"
+    compile "com.android.support:appcompat-v7:$supportLibVersion"
+
+    // ExoPlayer
+    compile "com.google.android.exoplayer:exoplayer-core:$exoPlayerVersion"
+    compile "com.google.android.exoplayer:exoplayer-dash:$exoPlayerVersion"
+    compile "com.google.android.exoplayer:exoplayer-hls:$exoPlayerVersion"
+    compile "com.google.android.exoplayer:exoplayer-smoothstreaming:$exoPlayerVersion"
+}
+
+android {
+    compileSdkVersion 27
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 27
+
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
