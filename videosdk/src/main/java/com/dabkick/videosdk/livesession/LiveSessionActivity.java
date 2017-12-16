@@ -7,11 +7,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -28,6 +31,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
@@ -136,6 +141,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
     RelativeLayout innerContainer;
     ConstraintLayout container;
     EmojiLayout emojis;
+    RelativeLayout chatLayout;
 
     //gopal
     VideoActivity va = VideoActivity.getInstance();
@@ -233,6 +239,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
         chatEditText.setOnFocusChangeListener(getChatFocusListener());
         chatEditText.setFilters(new InputFilter[]{
                 new InputFilter.LengthFilter(DEFAULT_CHAT_MSG_LENGTH_LIMIT)});
+        chatLayout = findViewById(R.id.layout_chat);
 
         // back button
         ImageView backBtn = findViewById(R.id.iv_leave_session_btn);
@@ -266,6 +273,20 @@ public class LiveSessionActivity extends AppCompatActivity implements
                         int position = stageLayoutManager.getPosition(centerView);
                         stagePresenter.onUserSwipedStage(position);
                     }
+                }
+            }
+        });
+
+        View rootView = getWindow().getDecorView().getRootView();
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+
+                if(chatEditText.hasFocus()) {
+                    Rect rectangle = new Rect();
+                    LiveSessionActivity.this.getWindow().getDecorView().getWindowVisibleDisplayFrame(rectangle);
+                    chatLayout.setY(rectangle.height() - chatLayout.getHeight() - AnimationUtils.convertDpToPixel(LiveSessionActivity.this,5));
+                    chatListView.setY(rectangle.height() - chatLayout.getHeight() - AnimationUtils.convertDpToPixel(LiveSessionActivity.this,5) - chatListView.getHeight());
                 }
             }
         });
