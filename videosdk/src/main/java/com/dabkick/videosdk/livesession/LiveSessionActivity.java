@@ -291,7 +291,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
             }
         });
 
-
     }
 
     private void swapStages() {
@@ -611,19 +610,8 @@ public class LiveSessionActivity extends AppCompatActivity implements
     }
 
     public void showInviteFriendChooser(View view) {
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("text/plain");
-        String appName = Util.getAppName(this);
-        String serverLink = String.format(
-                "http://stagingquery.dabkick.com/sdk/user/sdkInvite.php?s=%s&d=%s",
-                ((SdkApp)SdkApp.getAppContext()).getDabKickSession().getDeveloperKey(),
-                Prefs.getDeveloperId());
-        String text = "Let's watch videos together on " + appName + " by clicking " + serverLink;
-        shareIntent.putExtra(Intent.EXTRA_TEXT, text);
-        Intent chooserIntent = Intent.createChooser(shareIntent, "Share Room With");
-        if (chooserIntent.resolveActivity(getPackageManager()) != null) {
-            startActivity(chooserIntent);
-        }
+
+        expandInviteFriendsButton();
     }
 
     public void closeChatList(View view){
@@ -1546,6 +1534,24 @@ public class LiveSessionActivity extends AppCompatActivity implements
         if (toast != null) {
             toast.cancel();
             return;
+        }
+
+    }
+
+    public void expandInviteFriendsButton(){
+
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        String appName = Util.getAppName(this);
+        String serverLink = String.format(
+                "http://stagingquery.dabkick.com/sdk/user/sdkInvite.php?s=%s&d=%s",
+                ((SdkApp)SdkApp.getAppContext()).getDabKickSession().getDeveloperKey(),
+                Prefs.getDeveloperId());
+        String text = "Let's watch videos together on " + appName + " by clicking " + serverLink;
+        shareIntent.putExtra(Intent.EXTRA_TEXT, text);
+        Intent chooserIntent = Intent.createChooser(shareIntent, "Share Room With");
+        if (chooserIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(chooserIntent);
         }
 
     }
