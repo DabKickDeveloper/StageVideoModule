@@ -261,7 +261,7 @@ public class AnimationUtils {
 
         AnimatorSet set = new AnimatorSet();
         ObjectAnimator frameAnimation = ObjectAnimator.ofFloat(frameLayout,
-                "translationX", -convertDpToPixel(mActivity,250), 0);
+                "translationX", -convertDpToPixel(mActivity,200), 0);
         frameAnimation.setDuration(700);
         frameAnimation.addListener(new Animator.AnimatorListener() {
             @Override
@@ -285,7 +285,7 @@ public class AnimationUtils {
             }
         });
         ObjectAnimator imageAnimation = ObjectAnimator.ofFloat(imageView,
-                "translationX", 0, convertDpToPixel(mActivity,250));
+                "translationX", 0, convertDpToPixel(mActivity,200));
         imageAnimation.setDuration(700);
         set.playTogether(new Animator[]{frameAnimation,imageAnimation});
         set.start();
@@ -296,7 +296,7 @@ public class AnimationUtils {
 
         AnimatorSet set = new AnimatorSet();
         ObjectAnimator frameAnimation = ObjectAnimator.ofFloat(frameLayout,
-                "translationX", 0, -convertDpToPixel(mActivity,250));
+                "translationX", 0, -convertDpToPixel(mActivity,200));
         frameAnimation.setDuration(700);
         frameAnimation.addListener(new Animator.AnimatorListener() {
             @Override
@@ -319,7 +319,7 @@ public class AnimationUtils {
             }
         });
         ObjectAnimator imageAnimation = ObjectAnimator.ofFloat(imageView,
-                "translationX", convertDpToPixel(mActivity,250), 0);
+                "translationX", convertDpToPixel(mActivity,200), 0);
         imageAnimation.setDuration(700);
         set.playTogether(new Animator[]{frameAnimation,imageAnimation});
         set.start();
