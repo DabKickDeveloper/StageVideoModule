@@ -13,6 +13,7 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.v4.app.ActivityCompat;
@@ -142,6 +143,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
     ConstraintLayout container;
     EmojiLayout emojis;
     RelativeLayout chatLayout;
+    boolean chatHasFocus = false;
 
     //gopal
     VideoActivity va = VideoActivity.getInstance();
@@ -1578,7 +1580,36 @@ public class LiveSessionActivity extends AppCompatActivity implements
 //    }
 
 
+    @Override
+    protected void onPause() {
+        super.onPause();
 
+        if(chatEditText.hasFocus()) {
+            chatHasFocus = true;
+            chatEditText.clearFocus();
+        }
 
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm.isAcceptingText()) {
+            if (getCurrentFocus() != null)
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(chatHasFocus){
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    chatHasFocus = false;
+                    chatEditText.requestFocus();
+
+                }
+            }, 400);
+        }
+
+    }
 }
