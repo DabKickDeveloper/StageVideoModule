@@ -40,7 +40,8 @@ public class DabKickVideoButton extends LinearLayout {
 
     public void setDabKickSession(final DabKickSession dabKickSession) {
         ((SdkApp)SdkApp.getAppContext()).setDabKickSession(dabKickSession);
-        Prefs.setDeveloperId(dabKickSession.getDeveloperKey());
+        Prefs.setDeveloperId(dabKickSession.getDeveloperId());
+        Prefs.setDeveloperKey(dabKickSession.getDeveloperKey());
     }
 
     private void startLiveSessionActivity() {

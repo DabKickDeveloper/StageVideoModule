@@ -12,6 +12,7 @@ public class Prefs {
     private static final String ACCESS_TOKEN = "access_token";
     private static final String REFRESH_TOKEN = "refresh_token";
     private static final String FIREBASE_TOKEN = "firebase_token";
+    private static final String DEVELOPER_KEY = "developer_key";
     private static final String DEVELOPER_ID = "developer_id";
     private static final String USER_ID = "user_id";
     private static final String DABNAME = "dabname";
@@ -70,6 +71,14 @@ public class Prefs {
 
     public static void setDeveloperId(String developerId) {
         getEditor().putString(DEVELOPER_ID, developerId).apply();
+    }
+
+    public static String getDeveloperKey() {
+        return getPrefs().getString(DEVELOPER_KEY, "");
+    }
+
+    public static void setDeveloperKey(String developerId) {
+        getEditor().putString(DEVELOPER_KEY, developerId).apply();
     }
 
     public static String getUserId() {

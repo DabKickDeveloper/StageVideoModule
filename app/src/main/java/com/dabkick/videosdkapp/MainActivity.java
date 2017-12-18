@@ -391,7 +391,8 @@ public class MainActivity extends AppCompatActivity {
         };
 
         DabKickSession.DabKickBuilder dabKickBuilder = new DabKickSession.DabKickBuilder(
-                "4b3403665fea6",
+                "DK29515a9bdf6e11e7a1d8062",
+                "8cfa0c6f6cdc4133a8997013bb4b61",
                 dabKickVideoProvider
         );
 

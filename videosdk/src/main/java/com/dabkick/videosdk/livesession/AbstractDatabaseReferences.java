@@ -12,7 +12,7 @@ public abstract class AbstractDatabaseReferences {
     protected static String getBase() {
         return BASE + SEPARATOR +
                 LIVE_SESSIONS + SEPARATOR +
-                Prefs.getDeveloperId() + SEPARATOR;
+                Prefs.getDeveloperKey() + SEPARATOR;
     }
 
     public static String getSessionId() {

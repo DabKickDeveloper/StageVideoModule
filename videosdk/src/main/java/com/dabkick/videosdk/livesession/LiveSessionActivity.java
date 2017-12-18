@@ -11,11 +11,9 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
-import android.support.constraint.ConstraintSet;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -34,7 +32,6 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
@@ -48,7 +45,6 @@ import android.widget.Toast;
 
 import com.dabkick.videosdk.Prefs;
 import com.dabkick.videosdk.R;
-import com.dabkick.videosdk.SdkApp;
 import com.dabkick.videosdk.Util;
 import com.dabkick.videosdk.livesession.chat.ChatAdapter;
 import com.dabkick.videosdk.livesession.chat.ChatModel;
@@ -74,7 +70,6 @@ import com.dabkick.videosdk.livesession.stage.StagePresenter;
 import com.dabkick.videosdk.livesession.stage.StagePresenterImpl;
 import com.dabkick.videosdk.livesession.stage.StageRecyclerViewAdapter;
 import com.dabkick.videosdk.livesession.stage.VideoManager;
-import com.dabkick.videosdk.retrofit.JwtUtils;
 import com.dabkick.videosdk.retrofit.JwtUtils;
 import com.dabkick.videosdk.retrofit.RegisterResponse;
 import com.dabkick.videosdk.retrofit.RetrofitCreator;
@@ -1588,9 +1583,9 @@ public class LiveSessionActivity extends AppCompatActivity implements
         String appName = Util.getAppName(this);
         String serverLink = String.format(
                 "http://stagingquery.dabkick.com/sdk/user/sdkInvite.php?s=%s&d=%s",
-                ((SdkApp)SdkApp.getAppContext()).getDabKickSession().getDeveloperKey(),
+                AbstractDatabaseReferences.getSessionId(),
                 Prefs.getDeveloperId());
-        String text = "Let's watch videos together on " + appName + " by clicking " + serverLink;
+                String text = "Let's watch videos together on " + appName + " by clicking " + serverLink;
         shareIntent.putExtra(Intent.EXTRA_TEXT, text);
         Intent chooserIntent = Intent.createChooser(shareIntent, "Share Room With");
         if (chooserIntent.resolveActivity(getPackageManager()) != null) {

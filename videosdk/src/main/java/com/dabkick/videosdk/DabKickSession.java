@@ -7,11 +7,16 @@ public class DabKickSession {
 
 
     private final DabKickVideoProvider dabKickVideoProvider;
-    private final String developerKey;
+    private final String developerId, developerKey;
 
-    private DabKickSession(final String developerKey, final DabKickVideoProvider dabKickVideoProvider) {
+    private DabKickSession(final String developerId, final String developerKey, final DabKickVideoProvider dabKickVideoProvider) {
+        this.developerId = developerId;
         this.developerKey = developerKey;
         this.dabKickVideoProvider = dabKickVideoProvider;
+    }
+
+    public String getDeveloperId() {
+        return developerId;
     }
 
     public String getDeveloperKey() {
@@ -26,18 +31,17 @@ public class DabKickSession {
     public static class DabKickBuilder {
 
         private final DabKickVideoProvider nestedDabKickVideoProvider;
-        private final String developerKey;
+        private final String developerId, developerKey;
 
-        public DabKickBuilder(String developerKey, final DabKickVideoProvider nestedDabKickVideoProvider) {
+        public DabKickBuilder(String developerId, String developerKey, final DabKickVideoProvider nestedDabKickVideoProvider) {
+            this.developerId = developerId;
             this.developerKey = developerKey;
             this.nestedDabKickVideoProvider = nestedDabKickVideoProvider;
         }
 
         public DabKickSession build() {
-            return new DabKickSession(developerKey,
-                    nestedDabKickVideoProvider);
+            return new DabKickSession(developerId, developerKey, nestedDabKickVideoProvider);
         }
-
 
     }
 

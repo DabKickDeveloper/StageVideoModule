@@ -9,7 +9,7 @@ public class DabKick {
      * Initializes SDK values
      */
     public static void initSdk(String developerId) {
-        Prefs.setDeveloperId(developerId);
+        Prefs.setDeveloperKey(developerId);
     }
 
 
