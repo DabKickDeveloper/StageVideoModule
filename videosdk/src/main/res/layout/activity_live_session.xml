@@ -50,7 +50,7 @@
 
     <FrameLayout
         android:id="@+id/layout_mini_stage"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/height_livestream_bar"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -61,11 +61,9 @@
             android:id="@+id/recyclerview_livestream"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/height_livestream_bar"
-            android:layout_marginBottom="16dp"
-            android:layout_marginRight="96dp"
-            android:paddingLeft="60dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:listitem="@layout/livestream_add_friend_viewholder" />
+            tools:listitem="@layout/livestream_add_friend_viewholder"
+            android:layout_gravity="center"/>
 
     </FrameLayout>
 
