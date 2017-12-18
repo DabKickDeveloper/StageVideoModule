@@ -31,6 +31,7 @@ import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
@@ -307,6 +308,40 @@ public class LiveSessionActivity extends AppCompatActivity implements
         mainLayout.removeViewAt(0);
         View miniChild = miniLayout.getChildAt(0);
         miniLayout.removeViewAt(0);
+
+        if(temp.getTag().equals("video")){
+
+            FrameLayout.LayoutParams param = (FrameLayout.LayoutParams)temp.getLayoutParams();
+            param.height = (int)AnimationUtils.convertDpToPixel(LiveSessionActivity.this,180);
+            param.width =  (int)AnimationUtils.convertDpToPixel(LiveSessionActivity.this,130);
+            param.gravity = Gravity.CENTER;
+            param.bottomMargin = (int)AnimationUtils.convertDpToPixel(LiveSessionActivity.this,16);
+            temp.setLayoutParams(param);
+
+        }else{
+
+            FrameLayout.LayoutParams param = (FrameLayout.LayoutParams)temp.getLayoutParams();
+            param.height = (int)AnimationUtils.convertDpToPixel(LiveSessionActivity.this,180);
+            temp.setLayoutParams(param);
+        }
+
+        if(miniChild.getTag().equals("stream")){
+
+            FrameLayout.LayoutParams param = (FrameLayout.LayoutParams)miniChild.getLayoutParams();
+            param.height = (int)AnimationUtils.convertDpToPixel(LiveSessionActivity.this,200);
+            miniChild.setLayoutParams(param);
+
+        }else{
+
+            FrameLayout.LayoutParams param = (FrameLayout.LayoutParams)miniChild.getLayoutParams();
+            param.height = FrameLayout.LayoutParams.MATCH_PARENT;
+            param.width =  FrameLayout.LayoutParams.MATCH_PARENT;
+            param.gravity = Gravity.CENTER;
+            param.bottomMargin = 0;
+            miniChild.setLayoutParams(param);
+
+        }
+
         mainLayout.addView(miniChild);
         miniLayout.addView(temp);
 
