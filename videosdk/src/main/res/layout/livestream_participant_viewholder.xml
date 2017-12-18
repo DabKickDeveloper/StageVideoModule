@@ -3,12 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/livestream_item">
-
-    <ImageView
-        android:src="@drawable/ic_videocam_white_36dp"
-        style="@style/livestream_item"
-        android:visibility="gone"/>
+    android:layout_height="@dimen/height_livestream_bar"
+    android:layout_width="@dimen/width_livestream_bar_item"
+    android:background="@drawable/livestream_view"
+    android:layout_marginLeft="10dp">
 
     <com.twilio.video.VideoView
         android:id="@+id/livestream_my_viewholder_videoview"
@@ -18,12 +16,20 @@
         android:layout_alignBottom="@+id/livestream_viewholder_name"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        style="@style/livestream_item"/>
+        android:layout_height="@dimen/height_livestream_bar"
+        android:layout_width="@dimen/width_livestream_bar_item"
+        android:background="@drawable/livestream_view"/>
+
+    <ImageView
+        android:src="@drawable/avatarplaceholder"
+        android:layout_height="40dp"
+        android:layout_width="40dp"
+        android:layout_centerInParent="true"/>
 
     <TextView
         android:id="@+id/livestream_viewholder_name"
         tools:text="Name"
-        android:background="@android:color/holo_green_dark"
+        android:background="@android:color/transparent"
         android:textColor="@color/white"
         android:layout_width="match_parent"
         android:gravity="center"
