@@ -375,7 +375,7 @@ public class LiveSessionActivity extends AppCompatActivity implements
                     break;
             }
             AnimationUtils.slideToAbove(drawable, innerContainer,
-                    container,LiveSessionActivity.this);
+                    container,LiveSessionActivity.this, chatLayout);
         };
         EmojiPresenter emojiPresenter = new EmojiPresenter(emojiView);
         emojis.setListener(emojiPresenter);
