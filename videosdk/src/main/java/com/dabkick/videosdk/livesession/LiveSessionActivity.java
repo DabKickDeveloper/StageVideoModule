@@ -289,6 +289,10 @@ public class LiveSessionActivity extends AppCompatActivity implements
                     LiveSessionActivity.this.getWindow().getDecorView().getWindowVisibleDisplayFrame(rectangle);
                     chatLayout.setY(rectangle.height() - chatLayout.getHeight() - AnimationUtils.convertDpToPixel(LiveSessionActivity.this,5));
                     chatListView.setY(rectangle.height() - chatLayout.getHeight() - AnimationUtils.convertDpToPixel(LiveSessionActivity.this,5) - chatListView.getHeight());
+                }else{
+
+                    float y = miniLayout.getY() - AnimationUtils.convertDpToPixel(LiveSessionActivity.this,30) - chatLayout.getHeight();
+                    chatLayout.setY(y);
                 }
             }
         });
