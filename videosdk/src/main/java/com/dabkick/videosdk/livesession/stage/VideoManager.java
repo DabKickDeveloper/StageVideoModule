@@ -3,9 +3,9 @@ package com.dabkick.videosdk.livesession.stage;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -148,6 +148,42 @@ public class VideoManager {
 
     }
 
+    private void clickNext(String key) {
+        String nextKey = getNextKey(key);
+        if (!TextUtils.isEmpty(nextKey)) {
+            databaseCallback.onNextClicked(nextKey);
+        }
+    }
+
+    private void clickPrev(String key) {
+        String prevKey = getPrevKey(key);
+        if (!TextUtils.isEmpty(prevKey)) {
+            databaseCallback.onPreviousClicked(prevKey);
+        }
+    }
+
+    private String getNextKey(String key) {
+        for (int i = 0; i < items.size() - 1; i++) {
+            StageModel sm = items.get(i).stageModel;
+            if (sm.getKey().equals(key)) {
+                return items.get(i + 1).stageModel.getKey();
+            }
+        }
+        Timber.d("unable to find next key for %s", key);
+        return null;
+    }
+
+    private String getPrevKey(String key) {
+        for (int i = items.size() - 1; i > 0; i--) {
+            StageModel sm = items.get(i).stageModel;
+            if (sm.getKey().equals(key)) {
+                return items.get(i - 1).stageModel.getKey();
+            }
+        }
+        Timber.d("unable to find prev key for %s", key);
+        return null;
+    }
+
     public class VideoItem {
 
         com.devbrackets.android.exomedia.ui.widget.VideoView videoView;
@@ -212,8 +248,16 @@ public class VideoManager {
                                 stageModel.getKey(), newState, videoView.getCurrentPosition());
                         return false;
                     }
-                    @Override public boolean onPreviousClicked() {return false;}
-                    @Override public boolean onNextClicked() {return false;}
+                    @Override public boolean onPreviousClicked() {
+                        pauseLocal();
+                        clickPrev(stageModel.getKey());
+                        return false;
+                    }
+                    @Override public boolean onNextClicked() {
+                        pauseLocal();
+                        clickNext(stageModel.getKey());
+                        return false;
+                    }
                     @Override public boolean onRewindClicked() {return false;}
                     @Override public boolean onFastForwardClicked() {return false;
                     }

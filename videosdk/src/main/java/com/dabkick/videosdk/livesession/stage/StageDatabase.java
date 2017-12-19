@@ -23,9 +23,10 @@ public class StageDatabase {
         void onStageVideoTimeChanged(String key, long playedMillis);
         void onStageVideoStateChanged(String key, String newState, long playedMillis);
         void onVideoComplete(String key);
+        void onNextClicked(String key);
+        void onPreviousClicked(String key);
     }
 
-    private StageDatabaseCallback callback;
     private DatabaseReference databaseReference;
     private FirebaseDatabase firebaseDatabase;
     private ChildEventListener childEventListener;
@@ -57,6 +58,16 @@ public class StageDatabase {
             @Override
             public void onVideoComplete(String key) {
                 updateState(key, "paused", 1);
+            }
+
+            @Override
+            public void onNextClicked(String key) {
+                overviewDatabase.setStageKey(key);
+            }
+
+            @Override
+            public void onPreviousClicked(String key) {
+                overviewDatabase.setStageKey(key);
             }
 
         });
