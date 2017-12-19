@@ -27,6 +27,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.text.InputFilter;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -283,8 +284,16 @@ public class LiveSessionActivity extends AppCompatActivity implements
                 if(chatEditText.hasFocus()) {
                     Rect rectangle = new Rect();
                     LiveSessionActivity.this.getWindow().getDecorView().getWindowVisibleDisplayFrame(rectangle);
-                    chatLayout.setY(rectangle.height() - chatLayout.getHeight() - AnimationUtils.convertDpToPixel(LiveSessionActivity.this,5));
-                    chatListView.setY(rectangle.height() - chatLayout.getHeight() - AnimationUtils.convertDpToPixel(LiveSessionActivity.this,5) - chatListView.getHeight());
+
+                    DisplayMetrics metrics = new DisplayMetrics();
+                    getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                    int screenHeight = metrics.heightPixels;
+                    int heightDifference = screenHeight - (rectangle.bottom - rectangle.top);
+
+                    if(heightDifference > screenHeight/3) {
+                        chatLayout.setY(rectangle.height() - chatLayout.getHeight() - AnimationUtils.convertDpToPixel(LiveSessionActivity.this, 5));
+                        chatListView.setY(rectangle.height() - chatLayout.getHeight() - AnimationUtils.convertDpToPixel(LiveSessionActivity.this, 5) - chatListView.getHeight());
+                    }
                 }else{
 
                     float chatLayoutY = miniLayout.getY() - AnimationUtils.convertDpToPixel(LiveSessionActivity.this,30) - chatLayout.getHeight();
@@ -449,10 +458,10 @@ public class LiveSessionActivity extends AppCompatActivity implements
     private View.OnFocusChangeListener getChatFocusListener() {
         return (v, hasFocus) -> {
             if (hasFocus) {
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+               /* InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm != null) {
                     imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-                }
+                }*/
 
                 chatEditText.setWidth(0);
                 LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
