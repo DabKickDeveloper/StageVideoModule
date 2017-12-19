@@ -5,7 +5,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="@dimen/height_livestream_bar"
     android:layout_width="@dimen/width_livestream_bar_item"
-    android:background="@drawable/livestream_view"
     android:id="@+id/relativeLayout">
 
     <com.twilio.video.VideoView
@@ -14,7 +13,6 @@
         android:visibility="visible"
         android:layout_height="@dimen/height_livestream_bar"
         android:layout_width="@dimen/width_livestream_bar_item"
-        android:background="@drawable/livestream_view"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
