@@ -14,9 +14,30 @@
 
         <activity
             android:name=".livesession.LiveSessionActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBarTheme"
-            android:windowSoftInputMode="stateHidden|adjustPan"/>
+            android:windowSoftInputMode="stateHidden|adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="DK29515a9bdf6e11e7a1d8062"
+                    android:host="path" />
+            </intent-filter>
+            <intent-filter>
+                <!-- Spotify auth callback -->
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="callback"
+                    android:scheme="playlistmessagesforspotify"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

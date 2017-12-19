@@ -295,6 +295,20 @@ public class LiveSessionActivity extends AppCompatActivity implements
             }
         });
 
+        if (savedInstanceState != null) {
+            handleShareLink(getIntent().getData());
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleShareLink(intent.getData());
+    }
+
+    private void handleShareLink(Uri intent) {
+        String link = intent.toString();
+        Timber.i("link: %s", link);
     }
 
     private void swapStages() {
@@ -1546,36 +1560,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
             alert11.show();
     }
 
-//    public static void displayToast(String message) {
-//        runOnUIThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                if (toast != null) {
-//                    toast.cancel();
-//                    if (this != null) {
-//                        toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
-//                        toast.show();
-//                    }
-//                } else {
-//                    if (this != null) {
-//                        toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
-//                        toast.show();
-//                    }
-//                }
-//            }
-//        });
-//    }
-
-
-    public static void dismissToast() {
-
-        if (toast != null) {
-            toast.cancel();
-            return;
-        }
-
-    }
-
     public void expandInviteFriendsButton(){
 
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -1603,17 +1587,6 @@ public class LiveSessionActivity extends AppCompatActivity implements
     public void onMessageEvent(SwapStageEvent event) {
         swapStages();
     };
-
-
-    //back button enabeled and ends the sesion.
-//    @Override
-//    public void onBackPressed() {
-//
-//        va.clear();
-////        va.setAudioFocus(false);
-//
-//        super.onBackPressed();
-//    }
 
 
     @Override
