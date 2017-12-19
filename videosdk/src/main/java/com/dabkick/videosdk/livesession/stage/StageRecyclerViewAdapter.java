@@ -44,6 +44,9 @@ public class StageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         }
 
         VideoView toAddView = videoManager.getVideoViewAtIndex(position);
+        if (toAddView.getParent() != null) {
+            ((ViewGroup)toAddView.getParent()).removeViewAt(0);
+        }
         vh.layout.addView(toAddView);
 
     }
