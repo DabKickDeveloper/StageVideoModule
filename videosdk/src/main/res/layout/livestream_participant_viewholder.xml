@@ -5,16 +5,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="@dimen/height_livestream_bar"
     android:layout_width="@dimen/width_livestream_bar_item"
-    android:layout_marginLeft="10dp">
+    android:layout_marginLeft="10dp"
+    android:background="@drawable/livestream_view">
 
     <com.twilio.video.VideoView
         android:id="@+id/livestream_my_viewholder_videoview"
+        android:layout_centerInParent="true"
+        android:background="@drawable/participant_view1"
         app:overlaySurface="true"
         android:visibility="visible"
-        android:layout_alignParentTop="true"
-        android:layout_alignBottom="@+id/livestream_viewholder_name"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
         android:layout_height="@dimen/height_livestream_bar"
         android:layout_width="@dimen/width_livestream_bar_item"/>
 

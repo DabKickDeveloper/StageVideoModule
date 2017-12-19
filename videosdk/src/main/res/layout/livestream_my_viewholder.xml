@@ -5,10 +5,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="@dimen/height_livestream_bar"
     android:layout_width="@dimen/width_livestream_bar_item"
-    android:id="@+id/relativeLayout">
+    android:id="@+id/relativeLayout"
+    android:background="@drawable/livestream_view">
 
     <com.twilio.video.VideoView
         android:id="@+id/livestream_my_viewholder_videoview"
+        android:background="@drawable/livestream_view1"
         app:overlaySurface="true"
         android:visibility="visible"
         android:layout_height="@dimen/height_livestream_bar"
