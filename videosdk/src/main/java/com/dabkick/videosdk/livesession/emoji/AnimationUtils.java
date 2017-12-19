@@ -34,7 +34,7 @@ public class AnimationUtils {
 
         Random r = new Random();
         int Low = 10;
-        int High = 300;
+        int High = 100;
         int rightValue = r.nextInt(High - Low) + Low;
 
         ImageView bounceimage = new ImageView(mActivity);
@@ -52,38 +52,33 @@ public class AnimationUtils {
         DotsView dotsView = new DotsView(mActivity);
         CircleView circleView = new CircleView(mActivity);
 
+        circleView.requestLayout();
+        circleView.setY(chatLayout.getY() - convertDpToPixel(mActivity,30));
+        friendImageIcon.requestLayout();
+        friendImageIcon.setY(chatLayout.getY() - convertDpToPixel(mActivity,30));
+        bounceimage.requestFocus();
+        bounceimage.setY(chatLayout.getY() - convertDpToPixel(mActivity,30));
+
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity)mActivity).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
 
         RelativeLayout.LayoutParams relativeLayoutParams = new RelativeLayout.LayoutParams((int) convertDpToPixel(mActivity, 150),
                 height);
-        relativeLayoutParams.addRule(RelativeLayout.ABOVE, R.id.layout_chat);
         relativeLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         relativeLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         relativeLayoutParams.rightMargin = rightValue - 100;
         frameLayout.requestLayout();
         frameLayout.setLayoutParams(relativeLayoutParams);
 
-        RelativeLayout.LayoutParams dotsParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dotsParams.addRule(RelativeLayout.ABOVE, R.id.layout_chat);
-        dotsParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        dotsParams.setMarginStart((int) convertDpToPixel(mActivity,15));
-
-        RelativeLayout.LayoutParams circleParams = new RelativeLayout.LayoutParams(90, 90);
-        circleParams.addRule(RelativeLayout.ABOVE, R.id.layout_chat);
-        circleParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        circleParams.setMarginStart((int) convertDpToPixel(mActivity,15));
-
-        RelativeLayout.LayoutParams iconParams = new RelativeLayout.LayoutParams(90, 90);
-        iconParams.addRule(RelativeLayout.ABOVE, R.id.layout_chat);
-        iconParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        iconParams.setMarginStart((int) convertDpToPixel(mActivity,15));
-
-        RelativeLayout.LayoutParams bounceEmojiParams = new RelativeLayout.LayoutParams(90, 90);
-        bounceEmojiParams.addRule(RelativeLayout.ABOVE, R.id.layout_chat);
-        bounceEmojiParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        bounceEmojiParams.setMarginStart((int) convertDpToPixel(mActivity,15));
+        FrameLayout.LayoutParams dotsParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dotsParams.gravity = Gravity.CENTER_HORIZONTAL;
+        FrameLayout.LayoutParams circleParams = new FrameLayout.LayoutParams(90, 90);
+        circleParams.gravity = Gravity.CENTER_HORIZONTAL;
+        FrameLayout.LayoutParams iconParams = new FrameLayout.LayoutParams(90, 90);
+        iconParams.gravity = Gravity.CENTER_HORIZONTAL;
+        FrameLayout.LayoutParams bounceEmojiParams = new FrameLayout.LayoutParams(90, 90);
+        bounceEmojiParams.gravity = Gravity.CENTER_HORIZONTAL;
 
         dotsView.requestLayout();
         dotsView.setLayoutParams(dotsParams);
@@ -93,15 +88,6 @@ public class AnimationUtils {
         friendImageIcon.setLayoutParams(iconParams);
         bounceimage.requestFocus();
         bounceimage.setLayoutParams(bounceEmojiParams);
-
-        dotsView.requestLayout();
-        dotsView.setY(chatLayout.getY() - convertDpToPixel(mActivity,30));
-        circleView.requestLayout();
-        circleView.setY(chatLayout.getY() - convertDpToPixel(mActivity,30));
-        friendImageIcon.requestLayout();
-        friendImageIcon.setY(chatLayout.getY() - convertDpToPixel(mActivity,30));
-        bounceimage.requestFocus();
-        bounceimage.setY(chatLayout.getY() - convertDpToPixel(mActivity,30));
 
         frameLayout.addView(bounceimage);
         frameLayout.addView(friendImageIcon);
