@@ -9,4 +9,5 @@
     <color name="livesession_bckgrd">#646e97</color>
     <color name="media_drawer_share_bckgrnd">#252965</color>
     <color name="livesession_txt_color">#df1564</color>
+    <color name="red">#E2041c</color>
 </resources>

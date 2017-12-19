@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
 import com.devbrackets.android.exomedia.R;
+import com.devbrackets.android.exomedia.listener.VideoControlsSeekListener;
 import com.devbrackets.android.exomedia.util.TimeFormatUtil;
 import com.devbrackets.android.exomedia.ui.animation.BottomViewHideShowAnimation;
 import com.devbrackets.android.exomedia.ui.animation.TopViewHideShowAnimation;
@@ -219,6 +220,7 @@ public class VideoControlsMobile extends VideoControls {
 
         updatePlaybackState(videoView != null && videoView.isPlaying());
     }
+
 
     /**
      * Listens to the seek bar change events and correctly handles the changes

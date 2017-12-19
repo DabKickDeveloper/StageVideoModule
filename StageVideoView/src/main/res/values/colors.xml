@@ -8,4 +8,6 @@
     <color name="exomedia_leanback_progress_horizontal_background">#19FFFFFF</color>
     <color name="exomedia_leanback_progress_horizontal_progress_secondary">#33FFFFFF</color>
     <color name="exomedia_leanback_progress_horizontal_progress_placeholder">#FF43B2E5</color>
+    <color name="red">#E2041c</color>
+    <color name="white">#FFFFFF</color>
 </resources>

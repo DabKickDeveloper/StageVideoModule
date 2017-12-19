@@ -104,46 +104,64 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/timerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/exomedia_controls_current_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:textColor="@android:color/white"
+                    tools:ignore="RtlHardcoded"
+                    tools:text="1:06:29"/>
+
+                <TextView
+                    android:id="@+id/exomedia_controls_end_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@android:color/white"
+                    tools:ignore="RtlHardcoded"
+                    tools:text="1:23:49"/>
+
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/exomedia_controls_current_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
-                android:textColor="@android:color/white"
-                tools:ignore="RtlHardcoded"
-                tools:text="1:06:29"/>
 
             <SeekBar
                 android:id="@+id/exomedia_controls_video_seek"
-                style="?android:seekBarStyle"
-                android:layout_width="0dp"
+                android:background="@null"
+                android:layout_marginLeft="-20dp"
+                android:layout_marginRight="-16dp"
+                android:progressDrawable="@drawable/progress"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:thumb="@drawable/small_thumb"
                 tools:ignore="RtlHardcoded"/>
 
-            <TextView
-                android:id="@+id/exomedia_controls_end_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
-                android:textColor="@android:color/white"
-                tools:ignore="RtlHardcoded"
-                tools:text="1:23:49"/>
 
             <LinearLayout
                 android:id="@+id/exomedia_controls_extra_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 tools:ignore="RtlHardcoded,UselessLeaf"/>
         </LinearLayout>
 
